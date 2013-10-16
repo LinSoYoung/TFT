@@ -1,0 +1,74 @@
+#include <TFT.h>
+
+#ifdef __PIC32MX__
+
+TFTSPI::TFTSPI(SPIDevice *spi, uint8_t dc) {
+    _spi = spi;
+    _dc = dc;
+
+    pinMode(_dc, OUTPUT);
+    digitalWrite(_dc, HIGH);
+
+    _spi->begin();
+}
+
+void TFTSPI::writeCommand(uint8_t command) {
+    digitalWrite(_dc, LOW);
+    _spi->transfer8(command);
+}
+
+void TFTSPI::commandStreamStart() {
+    digitalWrite(_dc, LOW);
+    _spi->enable();
+}
+
+void TFTSPI::commandStreamEnd() {
+    _spi->disable();
+}
+
+void TFTSPI::commandStream(uint8_t data) {
+    _spi->transfer8(data, true);
+}
+
+void TFTSPI::writeData8(uint8_t data) {
+    digitalWrite(_dc, HIGH);
+    _spi->transfer8(data);
+}
+
+void TFTSPI::writeData16(uint16_t data) {
+    digitalWrite(_dc, HIGH);
+    _spi->transfer16(data);
+}
+
+void TFTSPI::writeData32(uint32_t data) {
+    digitalWrite(_dc, HIGH);
+    _spi->transfer32(data);
+}
+
+void TFTSPI::dataStreamStart() {
+    digitalWrite(_dc, HIGH);
+    _spi->enable();
+}
+
+void TFTSPI::dataStreamEnd() {
+    _spi->disable();
+}
+
+void TFTSPI::dataStream8(uint8_t data) {
+    _spi->transfer8(data, true);
+}
+
+void TFTSPI::dataStream16(uint16_t data) {
+    _spi->transfer16(data, true);
+}
+
+void TFTSPI::dataStream32(uint32_t data) {
+    _spi->transfer32(data, true);
+}
+
+void TFTSPI::blockData(uint32_t *data, uint32_t len) {
+    _spi->asyncWrite32(data, len);
+}
+
+#endif
+
