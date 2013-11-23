@@ -4,6 +4,17 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include <TFT.h>
 
+uint16_t rgb(uint32_t c) {
+    uint8_t r = c >> 16;
+    uint8_t g = c >> 8;
+    uint8_t b = c;
+
+    r = r >> 3;
+    g = g >> 2;
+    b = b >> 3;
+    return ((r << 11) | (g << 5) | b);
+}
+
 TFT::TFT() {
     _comm = NULL;
     cursor_y = cursor_x = 0;
@@ -348,6 +359,14 @@ uint16_t TFT::stringWidth(char *text) {
     return w;
 }
         
+uint16_t TFT::stringHeight(char *text) {
+    uint16_t w = 0;
+
+    uint8_t lpc = font[0];
+
+    return lpc;
+}
+        
 
 #if ARDUINO >= 100
 size_t TFT::write(uint8_t c) {
@@ -469,4 +488,148 @@ void TFT::update(Framebuffer *fb, int16_t dx, int16_t dy) {
 
 uint16_t TFT::getTextColor() {
     return textcolor;
+}
+
+point3d TFT::rgb2xyz(uint16_t rgb) {
+    uint8_t red = rgb >> 11;
+    uint8_t green = rgb >> 5 & 0b111111;
+    uint8_t blue = rgb & 0b11111;
+
+    point3d xyz;
+
+    red = red << 3;
+    green = green << 2;
+    blue = blue << 3;
+
+    float r = red / 255.0;
+    float g = green / 255.0;
+    float b = blue / 255.0;
+
+    if (r > 0.04045) {
+        r  = pow(((r + 0.055) / 1.055), 2.4);
+    } else {
+        r  = r / 12.92;
+    }
+
+    if (g > 0.04045) {
+        g  = pow(((g + 0.055) / 1.055), 2.4);
+    } else {
+        g  = g / 12.92;
+    }
+
+    if (b > 0.04045) {
+        b  = pow(((b + 0.055) / 1.055), 2.4);
+    } else {
+        b  = b / 12.92;
+    }
+
+    r = r * 100.0;
+    g = g * 100.0;
+    b = b * 100.0;
+
+    xyz.x = r * 0.4124 + g * 0.3576 + b * 0.1805;
+    xyz.y = r * 0.2126 + g * 0.7152 + b * 0.0722;
+    xyz.z = r * 0.0193 + g * 0.1192 + b * 0.9505;
+    return xyz;
+}
+
+point3d TFT::xyz2lab(point3d xyz) {
+    point3d lab;
+
+    float x = xyz.x / 100.0;
+    float y = xyz.y / 100.0;
+    float z = xyz.z / 100.0;
+    
+    if (x > 0.008856) {
+        x = pow(x, 1.0/3.0);
+    } else {
+        x = (7.787 * x) + (16.0 / 116.0);
+    }
+
+    if (y > 0.008856) {
+        y = pow(y, 1.0/3.0);
+    } else {
+        y = (7.787 * y) + (16.0 / 116.0);
+    }
+
+    if (z > 0.008856) {
+        z = pow(z, 1.0/3.0);
+    } else {
+        z = (7.787 * z) + (16.0 / 116.0);
+    }
+
+    lab.x = (116.0 * y) - 16.0;
+    lab.y = 500.0 * (x - y);
+    lab.z = 200.0 * (y - z);
+    return lab;
+}
+
+float TFT::deltaE(point3d labA, point3d labB) {
+    return sqrt(
+        (pow(labA.x - labB.x, 2.0))
+        + (pow(labA.y - labB.y, 2.0))
+        + (pow(labA.z - labB.z, 2.0))
+    );
+}
+
+
+uint32_t TFT::deltaOrth(uint16_t c1, uint16_t c2) {
+    uint32_t hsv1 = rgb2hsv(c1);
+    uint32_t hsv2 = rgb2hsv(c2);
+
+    uint8_t h1 = (hsv1 >> 16) & 0xFF;
+    uint8_t h2 = (hsv2 >> 16) & 0xFF;
+    uint8_t s1 = (hsv1 >> 8) & 0xFF;
+    uint8_t s2 = (hsv2 >> 8) & 0xFF;
+    uint8_t v1 = hsv1 & 0xFF;
+    uint8_t v2 = hsv2 & 0xFF;
+
+    int32_t hd = h1 - h2;
+    int32_t sd = s1 - s2;
+    int32_t vd = v1 - v2;
+
+    uint32_t sos = (hd * hd) + (sd * sd) + (vd * vd);
+    return sos;
+}
+
+uint32_t TFT::rgb2hsv(uint16_t rgb)
+{
+    uint8_t r = rgb >> 11;
+    uint8_t g = rgb >> 5 & 0b111111;
+    uint8_t b = rgb & 0b11111;
+
+    r <<= 3;
+    g <<= 2;
+    b <<= 3;
+
+    uint8_t h, s, v;
+
+    unsigned char rgbMin, rgbMax;
+
+    rgbMin = r < g ? (r < b ? r : b) : (g < b ? g : b);
+    rgbMax = r > g ? (r > b ? r : b) : (g > b ? g : b);
+
+    v = rgbMax;
+    if (v == 0)
+    {
+        h = 0;
+        s = 0;
+        return (h << 16) | (s << 8) | v;
+    }
+
+    s = 255 * long(rgbMax - rgbMin) / v;
+    if (s == 0)
+    {
+        h = 0;
+        return (h << 16) | (s << 8) | v;
+    }
+
+    if (rgbMax == r)
+        h = 0 + 43 * (g - b) / (rgbMax - rgbMin);
+    else if (rgbMax == g)
+        h = 85 + 43 * (b - r) / (rgbMax - rgbMin);
+    else
+        h = 171 + 43 * (r - g) / (rgbMax - rgbMin);
+
+    return (h << 16) | (s << 8) | v;
 }

@@ -89,10 +89,12 @@ class Framebuffer : public TFT {
         virtual uint16_t getWidth();
         virtual uint16_t getHeight();
 
+        virtual uint8_t getClosestColor(uint16_t c);
+        void translateCoordinates(int16_t *x, int16_t *y);
+
     private:
         uint16_t _masterWidth;
         uint16_t _masterHeight;
-        void translateCoordinates(int16_t *x, int16_t *y);
 };
 
 #endif

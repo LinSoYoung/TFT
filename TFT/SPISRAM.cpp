@@ -1,15 +1,15 @@
-#include <SPIRAM.h>
+#include <SPISRAM.h>
 
 #define RAMSPEED 10000000UL
 
-void SPIRAM::initializeDevice() {
+void SPISRAM::initializeDevice() {
     _spi->begin();
     _spi->setSpeed(RAMSPEED);
     pinMode(_cs, OUTPUT);
     digitalWrite(_cs, HIGH);
 }
 
-uint8_t SPIRAM::read8(uint32_t address) {
+uint8_t SPISRAM::read8(uint32_t address) {
     uint8_t b;  
     _spi->setSpeed(RAMSPEED);
     digitalWrite(_cs, LOW);
@@ -22,7 +22,7 @@ uint8_t SPIRAM::read8(uint32_t address) {
     return b;
 }
 
-uint16_t SPIRAM::read16(uint32_t address) {
+uint16_t SPISRAM::read16(uint32_t address) {
     uint16_t b;  
     _spi->setSpeed(RAMSPEED);
     digitalWrite(_cs, LOW);
@@ -36,7 +36,7 @@ uint16_t SPIRAM::read16(uint32_t address) {
     return b;
 }
 
-uint32_t SPIRAM::read32(uint32_t address) {
+uint32_t SPISRAM::read32(uint32_t address) {
     uint32_t b;  
     _spi->setSpeed(RAMSPEED);
     digitalWrite(_cs, LOW);
@@ -52,7 +52,7 @@ uint32_t SPIRAM::read32(uint32_t address) {
     return b;
 }
 
-void SPIRAM::read8(uint32_t address, uint8_t *b, uint32_t len) {
+void SPISRAM::read8(uint32_t address, uint8_t *b, uint32_t len) {
     _spi->setSpeed(RAMSPEED);
     digitalWrite(_cs, LOW);
     _spi->transfer(0x03);
@@ -65,7 +65,7 @@ void SPIRAM::read8(uint32_t address, uint8_t *b, uint32_t len) {
     digitalWrite(_cs, HIGH);
 }
 
-void SPIRAM::read16(uint32_t address, uint16_t *b, uint32_t len) {
+void SPISRAM::read16(uint32_t address, uint16_t *b, uint32_t len) {
     _spi->setSpeed(RAMSPEED);
     digitalWrite(_cs, LOW);
     _spi->transfer(0x03);
@@ -79,7 +79,7 @@ void SPIRAM::read16(uint32_t address, uint16_t *b, uint32_t len) {
     digitalWrite(_cs, HIGH);
 }
 
-void SPIRAM::read32(uint32_t address, uint32_t *b, uint32_t len) {
+void SPISRAM::read32(uint32_t address, uint32_t *b, uint32_t len) {
     _spi->setSpeed(RAMSPEED);
     digitalWrite(_cs, LOW);
     _spi->transfer(0x03);
@@ -95,7 +95,7 @@ void SPIRAM::read32(uint32_t address, uint32_t *b, uint32_t len) {
     digitalWrite(_cs, HIGH);
 }
 
-void SPIRAM::write8(uint32_t address, uint8_t b) {
+void SPISRAM::write8(uint32_t address, uint8_t b) {
     _spi->setSpeed(RAMSPEED);
     digitalWrite(_cs, LOW);
     _spi->transfer(0x02);
@@ -106,7 +106,7 @@ void SPIRAM::write8(uint32_t address, uint8_t b) {
     digitalWrite(_cs, HIGH);
 }
 
-void SPIRAM::write16(uint32_t address, uint16_t b) {
+void SPISRAM::write16(uint32_t address, uint16_t b) {
     _spi->setSpeed(RAMSPEED);
     digitalWrite(_cs, LOW);
     _spi->transfer(0x02);
@@ -118,7 +118,7 @@ void SPIRAM::write16(uint32_t address, uint16_t b) {
     digitalWrite(_cs, HIGH);
 }
 
-void SPIRAM::write32(uint32_t address, uint32_t b) {
+void SPISRAM::write32(uint32_t address, uint32_t b) {
     _spi->setSpeed(RAMSPEED);
     digitalWrite(_cs, LOW);
     _spi->transfer(0x02);
@@ -132,7 +132,7 @@ void SPIRAM::write32(uint32_t address, uint32_t b) {
     digitalWrite(_cs, HIGH);
 }
 
-void SPIRAM::write8(uint32_t address, uint8_t *b, uint32_t len) {
+void SPISRAM::write8(uint32_t address, uint8_t *b, uint32_t len) {
     _spi->setSpeed(RAMSPEED);
     digitalWrite(_cs, LOW);
     _spi->transfer(0x02);
@@ -145,7 +145,7 @@ void SPIRAM::write8(uint32_t address, uint8_t *b, uint32_t len) {
     digitalWrite(_cs, HIGH);
 }
 
-void SPIRAM::write16(uint32_t address, uint16_t *b, uint32_t len) {
+void SPISRAM::write16(uint32_t address, uint16_t *b, uint32_t len) {
     _spi->setSpeed(RAMSPEED);
     digitalWrite(_cs, LOW);
     _spi->transfer(0x02);
@@ -159,7 +159,7 @@ void SPIRAM::write16(uint32_t address, uint16_t *b, uint32_t len) {
     digitalWrite(_cs, HIGH);
 }
 
-void SPIRAM::write32(uint32_t address, uint32_t *b, uint32_t len) {
+void SPISRAM::write32(uint32_t address, uint32_t *b, uint32_t len) {
     _spi->setSpeed(RAMSPEED);
     digitalWrite(_cs, LOW);
     _spi->transfer(0x02);

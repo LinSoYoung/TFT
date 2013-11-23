@@ -1,12 +1,12 @@
-#ifndef _SPIRAM_H
-#define _SPIRAM_H
+#ifndef _SPISRAM_H
+#define _SPISRAM_H
 
 #include <TFT.h>
 #include <DSPI.h>
 
-class SPIRAM : public DataStore {
+class SPISRAM : public DataStore {
     public:
-        SPIRAM(DSPI *spi, uint8_t cs, uint32_t s) : _spi(spi), _cs(cs), _size(s) {}
+        SPISRAM(DSPI *spi, uint8_t cs, uint32_t s) : _spi(spi), _cs(cs), _size(s) {}
         uint8_t read8(uint32_t address);
         uint16_t read16(uint32_t address);
         uint32_t read32(uint32_t address);

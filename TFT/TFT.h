@@ -18,7 +18,16 @@
 #include <Color.h>
 #include <Fonts.h>
 
+typedef struct {
+    float x;
+    float y;
+    float z;
+} point3d;
+
 class Framebuffer;
+
+extern uint16_t rgb(uint32_t c);
+
 
 class TFT : public Print
 {
@@ -58,6 +67,7 @@ class TFT : public Print
         virtual void update(Framebuffer *fb);
         virtual void update(Framebuffer *fb, int16_t dx, int16_t dy);
         virtual uint16_t stringWidth(char *text);
+        virtual uint16_t stringHeight(char *text);
 #if ARDUINO >= 100
         size_t write(uint8_t c);
 #else
@@ -76,8 +86,12 @@ class TFT : public Print
         virtual uint16_t getWidth() { return _width; };
         virtual uint16_t getHeight() { return _height; };
 
+        point3d rgb2xyz(uint16_t c);
+        point3d xyz2lab(point3d c);
+        float deltaE(point3d labA, point3d labB);
+        uint32_t deltaOrth(uint16_t c1, uint16_t c2);
+        uint32_t rgb2hsv(uint16_t rgb);
 
-    private:
         void drawCircleHelper( int16_t x0, int16_t y0, int16_t r, uint8_t cornername, uint16_t color);
         void fillCircleHelper(int16_t x0, int16_t y0, int16_t r, uint8_t cornername, int16_t delta, uint16_t color);
 
@@ -100,12 +114,13 @@ class TFT : public Print
 #include <MCP23S17.h>
 
 // Storage devices
-#include <SPIRAM.h>
+#include <SPISRAM.h>
 #include <SRAM.h>
 
 // Virtual display devices
 #include <Framebuffer.h>
 #include <Framebuffer1.h>
+#include <Framebuffer332.h>
 #include <Aggregator.h>
 
 // Supported devices

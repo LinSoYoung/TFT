@@ -751,4 +751,16 @@ uint16_t Framebuffer::getHeight() {
     return _width;
 }
 
+uint8_t Framebuffer::getClosestColor(uint16_t c) {
+    uint32_t cdiff = 0xFFFFFFFF;
 
+    uint8_t best;
+    for (uint16_t x = 0; x < 256; x++) {
+        uint32_t d = deltaOrth(palette[x], c);
+        if (d < cdiff) {
+            cdiff = d;
+            best = x;
+        }
+    }
+    return best;
+}
