@@ -17,6 +17,7 @@
 #include <DataStore.h>
 #include <Color.h>
 #include <Fonts.h>
+#include <ParallelIO.h>
 
 typedef struct {
     float x;
@@ -78,8 +79,8 @@ class TFT : public Print
         uint8_t textsize;
         boolean wrap;
         uint16_t textcolor, textbgcolor;
-        int16_t _width;
-        int16_t _height;
+        uint16_t _width;
+        uint16_t _height;
         uint8_t rotation;
         uint8_t drawChar(int16_t x, int16_t y, unsigned char c, uint16_t color, uint16_t bg);
 
@@ -100,6 +101,8 @@ class TFT : public Print
 
 };
 
+#include <Image.h>
+
 // Supplorted communication systems
 #ifdef __PIC32MX__
 #include <TFTDSPI.h>
@@ -112,6 +115,7 @@ class TFT : public Print
 #include <RawPar.h>
 #include <TFTPMP.h>
 #include <MCP23S17.h>
+#include <CoreIO.h>
 
 // Storage devices
 #include <SPISRAM.h>
@@ -136,6 +140,12 @@ class TFT : public Print
 // Touchscreen devices
 #include <Touch.h>
 #include <XPT2046.h>
+
+// Image formats
+#include <RLE.h>
+#include <Raw565.h>
+#include <Raw8.h>
+
 #endif
 
 

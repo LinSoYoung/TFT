@@ -88,7 +88,7 @@ void Framebuffer1::getScanLine(uint16_t y, uint16_t *data) {
 		} else {
 			uint16_t bytepos = x / 8;
 			uint16_t bitpos = x % 8;
-    			data[x] = palette[(buffer->read8(bytepos) & (1<<bitpos)) ? 1 : 0];
+    			data[x] = palette[(buffer->read8(bytepos) & (1<<bitpos)) ? Color::White : Color::Black];
 		}
 	}
 }

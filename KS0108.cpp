@@ -35,7 +35,10 @@ void KS0108::setY(uint8_t y)
 
 void KS0108::setPixel(int16_t x, int16_t y, uint16_t color) {
     doSetPixel(x, y, color);
-    updateScreen();
+    y = y >> 3;
+    setPage(y);
+    setY(x);
+    _comm->writeData8(this->buffer[y * _width + x]);
 }
 
 void KS0108::doSetPixel(int16_t x, int16_t y, uint16_t color) {
@@ -43,23 +46,23 @@ void KS0108::doSetPixel(int16_t x, int16_t y, uint16_t color) {
     uint8_t pixel;
     uint8_t mask;
 
-	if((x < 0) ||(x >= _width) || (y < 0) || (y >= _height)) 
+	if((x < 0) ||(x >= 64) || (y < 0) || (y >= 64)) 
 		return;
 
     row = y>>3;
     pixel = y & 0x07;
     mask = 1<<pixel;
     if (color) {
-        this->buffer[row * _width + x] |= mask;
+        this->buffer[(row << 6) + x] |= mask;
     } else {
-        this->buffer[row * _width + x] &= ~mask;
+        this->buffer[(row << 6) + x] &= ~mask;
     }
 }
 
 void KS0108::fillScreen(uint16_t color) {
     for (int16_t y = 0; y < _height/8; y++) {
         for (int16_t x = 0; x < _width; x++) {
-            this->buffer[y * _width + x] = color ? 0xFF : 0x00;
+            this->buffer[(y << 6) + x] = color ? 0xFF : 0x00;
         }
     }
     updateScreen();
@@ -94,7 +97,7 @@ void KS0108::drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t color) {
 void KS0108::invertDisplay(boolean i) {
     for (int16_t y = 0; y < _height/8; y++) {
         for (int16_t x = 0; x < _width; x++) {
-            this->buffer[y * _width + x] = ~this->buffer[y * _width + x];
+            this->buffer[(y << 6) + x] = ~this->buffer[(y << 6) + x];
         }
     }
     updateScreen();
@@ -108,7 +111,22 @@ void KS0108::updateScreen() {
         this->setY(0);
         for(x=0; x<64; x++)
         {
-            _comm->writeData8(this->buffer[y * _width + x]);
+            _comm->writeData8(this->buffer[(y << 6) + x]);
         }
     }
+}
+
+void KS0108::update(Framebuffer *fb) {
+    update(fb, 0, 0);
+}
+
+void KS0108::update(Framebuffer *fb, int16_t x, int16_t y) {
+    uint16_t buf[fb->getWidth()];
+    for (uint16_t dy = 0; dy < getHeight(); dy++) {
+        fb->getScanLine(y + dy, buf);
+        for (uint16_t dx = 0; dx < getWidth(); dx++) {
+            doSetPixel(dx, dy, buf[x + dx]);
+        }
+    }
+    updateScreen();
 }

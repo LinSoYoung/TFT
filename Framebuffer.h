@@ -28,20 +28,6 @@ class Framebuffer : public TFT {
 
         // Basic drawing primitives
         virtual void setPixel(int16_t x, int16_t y, uint16_t c);
-        virtual void drawIndexed(int16_t x, int16_t y, const uint8_t *data, uint16_t w, uint16_t h);
-        virtual void drawIndexed(int16_t x, int16_t y, const uint8_t *data, uint16_t w, uint16_t h, uint8_t t);
-        virtual void drawIndexed(int16_t x, int16_t y, Framebuffer *fb);
-        virtual void drawIndexed(int16_t x, int16_t y, Framebuffer *fb, uint8_t t);
-
-        virtual void drawRLE(int16_t x, int16_t y, const uint8_t *data);
-        virtual void drawRLE(int16_t x, int16_t y, const uint8_t *data, uint8_t t);
-        virtual void drawRLETransformed(int16_t x, int16_t y, const uint8_t *data, uint8_t transform);
-        virtual void drawRLETransformed(int16_t x, int16_t y, const uint8_t *data, uint8_t transform, uint8_t t);
-
-        virtual void drawTransformed(int16_t x, int16_t y, const uint8_t *data, uint16_t w, uint16_t h, uint8_t transform);
-        virtual void drawTransformed(int16_t x, int16_t y, const uint8_t *data, uint16_t w, uint16_t h, uint8_t transform, uint8_t t);
-        virtual void drawTransformed(int16_t x, int16_t y, Framebuffer *fb, uint8_t transform);
-        virtual void drawTransformed(int16_t x, int16_t y, Framebuffer *fb, uint8_t transform, uint8_t t);
 
         virtual void drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t color);
         virtual void drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t color);

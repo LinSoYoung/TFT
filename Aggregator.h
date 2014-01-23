@@ -12,7 +12,7 @@ struct AggregatorList {
 
 class Aggregator : public TFT {
 	public:
-		Aggregator() : TFT(NULL) {};
+		Aggregator() : TFT(NULL), _displays(NULL), _width(0), _height(0) {};
 
         void fillScreen(uint16_t color);
         void setPixel(int16_t x, int16_t y, uint16_t color);
@@ -25,8 +25,19 @@ class Aggregator : public TFT {
 
         void addDisplay(TFT *d, int16_t x, int16_t y);
 
+        void drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t c);
+        void drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t c);
+
+        uint16_t getWidth() { return _width; }
+        uint16_t getHeight() { return _height; }
+
+        void update(Framebuffer *fb);
+        void update(Framebuffer *fb, int16_t dx, int16_t dy);
+
 	protected:
-        struct AggregatorList *displays;
+        struct AggregatorList *_displays;
+        uint16_t _width;
+        uint16_t _height;
 };
 
 #endif

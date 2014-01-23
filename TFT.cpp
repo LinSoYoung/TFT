@@ -21,7 +21,7 @@ TFT::TFT() {
     textcolor = 0xFFFF;
     textbgcolor = 0;
     wrap = true;
-    font = Fonts::Default;
+    font = NULL; //Fonts::Default;
 }
 
 TFT::TFT(TFTCommunicator *comm) {
@@ -30,7 +30,7 @@ TFT::TFT(TFTCommunicator *comm) {
     textcolor = 0xFFFF;
     textbgcolor = 0;
     wrap = true;
-    font = Fonts::Default;
+    font = NULL; //Fonts::Default;
 }
 
 
@@ -196,7 +196,7 @@ void TFT::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t col
 
 
 void TFT::fillScreen(uint16_t color) {
-    fillRectangle(0, 0, _width, _height, color);
+    fillRectangle(0, 0, getWidth(), getHeight(), color);
 }
 
 // draw a rounded rectangle!
@@ -341,6 +341,9 @@ void TFT::drawRGBA(int16_t x, int16_t y, const uint16_t *bitmap, int16_t w, int1
 
 uint16_t TFT::stringWidth(char *text) {
     uint16_t w = 0;
+    if (font == NULL) {
+        return 0;
+    }
 
     uint8_t lpc = font[0];
     uint8_t bpl = font[1];
@@ -361,6 +364,9 @@ uint16_t TFT::stringWidth(char *text) {
         
 uint16_t TFT::stringHeight(char *text) {
     uint16_t w = 0;
+    if (font == NULL) {
+        return 0;
+    }
 
     uint8_t lpc = font[0];
 
@@ -370,8 +376,14 @@ uint16_t TFT::stringHeight(char *text) {
 
 #if ARDUINO >= 100
 size_t TFT::write(uint8_t c) {
+    if (font == NULL) {
+        return 0;
+    }
 #else
 void TFT::write(uint8_t c) {
+    if (font == NULL) {
+        return;
+    }
 #endif
     uint8_t lpc = font[0];
     uint8_t bpl = font[1];
@@ -388,7 +400,7 @@ void TFT::write(uint8_t c) {
             uint8_t co = c - startGlyph;
             uint16_t charstart = (co * ((lpc * bpl) + 1)) + 4; // Start of character data
             uint8_t charwidth = font[charstart++];
-            if (wrap && (cursor_x > (_width - charwidth))) {
+            if (wrap && (cursor_x > (getWidth() - charwidth))) {
                 cursor_y += lpc;
                 cursor_x = 0;
             }
@@ -402,6 +414,9 @@ void TFT::write(uint8_t c) {
 
 // draw a character
 uint8_t TFT::drawChar(int16_t x, int16_t y, unsigned char c, uint16_t color, uint16_t bg) {
+    if (font == NULL) {
+        return 0;
+    }
 
     uint8_t lpc = font[0];  // Lines per character
     uint8_t bpl = font[1];  // Bytes per line
@@ -479,8 +494,8 @@ void TFT::update(Framebuffer *fb) {
 }
 
 void TFT::update(Framebuffer *fb, int16_t dx, int16_t dy) {
-    for (int y = 0; y < _height; y++) {
-        for (int x = 0; x < _width; x++) {
+    for (int y = 0; y < getHeight(); y++) {
+        for (int x = 0; x < getWidth(); x++) {
             setPixel(x, y, fb->colorAt(x + dx, y + dy));
         }
     }

@@ -2,38 +2,39 @@
 
 void Aggregator::fillScreen(uint16_t color) {
     struct AggregatorList *s;
-    if (!displays) {
+    if (!_displays) {
         return;
     }
-    for (s = displays; s; s = s->next) {
+    for (s = _displays; s; s = s->next) {
         s->display->fillScreen(color);
     }
 }
 
 void Aggregator::invertDisplay(boolean i) {
     struct AggregatorList *s;
-    if (!displays) {
+    if (!_displays) {
         return;
     }
-    for (s = displays; s; s = s->next) {
+    for (s = _displays; s; s = s->next) {
         s->display->invertDisplay(i);
     }
 }
 
 void Aggregator::setPixel(int16_t x, int16_t y, uint16_t color) {
     struct AggregatorList *s;
-    if (!displays) {
+    if (!_displays) {
         return;
     }
-    for (s = displays; s; s = s->next) {
+    for (s = _displays; s; s = s->next) {
         s->display->setPixel(x - s->x, y - s->y, color);
     }
 }
 
 void Aggregator::initializeDevice() {
-    displays = NULL;
-    _width = 65535;
-    _height = 65535;
+    struct AggregatorList *s;
+    for (s = _displays; s; s = s->next) {
+        s->display->initializeDevice();
+    }
 }
 
 void Aggregator::addDisplay(TFT *d, int16_t x, int16_t y) {
@@ -49,11 +50,43 @@ void Aggregator::addDisplay(TFT *d, int16_t x, int16_t y) {
     n->y = y;
     n->next = NULL;
 
-    if (!displays) {
-        displays = n;
+    if (!_displays) {
+        _displays = n;
     } else {
-        for (s = displays; s->next; s = s->next);
+        for (s = _displays; s->next; s = s->next);
         s->next = n;
+    }
+
+    if (x + n->display->getWidth() > _width) {
+        _width = x + n->display->getWidth();
+    }
+
+    if (y + n->display->getHeight() > _height) {
+        _height = y + n->display->getHeight();
+    }
+
+}
+
+void Aggregator::drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t c) {
+    for (int i = 0; i < w; i++) {
+        setPixel(x + i, y, c);
     }
 }
 
+void Aggregator::drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t c) {
+    for (int i = 0; i < h; i++) {
+        setPixel(x, y + i, c);
+    }
+}
+
+
+void Aggregator::update(Framebuffer *fb) {
+    update(fb, 0, 0);
+}
+
+void Aggregator::update(Framebuffer *fb, int16_t dx, int16_t dy) {
+    struct AggregatorList *s;
+    for (s = _displays; s; s = s->next) {
+        s->display->update(fb, dx + s->x, dy + s->y);
+    }
+}
