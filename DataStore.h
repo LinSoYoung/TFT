@@ -3,6 +3,9 @@
 
 #include <TFT.h>
 
+class DataBlock;
+class DataWrite;
+
 class DataStore {
 	public:
 		virtual uint8_t read8(uint32_t addr) = 0;
@@ -25,6 +28,22 @@ class DataStore {
 		DataStore() {};
 		virtual void initializeDevice() = 0;
 		virtual uint32_t size() = 0;
+
+        DataBlock &allocate(uint32_t s);
+        void free(DataBlock& b);
+};
+
+class DataBlock {
+    private:
+        uint32_t _start;
+        uint32_t _len;
+        DataStore *_store;
+
+    public:
+        DataBlock(uint32_t start, uint32_t len, DataStore *store) : _start(start), _len(len), _store(store) {}
+        uint8_t operator [] (uint32_t a);
+        void set(uint32_t a, uint8_t v);
+        uint8_t get(uint32_t a);
 };
 
 #endif

@@ -26,7 +26,9 @@ void Aggregator::setPixel(int16_t x, int16_t y, uint16_t color) {
         return;
     }
     for (s = _displays; s; s = s->next) {
-        s->display->setPixel(x - s->x, y - s->y, color);
+        if ((x >= s->x && x < s->x + s->display->getWidth()) && (y >= s->y && y < s->y + s->display->getHeight())) {
+            s->display->setPixel(x - s->x, y - s->y, color);
+        }
     }
 }
 

@@ -61,7 +61,7 @@ MCP23S17::MCP23S17(DSPI *spi, uint8_t cs, uint8_t addr) {
     _buffer = 0;
 
     _spi->begin();
-    _spi->setSpeed(20000000UL);
+    _spi->setSpeed(MCP23S17_SPEED);
     ::pinMode(_cs, OUTPUT);
     ::digitalWrite(_cs, HIGH);
     uint8_t cmd = 0b01000000;
@@ -78,6 +78,7 @@ void MCP23S17::readRegister(uint8_t addr) {
         return;
     }
     uint8_t cmd = 0b01000001 | ((_addr & 0b111) << 1);
+    _spi->setSpeed(MCP23S17_SPEED);
     ::digitalWrite(_cs, LOW);
     _spi->transfer(cmd);
     _spi->transfer(addr);
@@ -90,6 +91,7 @@ void MCP23S17::writeRegister(uint8_t addr) {
         return;
     }
     uint8_t cmd = 0b01000000 | ((_addr & 0b111) << 1);
+    _spi->setSpeed(MCP23S17_SPEED);
     ::digitalWrite(_cs, LOW);
     _spi->transfer(cmd);
     _spi->transfer(addr);
@@ -99,6 +101,7 @@ void MCP23S17::writeRegister(uint8_t addr) {
 
 void MCP23S17::readAll() {
     uint8_t cmd = 0b01000001 | ((_addr & 0b111) << 1);
+    _spi->setSpeed(MCP23S17_SPEED);
     ::digitalWrite(_cs, LOW);
     _spi->transfer(cmd);
     _spi->transfer(0);
@@ -110,6 +113,7 @@ void MCP23S17::readAll() {
 
 void MCP23S17::writeAll() {
     uint8_t cmd = 0b01000000 | ((_addr & 0b111) << 1);
+    _spi->setSpeed(MCP23S17_SPEED);
     ::digitalWrite(_cs, LOW);
     _spi->transfer(cmd);
     _spi->transfer(0);

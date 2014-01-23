@@ -1,6 +1,6 @@
 #include <SPISRAM.h>
 
-#define RAMSPEED 10000000UL
+#define RAMSPEED 20000000UL
 
 void SPISRAM::initializeDevice() {
     _spi->begin();
@@ -175,4 +175,46 @@ void SPISRAM::write32(uint32_t address, uint32_t *b, uint32_t len) {
     digitalWrite(_cs, HIGH);
 }
 
+void SPISRAM::setAll8(uint8_t data) {
+    _spi->setSpeed(RAMSPEED);
+    digitalWrite(_cs, LOW);
+    _spi->transfer(0x02);
+    _spi->transfer(0);
+    _spi->transfer(0);
+    _spi->transfer(0);
+    for (uint32_t i = 0; i < _size; i++) {
+        _spi->transfer(data);
+    }
+    digitalWrite(_cs, HIGH);
+}
+
+void SPISRAM::setAll16(uint16_t data) {
+    _spi->setSpeed(RAMSPEED);
+    digitalWrite(_cs, LOW);
+    _spi->transfer(0x02);
+    _spi->transfer(0);
+    _spi->transfer(0);
+    _spi->transfer(0);
+    for (uint32_t i = 0; i < _size; i+=2) {
+        _spi->transfer((data >> 8) & 0xFF);
+        _spi->transfer(data & 0xFF);
+    }
+    digitalWrite(_cs, HIGH);
+}
+
+void SPISRAM::setAll32(uint32_t data) {
+    _spi->setSpeed(RAMSPEED);
+    digitalWrite(_cs, LOW);
+    _spi->transfer(0x02);
+    _spi->transfer(0);
+    _spi->transfer(0);
+    _spi->transfer(0);
+    for (uint32_t i = 0; i < _size; i+=4) {
+        _spi->transfer((data >> 24) & 0xFF);
+        _spi->transfer((data >> 16) & 0xFF);
+        _spi->transfer((data >> 8) & 0xFF);
+        _spi->transfer(data & 0xFF);
+    }
+    digitalWrite(_cs, HIGH);
+}
 

@@ -23,6 +23,10 @@ class SPISRAM : public DataStore {
         void write16(uint32_t address, uint16_t *data, uint32_t len);
         void write32(uint32_t address, uint32_t *data, uint32_t len);
 
+        void setAll8(uint8_t data);
+        void setAll16(uint16_t data);
+        void setAll32(uint32_t data);
+
         void initializeDevice();
         uint32_t size() { return _size; }
     private:

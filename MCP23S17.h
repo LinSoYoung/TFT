@@ -32,6 +32,8 @@
 #ifndef _MCP23S17_H
 #define _MCP23S17_H
 
+#define MCP23S17_SPEED 20000000UL
+
 #include <TFT.h>
 
 class MCP23S17 : public ParallelIO {

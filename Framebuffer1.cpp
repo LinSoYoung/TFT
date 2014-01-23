@@ -18,7 +18,7 @@ void Framebuffer1::setPixel(int16_t x, int16_t y, uint16_t color) {
         return;
     }
     uint8_t pcol = color & 0xFF;
-    uint32_t pos = y * _width + x;
+    uint32_t pos = Math::FastUIntMpy(y, _width) + x;
     uint32_t bytepos = pos / 8;
     uint32_t bitpos = pos & 8;
     uint8_t newval;
@@ -31,7 +31,7 @@ void Framebuffer1::setPixel(int16_t x, int16_t y, uint16_t color) {
 }
 
 void Framebuffer1::fillScreen(uint16_t color) {
-    for (uint32_t x = 0; x < (_width * _height) / 8; x++) {
+    for (uint32_t x = 0; x < Math::FastUIntMpy(_width, _height) / 8; x++) {
         buffer->write8(x, color ? 0xFF : 0);
     }
 }
@@ -66,29 +66,29 @@ uint16_t Framebuffer1::colorAt(int16_t x, int16_t y) {
     }
     struct sprite *s = spriteAt(x, y);
     if (s) {
-        uint32_t offset = s->width * s->height * s->currentframe;
-        uint8_t color = s->data[offset + (y - s->ypos) * s->width + (x - s->xpos)];
+        uint32_t offset = Math::FastUIntMpy(Math::FastUIntMpy(s->width, s->height), s->currentframe);
+        uint8_t color = s->data[offset + Math::FastUIntMpy((y - s->ypos), s->width) + (x - s->xpos)];
         return palette[color % 2];
     }
-    uint32_t pos = y * _width + x;
+    uint32_t pos = Math::FastUIntMpy(y, _width) + x;
     uint32_t bytepos = pos / 8;
     uint32_t bitpos = pos % 8;
     return palette[(buffer->read8(bytepos) & (1<<bitpos)) ? 1 : 0];
 }
 
-void Framebuffer1::getScanLine(uint16_t y, uint16_t *data) {
-	uint8_t bufferdata[_width/8];
-	buffer->read8((y * _width) / 8, bufferdata, _width / 8);
-	for (uint16_t x = 0; x < _width; x++) {
-		struct sprite *s = spriteAt(x, y);
+void Framebuffer1::getScanLine(uint16_t y, uint16_t x, uint16_t w, uint16_t *data) {
+	uint8_t bufferdata[w/8 + 2];
+	buffer->read8(((Math::FastUIntMpy(y, _width) + x) / 8), bufferdata, w / 8 + 2);
+	for (uint16_t px = 0; px < w; px++) {
+		struct sprite *s = spriteAt(x + px, y);
 		if (s) {
-			uint32_t offset = s->width * s->height * s->currentframe;
-			uint8_t color = s->data[offset + (y - s->ypos) * s->width + (x - s->xpos)];
-			data[x] = palette[color % 2];
+			uint32_t offset = Math::FastUIntMpy(Math::FastUIntMpy(s->width, s->height), s->currentframe);
+			uint8_t color = s->data[offset + Math::FastUIntMpy((y - s->ypos), s->width) + (px - s->xpos)];
+			data[px] = palette[(color & 1)];
 		} else {
-			uint16_t bytepos = x / 8;
-			uint16_t bitpos = x % 8;
-    			data[x] = palette[(buffer->read8(bytepos) & (1<<bitpos)) ? Color::White : Color::Black];
+			uint16_t bytepos = (px) >> 3;
+			uint16_t bitpos = (px + x) & 0x07;
+            data[px] = palette[(bufferdata[bytepos] & (1<<bitpos)) ? 1 : 0];
 		}
 	}
 }

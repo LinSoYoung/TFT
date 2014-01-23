@@ -19,6 +19,9 @@
 #include <Fonts.h>
 #include <ParallelIO.h>
 
+// Utility Classes
+#include <Math.h>
+
 typedef struct {
     float x;
     float y;

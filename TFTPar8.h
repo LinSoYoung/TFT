@@ -46,6 +46,7 @@ class TFTPar8 : public TFTCommunicator
         void blockData(uint32_t *d, uint32_t);
 
     private:
+        uint8_t _csPolarity;
         ParallelIO *_dev;
         uint8_t _cs;
         uint8_t _dc;

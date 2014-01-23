@@ -43,7 +43,9 @@ class Framebuffer : public TFT {
         virtual void loadPalette(const uint8_t p[256][3]);
         virtual void loadPalette(Framebuffer *fb);
         virtual uint16_t colorAt(int16_t x, int16_t y);
+        virtual uint16_t bgColorAt(int16_t x, int16_t y);
         virtual void getScanLine(uint16_t y, uint16_t *data);
+        virtual void getScanLine(uint16_t y, uint16_t x, uint16_t w, uint16_t *data);
 
         // Sprites
         virtual struct sprite * addSprite(const uint8_t *data, uint16_t w, uint16_t h, uint8_t t, uint8_t f);
@@ -77,6 +79,8 @@ class Framebuffer : public TFT {
 
         virtual uint8_t getClosestColor(uint16_t c);
         void translateCoordinates(int16_t *x, int16_t *y);
+
+        virtual void scroll(int16_t dx, int16_t dy);
 
     private:
         uint16_t _masterWidth;

@@ -1,8 +1,3 @@
-//	ST7735 code to get Adafruit 1.8" TFT shield working with chipKIT uC32
-//	Note was not able to make it work on my Uno32 with SPI, DSPI with or without delays in ST7735.cpp
-//  This port to chipKIT written by Chris Kelley of ca-cycleworks.com  (c) ? Sure, ok same MIT thing, whatever
-//	This code derived from Adafruit_ST7735 library. See bottom of .h file for their full MIT license stuff.
-////////////////////////////////////////////////////////////////////////////////
 #include <TFT.h>
 
 #define GLCD_CMD_OFF         0b00111110
@@ -14,6 +9,8 @@
 #define GLCD_STAT_BUSY   0b10000000
 #define GLCD_STAT_ONOFF  0b00100000
 #define GLCD_STAT_RESET  0b00010000
+
+#define C2B(X, Y) (((Y) << 6) + (X))
 
 void KS0108::initializeDevice() {
     _width  = 64;
@@ -38,7 +35,7 @@ void KS0108::setPixel(int16_t x, int16_t y, uint16_t color) {
     y = y >> 3;
     setPage(y);
     setY(x);
-    _comm->writeData8(this->buffer[y * _width + x]);
+    _comm->writeData8(this->buffer[C2B(x, y)]);
 }
 
 void KS0108::doSetPixel(int16_t x, int16_t y, uint16_t color) {
@@ -53,16 +50,16 @@ void KS0108::doSetPixel(int16_t x, int16_t y, uint16_t color) {
     pixel = y & 0x07;
     mask = 1<<pixel;
     if (color) {
-        this->buffer[(row << 6) + x] |= mask;
+        this->buffer[C2B(x, row)] |= mask;
     } else {
-        this->buffer[(row << 6) + x] &= ~mask;
+        this->buffer[C2B(x, row)] &= ~mask;
     }
 }
 
 void KS0108::fillScreen(uint16_t color) {
     for (int16_t y = 0; y < _height/8; y++) {
         for (int16_t x = 0; x < _width; x++) {
-            this->buffer[(y << 6) + x] = color ? 0xFF : 0x00;
+            this->buffer[C2B(x, y)] = color ? 0xFF : 0x00;
         }
     }
     updateScreen();
@@ -97,7 +94,7 @@ void KS0108::drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t color) {
 void KS0108::invertDisplay(boolean i) {
     for (int16_t y = 0; y < _height/8; y++) {
         for (int16_t x = 0; x < _width; x++) {
-            this->buffer[(y << 6) + x] = ~this->buffer[(y << 6) + x];
+            this->buffer[C2B(x, y)] = ~this->buffer[C2B(x, y)];
         }
     }
     updateScreen();
@@ -111,7 +108,7 @@ void KS0108::updateScreen() {
         this->setY(0);
         for(x=0; x<64; x++)
         {
-            _comm->writeData8(this->buffer[(y << 6) + x]);
+            _comm->writeData8(this->buffer[C2B(x, y)]);
         }
     }
 }
@@ -121,11 +118,11 @@ void KS0108::update(Framebuffer *fb) {
 }
 
 void KS0108::update(Framebuffer *fb, int16_t x, int16_t y) {
-    uint16_t buf[fb->getWidth()];
-    for (uint16_t dy = 0; dy < getHeight(); dy++) {
-        fb->getScanLine(y + dy, buf);
-        for (uint16_t dx = 0; dx < getWidth(); dx++) {
-            doSetPixel(dx, dy, buf[x + dx]);
+    uint16_t buf[64];
+    for (uint16_t dy = 0; dy < 64; dy++) {
+        fb->getScanLine(y + dy, x, 64, buf);
+        for (uint16_t dx = 0; dx < 64; dx++) {
+            doSetPixel(dx, dy, buf[dx]);
         }
     }
     updateScreen();

@@ -205,21 +205,33 @@ uint16_t Framebuffer::colorAt(int16_t x, int16_t y) {
     return palette[bufferRead(pos)];
 }
 
+uint16_t Framebuffer::bgColorAt(int16_t x, int16_t y) {
+    if (x < 0 || y < 0 || x >= _width || y >= _height) {
+        return 0;
+    }
+    uint32_t pos = y * _width + x;
+    return palette[bufferRead(pos)];
+}
+
 void Framebuffer::getScanLine(uint16_t y, uint16_t *data) {
-	uint8_t bufferdata[_masterWidth];
-	buffer->read8(y * _masterWidth, bufferdata, _masterWidth);
-	for (uint16_t x = 0; x < _masterWidth; x++) {
+    getScanLine(y, 0, getWidth(), data);
+}
+
+void Framebuffer::getScanLine(uint16_t y, uint16_t x, uint16_t w, uint16_t *data) {
+	uint8_t bufferdata[w];
+	buffer->read8(y * getWidth() + x, bufferdata, w);
+	for (uint16_t px = 0; px < w; px++) {
         if (sprites != NULL) {
-            struct sprite *s = spriteAt(x, y);
+            struct sprite *s = spriteAt(x + px, y);
             if (s) {
                 uint32_t offset = s->width * s->height * s->currentframe;
-                uint8_t color = s->data[offset + (y - s->ypos) * s->width + (x - s->xpos)];
-                data[x] = palette[color];
+                uint8_t color = s->data[offset + (y - s->ypos) * s->width + (px - s->xpos)];
+                data[px] = palette[color];
             } else {
-                data[x] = palette[bufferdata[x]];
+                data[px] = palette[bufferdata[px]];
             }
         } else {
-            data[x] = palette[bufferdata[x]];
+            data[px] = palette[bufferdata[px]];
         }
 	}
 }
@@ -358,4 +370,28 @@ uint8_t Framebuffer::getClosestColor(uint16_t c) {
         }
     }
     return best;
+}
+
+void Framebuffer::scroll(int16_t dx, int16_t dy) {
+    uint16_t w = getWidth();
+    uint16_t h = getHeight();
+
+    uint16_t ax = abs(dx);
+    uint16_t ay = abs(dy);
+
+    if (ay == 0) {
+        for (uint16_t y = 0; y < h; y++) {
+            if (dx < 0) {
+                for (uint16_t x = 0; x < w - ax; x++) {
+                    uint16_t col = bgColorAt(x + ax, y);
+                    setPixel(x, y, col);
+                }
+            } else {
+                for (uint16_t x = 0; x < w - ax; x++) {
+                    uint16_t col = bgColorAt(w - (x + ax), y);
+                    setPixel(w - x, y, col);
+                }
+            }
+        }
+    }
 }

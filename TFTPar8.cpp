@@ -26,19 +26,22 @@ TFTPar8::TFTPar8(ParallelIO *dev, uint8_t cs, uint8_t dc, uint8_t clk, uint8_t d
     _dev->pinMode(_d6, OUTPUT);
     _dev->pinMode(_d7, OUTPUT);
 
-    _dev->digitalWrite(_cs, HIGH);
+    _csPolarity = LOW;
+
+    _dev->digitalWrite(_cs, !_csPolarity);
     _dev->digitalWrite(_dc, LOW);
     _dev->digitalWrite(_clk, LOW);
 }
 
 void TFTPar8::clock() {
     _dev->digitalWrite(_clk, HIGH);
-    //delayMicroseconds(1);
+    delayMicroseconds(1);
     _dev->digitalWrite(_clk, LOW);
-    //delayMicroseconds(1);
+    delayMicroseconds(1);
 }
 
 void TFTPar8::setBus(uint8_t value) {
+    _dev->startBuffer();
     _dev->digitalWrite(_d7, value & 0x80);
     _dev->digitalWrite(_d6, value & 0x40);
     _dev->digitalWrite(_d5, value & 0x20);
@@ -47,113 +50,91 @@ void TFTPar8::setBus(uint8_t value) {
     _dev->digitalWrite(_d2, value & 0x04);
     _dev->digitalWrite(_d1, value & 0x02);
     _dev->digitalWrite(_d0, value & 0x01);
+    _dev->endBuffer();
 }
 
 void TFTPar8::writeCommand8(uint8_t command) {
     _dev->startBuffer();
     _dev->digitalWrite(_dc, LOW);
-    _dev->digitalWrite(_cs, LOW);
+    _dev->digitalWrite(_cs, _csPolarity);
     setBus(command);
-    _dev->endBuffer();
     clock();
-    _dev->digitalWrite(_cs, HIGH);
+    _dev->digitalWrite(_cs, !_csPolarity);
 }
 
 void TFTPar8::writeCommand16(uint16_t command) {
     _dev->startBuffer();
     _dev->digitalWrite(_dc, LOW);
-    _dev->digitalWrite(_cs, LOW);
+    _dev->digitalWrite(_cs, _csPolarity);
     setBus((command >> 8) & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->startBuffer();
     setBus(command & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->digitalWrite(_cs, HIGH);
+    _dev->digitalWrite(_cs, !_csPolarity);
 }
 
 void TFTPar8::writeCommand32(uint32_t command) {
     _dev->startBuffer();
     _dev->digitalWrite(_dc, LOW);
-    _dev->digitalWrite(_cs, LOW);
+    _dev->digitalWrite(_cs, _csPolarity);
     setBus((command >> 24) & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->startBuffer();
     setBus((command >> 16) & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->startBuffer();
     setBus((command >> 8) & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->startBuffer();
     setBus(command & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->digitalWrite(_cs, HIGH);
+    _dev->digitalWrite(_cs, !_csPolarity);
 }
 
 void TFTPar8::streamStart() {
-    _dev->digitalWrite(_cs, LOW);
+    _dev->digitalWrite(_cs, _csPolarity);
 }
 
 void TFTPar8::streamEnd() {
-    _dev->digitalWrite(_cs, HIGH);
+    _dev->digitalWrite(_cs, !_csPolarity);
 }
 
 void TFTPar8::writeData8(uint8_t data) {
     _dev->startBuffer();
     _dev->digitalWrite(_dc, HIGH);
-    _dev->digitalWrite(_cs, LOW);
+    _dev->digitalWrite(_cs, _csPolarity);
     setBus(data);
-    _dev->endBuffer();
     clock();
-    _dev->digitalWrite(_cs, HIGH);
+    _dev->digitalWrite(_cs, !_csPolarity);
 }
 
 void TFTPar8::writeData16(uint16_t data) {
     _dev->startBuffer();
     _dev->digitalWrite(_dc, HIGH);
-    _dev->digitalWrite(_cs, LOW);
+    _dev->digitalWrite(_cs, _csPolarity);
     setBus(data >> 8);
-    _dev->endBuffer();
     clock();
-    _dev->startBuffer();
     setBus(data & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->digitalWrite(_cs, HIGH);
+    _dev->digitalWrite(_cs, !_csPolarity);
 }
 
 void TFTPar8::writeData32(uint32_t data) {
     _dev->startBuffer();
     _dev->digitalWrite(_dc, HIGH);
-    _dev->digitalWrite(_cs, LOW);
+    _dev->digitalWrite(_cs, _csPolarity);
     setBus((data >> 24) & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->startBuffer();
     setBus((data >> 16) & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->startBuffer();
     setBus((data >> 8) & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->startBuffer();
     setBus(data & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->digitalWrite(_cs, HIGH);
+    _dev->digitalWrite(_cs, !_csPolarity);
 }
 
 void TFTPar8::streamCommand8(uint8_t data) {
     _dev->startBuffer();
     _dev->digitalWrite(_dc, LOW);
     setBus(data);
-    _dev->endBuffer();
     clock();
 }
 
@@ -161,11 +142,8 @@ void TFTPar8::streamCommand16(uint16_t data) {
     _dev->startBuffer();
     _dev->digitalWrite(_dc, LOW);
     setBus(data >> 8);
-    _dev->endBuffer();
     clock();
-    _dev->startBuffer();
     setBus(data & 0xFF);
-    _dev->endBuffer();
     clock();
 }
 
@@ -173,19 +151,12 @@ void TFTPar8::streamCommand32(uint32_t data) {
     _dev->startBuffer();
     _dev->digitalWrite(_dc, LOW);
     setBus((data >> 24) & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->startBuffer();
     setBus((data >> 16) & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->startBuffer();
     setBus((data >> 8) & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->startBuffer();
     setBus(data & 0xFF);
-    _dev->endBuffer();
     clock();
 }
 
@@ -193,7 +164,6 @@ void TFTPar8::streamData8(uint8_t data) {
     _dev->startBuffer();
     _dev->digitalWrite(_dc, HIGH);
     setBus(data);
-    _dev->endBuffer();
     clock();
 }
 
@@ -201,11 +171,8 @@ void TFTPar8::streamData16(uint16_t data) {
     _dev->startBuffer();
     _dev->digitalWrite(_dc, HIGH);
     setBus(data >> 8);
-    _dev->endBuffer();
     clock();
-    _dev->startBuffer();
     setBus(data & 0xFF);
-    _dev->endBuffer();
     clock();
 }
 
@@ -214,18 +181,12 @@ void TFTPar8::streamData32(uint32_t data) {
     _dev->digitalWrite(_dc, HIGH);
     setBus((data >> 24) & 0xFF);
     clock();
-    _dev->startBuffer();
     setBus((data >> 16) & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->startBuffer();
     setBus((data >> 8) & 0xFF);
-    _dev->endBuffer();
     clock();
-    _dev->startBuffer();
     setBus(data & 0xFF);
     clock();
-    _dev->endBuffer();
 }
 
 void TFTPar8::blockData(uint8_t *d, uint32_t c) {

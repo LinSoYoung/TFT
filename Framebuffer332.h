@@ -17,7 +17,8 @@ class Framebuffer332 : public Framebuffer {
         void loadPalette(const uint8_t p[256][3]);
         void loadPalette(Framebuffer *fb);
         uint16_t colorAt(int16_t x, int16_t y);
-        void getScanLine(uint16_t y, uint16_t *data);
+        uint16_t bgColorAt(int16_t x, int16_t y);
+        void getScanLine(uint16_t y, uint16_t x, uint16_t w, uint16_t *data);
         void initializeDevice();
 };
 
