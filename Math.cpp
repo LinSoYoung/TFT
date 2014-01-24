@@ -1,10 +1,15 @@
 #include <TFT.h>
 
-uint32_t Math::FastUIntMpy(uint32_t a, uint32_t b) {
-    uint32_t o = 0;
-    for (uint32_t i = 0; i < b; i++) {
-        o += a;
+namespace Math {
+    uint32_t FastUIntMpy(uint16_t a, uint16_t b) {
+        uint32_t o = 0;
+
+        for (int i = 0; i < 16; i++) {
+            if ((b & (1<<i)) != 0) {
+                o += (a << i);
+            }
+        }
+        return o;
     }
-    return o;
 }
 
