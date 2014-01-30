@@ -170,7 +170,8 @@ ST7735 tft(&mySpi, ST7735::BlackTab);
 
 // Create a framebuffer for us to do all our work in
 uint8_t buffer[ST7735::Height * ST7735::Width];
-Framebuffer fb(ST7735::Height, ST7735::Width, buffer);
+SRAM sram(buffer, ST7735::Height * ST7735::Width);
+Framebuffer fb(ST7735::Height, ST7735::Width, &sram);
 
 // This is the hunter sprite/
 struct sprite *mySprite1;
@@ -221,7 +222,7 @@ void setup() {
 	fb.fillScreen(0);
 	fb.setCursor(0, 0);
 	fb.setFont(Fonts::Sinclair);
-	tft.update(fb);
+	tft.update(&fb);
 
 	// Add the hunter sprite to the sprite list
 	mySprite1 = fb.addSprite(target, 16, 16, '.', 5);
@@ -310,7 +311,7 @@ void loop() {
 	fb.print(score);
 
 	// And push the frame to the screen
-	tft.update(fb);
+	tft.update(&fb);
 }
 
 uint8_t js() {
