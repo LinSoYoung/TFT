@@ -12,6 +12,8 @@
 
 #include <algorithm>
 
+#include <stdint.h>
+
 // Base classes
 #include <TFTCommunicator.h>
 #include <DataStore.h>
