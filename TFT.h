@@ -22,7 +22,7 @@
 #include <ParallelIO.h>
 
 // Utility Classes
-#include <Math.h>
+#include <MathFuncs.h>
 
 typedef struct {
     float x;
