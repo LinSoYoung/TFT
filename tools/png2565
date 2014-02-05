@@ -1,0 +1,41 @@
+#!/usr/bin/php
+<?php
+
+$from = @$argv[1];
+$to = @$argv[2];
+
+if (!$from) {
+    print "Usage: png2raw565 <in.png> <out.raw>\n";
+    exit(10);
+}
+
+$img = ImageCreateFromPNG($from);
+
+$width = ImageSX($img);
+$height = ImageSY($img);
+
+$out = fopen($to, "w");
+fwrite($out, chr($width & 0xFF), 1);
+fwrite($out, chr(($width >> 8) & 0xFF), 1);
+fwrite($out, chr($height & 0xFF), 1);
+fwrite($out, chr(($height >> 8) & 0xFF), 1);
+
+for ($y = 0; $y < $height; $y++) {
+    for ($x = 0; $x < $width; $x++) {
+        $c = imageColorAt($img, $x, $y);
+        $r = ($c >> 16) & 0xFF;
+        $g = ($c >> 8) & 0xFF;
+        $b = $c & 0xFF;
+
+        $r = $r >> 3;
+        $g = $g >> 2;
+        $b = $b >> 3;
+
+        $oc = ($r << 11) | ($g << 5) | $b;
+        fwrite($out, chr($oc & 0xFF), 1);
+        fwrite($out, chr(($oc >> 8) & 0xFF), 1);
+    }
+}
+fclose($out);
+    
+

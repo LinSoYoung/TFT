@@ -17,7 +17,11 @@ static inline uint8_t color565to332(uint16_t c) {
 }
 
 static inline uint16_t color332to565(uint8_t c) {
-    return (((uint16_t)c & 0b11) << 3) | (((uint16_t)c & 0b11100) << 6) | (((uint16_t)c & 0b11100000) << 8);
+    uint16_t clr = (((uint16_t)c & 0b11) << 3) | (((uint16_t)c & 0b11100) << 6) | (((uint16_t)c & 0b11100000) << 8);
+    clr |= ((clr & 0b0010000000000000) ? 0b0001100000000000 : 0);
+    clr |= ((clr & 0b0000000100000000) ? 0b0000000011100000 : 0);
+    clr |= ((clr & 0b0000000000011000) ? 0b0000000000000111 : 0);
+    return clr;
 }
 
 void Framebuffer332::setPixel(int16_t x, int16_t y, uint16_t color) {
@@ -61,8 +65,8 @@ uint16_t Framebuffer332::colorAt(int16_t x, int16_t y) {
         uint8_t color = s->data[offset + Math::FastUIntMpy((y - s->ypos), s->width) + (x - s->xpos)];
         return color332to565(color);
     }
-    uint32_t pos = Math::FastUIntMpy(y, _width) + x;
-    return color332to565(buffer->read8(pos));
+    uint16_t cmm = color332to565(buffer->read8(Math::FastUIntMpy(y, _width) + (x)));
+    return cmm;
 }
 
 uint16_t Framebuffer332::bgColorAt(int16_t x, int16_t y) {

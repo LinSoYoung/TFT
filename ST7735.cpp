@@ -250,7 +250,7 @@ void ST7735::streamCommands(uint8_t *cmdlist) {
     }
 }
 
-void ST7735::setAddrWindow(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
+void ST7735::setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
 	_comm->writeCommand8(ST7735_CASET); // Column addr set
 	_comm->writeData8(0x00);
 	_comm->writeData8(x0+colstart);     // XSTART 
@@ -378,10 +378,10 @@ void ST7735::update(Framebuffer *fb) {
     uint16_t color = 0;
 
     _comm->streamStart();
-    for (int y = 0; y < _height; y++) {
-        uint8_t l = y & 1;
+    for (int16_t y = 0; y < _height; y++) {
+        uint16_t l = y & 1;
 
-        for (int x = 0; x < _width; x+=2) {
+        for (int16_t x = 0; x < _width; x+=2) {
             color = fb->colorAt(x, y);
             if (_variant == ST7735::BlackTab) color = swapcolor(color);
             pixpair = color << 16;

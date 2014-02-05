@@ -20,7 +20,7 @@ class ST7735 : public TFT {
 
 		ST7735(TFTCommunicator *comms, uint8_t variant) : TFT(comms), _variant(variant) {}
 
-		void setAddrWindow(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1);
+		void setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
         void fillScreen(uint16_t color);
         void setPixel(int16_t x, int16_t y, uint16_t color);
         void drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t color);

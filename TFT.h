@@ -130,6 +130,7 @@ class TFT : public Print
 #include <Framebuffer.h>
 #include <Framebuffer1.h>
 #include <Framebuffer332.h>
+#include <Framebuffer565.h>
 #include <Aggregator.h>
 
 // Supported devices
