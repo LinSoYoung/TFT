@@ -87,6 +87,7 @@ class Framebuffer : public TFT {
     private:
         uint16_t _masterWidth;
         uint16_t _masterHeight;
+    protected:
         uint8_t _antiAlias;
 };
 

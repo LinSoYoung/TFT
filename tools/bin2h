@@ -1,0 +1,30 @@
+#!/usr/bin/perl
+
+use strict;
+
+my $file = shift;
+my $out = shift;
+
+if (($file eq "") or ($out eq "")) {
+    print "Usage: bin2h <input file> <output file>\n";
+    exit(10);
+}
+
+sysopen(IN, "$file", "r") || die("Unable to open $file for reading");
+open(OUT, ">$out") || die("Unable to open $out for writing");
+
+my $bytes = 0;
+print OUT "unsigned char binary_data[] = {\n    ";
+my $cnt = 0;
+my $inch;
+while (sysread(IN, $inch, 1)) {
+    printf OUT "0x%02X, ", ord($inch);
+    $cnt++;
+    if ($cnt == 16) {
+        $cnt = 0;
+        print OUT "\n    ";
+    }
+    $bytes++;
+}
+print OUT "};\n";
+print OUT "unsigned long binary_data_size=" . $bytes . ";\n";

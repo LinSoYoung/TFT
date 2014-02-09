@@ -170,7 +170,3 @@ void Framebuffer565::getScanLine(uint16_t y, uint16_t x, uint16_t w, uint16_t *d
 		}
 	}
 }
-
-void Framebuffer565::setAntiAlias(uint8_t tf) {
-    _antiAlias = tf ? true : false;
-}

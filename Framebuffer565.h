@@ -4,9 +4,6 @@
 #include <TFT.h>
 
 class Framebuffer565 : public Framebuffer {
-    private:
-        uint8_t _antiAlias;
-
     public:
         Framebuffer565(int16_t w, int16_t h, DataStore *b);
 
@@ -23,7 +20,6 @@ class Framebuffer565 : public Framebuffer {
         uint16_t bgColorAt(int16_t x, int16_t y);
         void getScanLine(uint16_t y, uint16_t x, uint16_t w, uint16_t *data);
         void initializeDevice();
-        void setAntiAlias(uint8_t);
 };
 
 #endif
