@@ -30,10 +30,21 @@ typedef struct {
     float z;
 } point3d;
 
+struct Color565 {
+    union {
+        uint16_t value;
+        struct {
+            unsigned r:5;
+            unsigned g:6;
+            unsigned b:5;
+        } __attribute__((packed));
+    } __attribute__((packed));
+} __attribute__((packed));
+
 class Framebuffer;
 
 extern uint16_t rgb(uint32_t c);
-
+extern uint16_t rgb(uint8_t r, uint8_t g, uint8_t b);
 
 class TFT : public Print
 {
@@ -74,6 +85,9 @@ class TFT : public Print
         virtual void update(Framebuffer *fb, int16_t dx, int16_t dy);
         virtual uint16_t stringWidth(char *text);
         virtual uint16_t stringHeight(char *text);
+
+        virtual uint16_t bgColorAt(int16_t x, int16_t y);
+        virtual uint16_t colorAt(int16_t x, int16_t y);
 #if ARDUINO >= 100
         size_t write(uint8_t c);
 #else
@@ -151,6 +165,7 @@ class TFT : public Print
 #include <RLE.h>
 #include <Raw565.h>
 #include <Raw8.h>
+#include <BMP.h>
 
 #endif
 

@@ -1,15 +1,15 @@
-#ifndef _SSD1289_H_
-#define _SSD1289_H_
+#ifndef _SSD1963_H_
+#define _SSD1963_H_
 
 #include <TFT.h>
 
-class SSD1289 : public TFT {
+class SSD1963 : public TFT {
 
 	public:
-        static const uint16_t Width      = 240;
-        static const uint16_t Height     = 320;
+        static const uint16_t Width      = 800;
+        static const uint16_t Height     = 480;
 
-		SSD1289(TFTCommunicator *comms) : TFT(comms) {}
+		SSD1963(TFTCommunicator *comms) : TFT(comms) {}
 
 		void setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
         void fillScreen(uint16_t color);

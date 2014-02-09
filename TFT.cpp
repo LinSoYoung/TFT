@@ -15,6 +15,13 @@ uint16_t rgb(uint32_t c) {
     return ((r << 11) | (g << 5) | b);
 }
 
+uint16_t rgb(uint8_t r, uint8_t g, uint8_t b) {
+    r = r >> 3;
+    g = g >> 2;
+    b = b >> 3;
+    return ((r << 11) | (g << 5) | b);
+}
+
 TFT::TFT() {
     _comm = NULL;
     cursor_y = cursor_x = 0;
@@ -648,3 +655,13 @@ uint32_t TFT::rgb2hsv(uint16_t rgb)
 
     return (h << 16) | (s << 8) | v;
 }
+
+uint16_t TFT::colorAt(int16_t x, int16_t y) {
+    return Color::Black;
+}
+
+uint16_t TFT::bgColorAt(int16_t x, int16_t y) {
+    return Color::Black;
+}
+
+
