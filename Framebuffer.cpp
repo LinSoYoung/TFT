@@ -201,8 +201,100 @@ uint16_t Framebuffer::colorAt(int16_t x, int16_t y) {
         uint8_t color = s->data[offset + (y - s->ypos) * s->width + (x - s->xpos)];
         return palette[color];
     }
-    uint32_t pos = y * _width + x;
-    return palette[bufferRead(pos)];
+
+    if (!_antiAlias) {
+        uint32_t pos = y * _width + x;
+        return palette[bufferRead(pos)];
+    }
+
+    uint32_t red=0, green=0, blue=0;
+
+    uint16_t top = 0;
+    uint16_t left = 0;
+    uint16_t right = 0;
+    uint16_t bottom = 0;
+
+    if (y > 0) {
+        top = y - 1;
+    } else {
+        top = y;
+    }
+
+    if (y < _height-1) {
+        bottom = y + 1;
+    } else {
+        bottom = y;
+    }
+
+    if (x > 0) {
+        left = x - 1;
+    } else {
+        left = x;
+    }
+
+    if (x < _width-1) {
+        right = x + 1;
+    } else {
+        right = x;
+    }
+
+    uint16_t topline = Math::FastUIntMpy(top, _width);
+    uint16_t midline = Math::FastUIntMpy(y, _width);
+    uint16_t bottomline = Math::FastUIntMpy(bottom, _width);
+
+    struct rgb565 ctl, ctm, ctr, cml, cmm, cmr, cbl, cbm, cbr;
+
+    ctl.value = palette[buffer->read8(topline + left)];
+    ctm.value = palette[buffer->read8(topline + x)];
+    ctr.value = palette[buffer->read8(topline + right)];
+
+    cml.value = palette[buffer->read8(midline + left)];
+    cmm.value = palette[buffer->read8(midline + x)];
+    cmr.value = palette[buffer->read8(midline + right)];
+
+    cbl.value = palette[buffer->read8(bottomline + left)];
+    cbm.value = palette[buffer->read8(bottomline + x)];
+    cbr.value = palette[buffer->read8(bottomline + right)];
+
+    red += (ctl.r >> 4);
+    red += (ctm.r >> 3);
+    red += (ctr.r >> 4);
+    red += (cml.r >> 3);
+    red += (cmm.r >> 1);
+    red += (cmr.r >> 3);
+    red += (cbl.r >> 4);
+    red += (cbm.r >> 3);
+    red += (cbr.r >> 4);
+    if (red > 0x1F) red = 0x1F;
+
+    green += (ctl.g >> 4);
+    green += (ctm.g >> 3);
+    green += (ctr.g >> 4);
+    green += (cml.g >> 3);
+    green += (cmm.g >> 1);
+    green += (cmr.g >> 3);
+    green += (cbl.g >> 4);
+    green += (cbm.g >> 3);
+    green += (cbr.g >> 4);
+    if (green > 0x3F) green = 0x3F;
+
+    blue += (ctl.b >> 4);
+    blue += (ctm.b >> 3);
+    blue += (ctr.b >> 4);
+    blue += (cml.b >> 3);
+    blue += (cmm.b >> 1);
+    blue += (cmr.b >> 3);
+    blue += (cbl.b >> 4);
+    blue += (cbm.b >> 3);
+    blue += (cbr.b >> 4);
+    if (blue > 0x1F) blue = 0x1F;
+
+    struct rgb565 out;
+    out.r = red;
+    out.g = green;
+    out.b = blue;
+
+    return out.value;
 }
 
 uint16_t Framebuffer::bgColorAt(int16_t x, int16_t y) {
@@ -394,4 +486,8 @@ void Framebuffer::scroll(int16_t dx, int16_t dy) {
             }
         }
     }
+}
+
+void Framebuffer::setAntiAlias(uint8_t aa) {
+    _antiAlias = aa ? true : false;
 }

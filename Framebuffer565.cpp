@@ -43,17 +43,6 @@ void Framebuffer565::loadPalette(const uint8_t p[256][3]) {
 void Framebuffer565::loadPalette(Framebuffer *fb) {
 }
 
-struct rgb565 {
-    union {
-        uint16_t value;
-        struct {
-            unsigned r:5;
-            unsigned g:6;
-            unsigned b:5;
-        } __attribute__((packed));
-    } __attribute__((packed));
-} __attribute__((packed));
-
 uint16_t Framebuffer565::colorAt(int16_t x, int16_t y) {
     if (x < 0 || y < 0 || x >= _width || y >= _width) {
         return 0;

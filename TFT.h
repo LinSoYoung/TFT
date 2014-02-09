@@ -30,6 +30,17 @@ typedef struct {
     float z;
 } point3d;
 
+struct rgb565 {
+    union {
+        uint16_t value;
+        struct {
+            unsigned r:5;
+            unsigned g:6;
+            unsigned b:5;
+        } __attribute__((packed));
+    } __attribute__((packed));
+} __attribute__((packed));
+
 struct Color565 {
     union {
         uint16_t value;
@@ -156,6 +167,7 @@ class TFT : public Print
 #include <ILI9340.h>
 #include <BD663474.h>
 #include <SSD1289.h>
+#include <SSD1936.h>
 
 // Touchscreen devices
 #include <Touch.h>
