@@ -1,0 +1,109 @@
+#!/usr/bin/php
+<?php
+
+$file = $argv[1];
+$depth = 8;
+$rlimit = 255;
+if ($argv[1] == '-8') {
+    $depth = 8;
+    $rlimit = 255;
+    $file = $argv[2];
+}
+if ($argv[1] == '-16') {
+    $depth = 16;
+    $rlimit = 65535;
+    $file = $argv[2];
+}
+
+$name = "image";
+
+if (preg_match("/\/([^\/]+).png/", $file, $m)) {
+    $name = $m[1];
+}
+
+$img = ImageCreateFromPNG($file);
+
+$width = ImageSX($img);
+$height = ImageSY($img);
+
+$data = array();
+$dc = 0;
+
+$count = 0;
+for ($y = 0; $y < $height; $y++) {
+    for ($x = 0; $x < $width; $x++) {
+        $color = ImageColorAt($img, $x, $y);
+        $data[$dc] = $color;
+        $dc++;
+    }
+}
+
+$lastval = $data[0];
+$runlength = 0;
+$currentval = 0;
+
+$pos = 0;
+
+$out = array();
+$opos = 0;
+
+while ($pos < $dc) {
+    $currentval = $data[$pos];
+    if($currentval != $lastval || $runlength == $rlimit) {
+        if ($runlength == 1) {
+            $out[$opos++] = $lastval;
+            $lastval = $currentval;
+            $runlength = 0;
+        } else {
+            $out[$opos++] = $lastval;
+            $out[$opos++] = $lastval;
+            if ($depth > 8) {
+                $out[$opos++] = $runlength >> 8;
+            }
+            $out[$opos++] = $runlength & 0xFF;
+            $lastval = $currentval;
+            $runlength = 0;
+        }
+    }
+    $runlength++;
+    $pos++;
+}
+
+print "// RLE format:\n";
+print "// 4 bytes RLE header - RLE\\x08 or RLE\\x10\n";
+print "// 4 bytes image data length - MSB first = $opos\n";
+print "// 2 bytes image width - MSB first = $width\n";
+print "// 2 bytes image height - MSB first = $height\n";
+print "// Image data in 8-bit or 16-bit double-byte RLE format:\n";
+print "// Single unique byte = literal byte\n";
+print "// Double byte indicates run - third byte is run length 0-255, or third and fourth bytes 0-65535\n";
+print "\n";
+
+print "const uint8_t " . $name . "[" . ($opos + 12) . "] = {\n";
+
+printf("0x%02X, 0x%02X, 0x%02X, 0x%02X,\n",
+    ord('R'), ord('L'), ord('E'), $depth);
+printf("0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X,\n",
+    ($opos >> 24) & 0xFF,
+    ($opos >> 16) & 0xFF,
+    ($opos >> 8) & 0xFF,
+    ($opos >> 0) & 0xFF,
+    ($width >> 8) & 0xFF,
+    ($width >> 0) & 0xFF,
+    ($height >> 8) & 0xFF,
+    ($height >> 0) & 0xFF
+);
+
+$cc = 0;
+$dc = 0;
+while ($dc < $opos) {
+    printf("0x%02X, ", $out[$dc]);
+    $cc++;
+    $dc++;
+    if ($cc == 16) {
+        print "\n";
+        $cc = 0;
+    }
+}
+
+print "};\n";
