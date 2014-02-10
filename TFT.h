@@ -167,7 +167,7 @@ class TFT : public Print
 #include <ILI9340.h>
 #include <BD663474.h>
 #include <SSD1289.h>
-#include <SSD1936.h>
+#include <SSD1963.h>
 
 // Touchscreen devices
 #include <Touch.h>
