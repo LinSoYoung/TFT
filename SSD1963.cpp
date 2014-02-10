@@ -224,7 +224,7 @@ void SSD1963::setRotation(uint8_t m) {
 }
 
 void SSD1963::invertDisplay(boolean i) {
-	_comm->writeCommand(i ? SSD1963_EnterInvertMode : SSD1963_ExitInvertMode);
+	_comm->writeCommand16(i ? SSD1963_EnterInvertMode : SSD1963_ExitInvertMode);
 }
 
 void SSD1963::update(Framebuffer *fb) {
