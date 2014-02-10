@@ -31,6 +31,19 @@ Resolution: 800x480
 
 WaveShare LCD22
 ---------------
+
 Driver: BD663474
+
 Communicator: TFTDSPI
+
 Resolution: 240x320
+
+Generic Graphical LCD
+---------------------
+
+Driver: KS0108
+
+Communicator: RawPar / MCP23S17
+
+Resolution: 64x64 per chip (link chips with Aggregator)
+
