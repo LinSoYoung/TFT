@@ -1,6 +1,6 @@
 #include <SPISRAM.h>
 
-#define RAMSPEED 20000000UL
+#define RAMSPEED 10000000UL
 
 void SPISRAM::initializeDevice() {
     _spi->begin();
