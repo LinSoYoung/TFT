@@ -301,14 +301,22 @@ void ST7735::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t 
 
 void ST7735::drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t color) {
 	// Rudimentary clipping
-	if((x >= _width) || (y >= _height)) 
+
+    if (x < 0) {
+        w += x;
+        x = 0;
+    }
+	if((x >= _width) || (y >= _height) || (y < 0)) {
 		return;
-	if((x+w-1) >= _width)  
+    }
+	if((x+w-1) >= _width) {
 		w = _width-x;
+    }
+
 	setAddrWindow(x, y, x+w-1, y);
+
 	if (_variant == BlackTab)   
 		color = swapcolor(color);
-	uint8_t hi = color >> 8, lo = color;
 
     _comm->streamStart();
 	while (w--) {
@@ -318,14 +326,24 @@ void ST7735::drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t color)
 }
 
 void ST7735::drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t color) {
-	if((x >= _width) || (y >= _height)) 
+    if (y < 0) {
+        h += y;
+        y = 0;
+    }
+
+	if((x >= _width) || (y >= _height) || (x < 0))  {
 		return;
-	if((y+h-1) >= _height) 
+    }
+
+	if((y+h-1) >= _height) {
 		h = _height-y;
+    }
+
 	setAddrWindow(x, y, x, y+h-1);
+
 	if (_variant == BlackTab)   
 		color = swapcolor(color);
-	uint8_t hi = color >> 8, lo = color;
+
 
     _comm->streamStart();
 	while (h--) {
