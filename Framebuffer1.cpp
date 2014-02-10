@@ -19,13 +19,13 @@ void Framebuffer1::setPixel(int16_t x, int16_t y, uint16_t color) {
     }
     uint8_t pcol = color & 0xFF;
     uint32_t pos = Math::FastUIntMpy(y, _width) + x;
-    uint32_t bytepos = pos / 8;
-    uint32_t bitpos = pos & 8;
+    uint32_t bytepos = pos >> 3;
+    uint32_t bitpos = pos % 8;
     uint8_t newval;
     if (color) {
-	newval = buffer->read8(bytepos) | (1<<bitpos);
+        newval = buffer->read8(bytepos) | (1<<bitpos);
     } else {
-	newval = buffer->read8(bytepos) & ~(1<<bitpos);
+        newval = buffer->read8(bytepos) & ~(1<<bitpos);
     }
     buffer->write8(bytepos, newval);
 }
@@ -78,7 +78,7 @@ uint16_t Framebuffer1::colorAt(int16_t x, int16_t y) {
 
 void Framebuffer1::getScanLine(uint16_t y, uint16_t x, uint16_t w, uint16_t *data) {
 	uint8_t bufferdata[w/8 + 2];
-	buffer->read8(((Math::FastUIntMpy(y, _width) + x) / 8), bufferdata, w / 8 + 2);
+	buffer->read8((Math::FastUIntMpy(y, _width) + x) >> 3, bufferdata, (w >> 3) + 2);
 	for (uint16_t px = 0; px < w; px++) {
 		struct sprite *s = spriteAt(x + px, y);
 		if (s) {

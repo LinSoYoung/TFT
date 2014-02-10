@@ -6,7 +6,8 @@ TFTPMP::TFTPMP() {
 void TFTPMP::initializeDevice() {
     PMCON = 1<<9 | 1<<8;
     //                          WAITB   WAITM    WAITE
-    PMMODE = 1<<10 | 0b10<<8 | (2<<6) | (2<<2) | 1;
+    //PMMODE = 1<<10 | 0b10<<8 | (2<<6) | (2<<2) | 1;
+    PMMODE = 1<<10 | 0b10<<8 | (0<<6) | (1<<2) | 0;
     PMADDR = 0;
     PMAEN = 1;
     PMCONSET = 1<<15;
