@@ -13,19 +13,19 @@ Draw a line from point *x0,y0* to point *x1,y1* in color *color*.
 
     void drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color);
 
-Draw a hollow rectangle from point *x,y* with with *w* and height *h* in color *color*.
+Draw a hollow rectangle from point *x,y* with width *w* and height *h* in color *color*.
 
     void drawRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
 
-Draw a filled rectangle from point *x,y* with with *w* and height *h* in color *color*.
+Draw a filled rectangle from point *x,y* with width *w* and height *h* in color *color*.
 
     void fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
 
-Draw a hollow rectangle from point *x,y* with with *w* and height *h* in color *color*.  The corners are rounded off with a radius of *r*.
+Draw a hollow rectangle from point *x,y* with width *w* and height *h* in color *color*.  The corners are rounded off with a radius of *r*.
 
     void drawRoundRect(int16_t x, int16_t y, int16_t w, int16_t h, int16_t r, uint16_t color);
 
-Draw a filled rectangle from point *x,y* with with *w* and height *h* in color *color*.  The corners are rounded off with a radius of *r*.
+Draw a filled rectangle from point *x,y* with width *w* and height *h* in color *color*.  The corners are rounded off with a radius of *r*.
 
     void fillRoundRect(int16_t x, int16_t y, int16_t w, int16_t h, int16_t r, uint16_t color);
 
