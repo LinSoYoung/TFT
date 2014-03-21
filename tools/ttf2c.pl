@@ -85,7 +85,7 @@ open(OUT,">$out");
 print OUT "#include <TFT.h>\n\n";
 print OUT "const uint8_t Fonts::" . $name . "[] = {\n";
 
-printf(OUT "    %d, %d, 0x%02X, 0x%02X,\n",
+printf(OUT "    %d, %d, 0x%02X, 0x%02X, 1,\n",
     $size->{height}, $size->{bpl}, $start, $end);
 
 my $char = $start;

@@ -25,6 +25,14 @@
 // Utility Classes
 #include "MathFuncs.h"
 
+typedef struct {
+    uint8_t linesPerCharacter;
+    uint8_t bytesPerLine;
+    uint8_t startGlyph;
+    uint8_t endGlyph;
+    uint8_t bitsPerPixel;
+} FontHeader;
+
 struct coord {
     uint16_t x;
     uint16_t y;
@@ -36,7 +44,7 @@ typedef struct {
     float z;
 } point3d;
 
-struct rgb565 {
+typedef struct {
     union {
         uint16_t value;
         struct {
@@ -45,18 +53,7 @@ struct rgb565 {
             unsigned b:5;
         } __attribute__((packed));
     } __attribute__((packed));
-} __attribute__((packed));
-
-struct Color565 {
-    union {
-        uint16_t value;
-        struct {
-            unsigned r:5;
-            unsigned g:6;
-            unsigned b:5;
-        } __attribute__((packed));
-    } __attribute__((packed));
-} __attribute__((packed));
+} __attribute__((packed)) Color565;
 
 class Framebuffer;
 

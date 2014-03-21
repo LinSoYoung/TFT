@@ -431,41 +431,46 @@ void TFT::write(uint8_t c) {
 
 // draw a character
 uint8_t TFT::drawChar(int16_t x, int16_t y, unsigned char c, uint16_t color, uint16_t bg) {
+
     if (font == NULL) {
         return 0;
     }
 
-    uint8_t lpc = font[0];  // Lines per character
-    uint8_t bpl = font[1];  // Bytes per line
-    uint8_t startGlyph = font[2]; // First character in data
-    uint8_t endGlyph = font[3]; // Last character in data
+    FontHeader *header = (FontHeader *)font;
 
-    if (c < startGlyph || c > endGlyph) {
+    if (c < header->startGlyph || c > header->endGlyph) {
         return 0;
     }
 
-    c = c - startGlyph;
+    c = c - header->startGlyph;
 
     // Start of this character's data is the character number multiplied by the
     // number of lines in a character (plus one for the character width) multiplied
     // by the number of bytes in a line, and then offset by 4 for the header.
-    uint32_t charstart = (c * ((lpc * bpl) + 1)) + 4; // Start of character data
+    uint32_t charstart = (c * ((header->linesPerCharacter * header->bytesPerLine) + 1)) + sizeof(FontHeader); // Start of character data
     uint8_t charwidth = font[charstart++]; // The first byte of a block is the width of the character
 
-    for (int8_t i = 0; i < lpc; i++ ) {
+    uint32_t bitmask = (1 << header->bitsPerPixel) - 1;
+
+    for (int8_t i = 0; i < header->linesPerCharacter; i++ ) {
         uint64_t line = 0;
-        for (int8_t j = 0; j < bpl; j++) {
+        for (int8_t j = 0; j < header->bytesPerLine; j++) {
             line <<= 8;
-            line |= font[charstart + (i * bpl) + j];
+            line |= font[charstart + (i * header->bytesPerLine) + j];
         }
 
         for (int8_t j = 0; j < charwidth; j++) {
-            if (line & 0x1) {
-                setPixel(x+j, y+i, color);
+            uint32_t pixelValue = line & bitmask;
+            if (pixelValue > 0) {
+                uint16_t bgc = bg;
+                if (bg == color) {
+                    bgc = colorAt(x+j, y+i);
+                }
+                setPixel(x+j, y+i, mix(bgc, color, 255 * pixelValue / bitmask));
             } else if (bg != color) {
                 setPixel(x+j, y+i, bg);
             }
-            line >>= 1;
+            line >>= header->bitsPerPixel;
         }
     }
     return charwidth;
@@ -705,9 +710,9 @@ void TFT::closeWindow() {
 }
 
 uint16_t TFT::mix(uint16_t a, uint16_t b, uint8_t pct) {
-    struct Color565 col_a;
-    struct Color565 col_b;
-    struct Color565 col_out;
+    Color565 col_a;
+    Color565 col_b;
+    Color565 col_out;
     col_a.value = a;
     col_b.value = b;
     uint32_t temp;

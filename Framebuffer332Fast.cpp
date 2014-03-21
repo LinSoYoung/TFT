@@ -113,7 +113,7 @@ uint16_t Framebuffer332Fast::colorAt(int16_t x, int16_t y) {
     uint16_t midline = (y * _width);
     uint16_t bottomline = (bottom * _width);
 
-    struct rgb565 ctl, ctm, ctr, cml, cmm, cmr, cbl, cbm, cbr;
+    Color565 ctl, ctm, ctr, cml, cmm, cmr, cbl, cbm, cbr;
 
     ctl.value = color332to565(dbuffer[topline + left]);
     ctm.value = color332to565(dbuffer[topline + x]);
@@ -160,7 +160,7 @@ uint16_t Framebuffer332Fast::colorAt(int16_t x, int16_t y) {
     blue += (cbr.b >> 4);
     if (blue > 0x1F) blue = 0x1F;
 
-    struct rgb565 out;
+    Color565 out;
     out.r = red;
     out.g = green;
     out.b = blue;
