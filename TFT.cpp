@@ -110,10 +110,20 @@ void TFT::drawCircleHelper( int16_t x0, int16_t y0, int16_t r, uint8_t cornernam
     }
 }
 
-void TFT::fillCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color) {
-    drawVerticalLine(x0, y0-r, 2*r+1, color);
-    fillCircleHelper(x0, y0, r, 3, 0, color);
+void TFT::fillCircle(int16_t x0, int16_t y0, int16_t radius, uint16_t color) {
+    int32_t r2 = radius * radius;
+    for (int y1 = 0-radius; y1 <= 0; y1++) {
+        int32_t y12 = y1 * y1;
+        for (int x1 = 0-radius; x1 <= 0; x1++) {
+            if (x1 * x1 + y12 <= r2) {
+                drawHorizontalLine(x0 + x1, y0 + y1, 2 * (0-x1), color);
+                drawHorizontalLine(x0 + x1, y0 - y1, 2 * (0-x1), color);
+                break;
+            }
+        }
+    }
 }
+
 
 // used to do circles and roundrects!
 void TFT::fillCircleHelper(int16_t x0, int16_t y0, int16_t r, uint8_t cornername, int16_t delta, uint16_t color) {
@@ -664,4 +674,89 @@ uint16_t TFT::bgColorAt(int16_t x, int16_t y) {
     return Color::Black;
 }
 
+void TFT::openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
+    winx0 = x0;
+    winy0 = y0;
+    winx1 = x1;
+    winy1 = y1;
+    winpx = 0;
+    winpy = 0;
+}
 
+void TFT::windowData(uint16_t d) {
+    setPixel(winx0 + winpx, winy0 + winpy, d);
+    winpx++;
+    if (winpx + winx0 > winx1) {
+        winpx = 0;
+        winpy++;
+    }
+    if (winpy + winy0 > winy1) {
+        winpy = 0;
+    }
+}
+
+void TFT::windowData(uint16_t *d, uint32_t l) {
+    for (uint32_t i = 0; i < l; i++) {
+        windowData(d[i]);
+    }
+}
+
+void TFT::closeWindow() {
+}
+
+uint16_t TFT::mix(uint16_t a, uint16_t b, uint8_t pct) {
+    struct Color565 col_a;
+    struct Color565 col_b;
+    struct Color565 col_out;
+    col_a.value = a;
+    col_b.value = b;
+    uint32_t temp;
+    temp = (((int32_t)col_a.r * (255-pct)) / 255) + (((uint32_t)col_b.r * pct) / 255);
+    col_out.r = temp;
+    temp = (((int32_t)col_a.g * (255-pct)) / 255) + (((uint32_t)col_b.g * pct) / 255);
+    col_out.g = temp;
+    temp = (((int32_t)col_a.b * (255-pct)) / 255) + (((uint32_t)col_b.b * pct) / 255);
+    col_out.b = temp;
+    return col_out.value;
+}
+
+boolean TFT::clipToScreen(int16_t &x, int16_t &y, int16_t &w, int16_t &h) {
+    if (x < 0) {
+        w += x;
+        x = 0;
+        if (w <= 0) {
+            return false;
+        }
+    }
+
+    if (y < 0) {
+        h += y;
+        y = 0;
+        if (h <= 0) {
+            return false;
+        }
+    }
+
+    if (x >= _width) {
+        return false;
+    }
+
+    if (y >= _height) {
+        return false;
+    }
+
+    if (x + w >= _width) {
+        w = _width-x;
+        if (w <= 0) {
+            return false;
+        }
+    }
+
+    if (y + h >= _height) {
+        h = _height-y;
+        if (h <= 0) {
+            return false;
+        }
+    }
+    return true;
+}

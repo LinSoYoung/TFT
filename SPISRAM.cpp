@@ -1,4 +1,4 @@
-#include <SPISRAM.h>
+#include <TFT.h>
 
 #define RAMSPEED 10000000UL
 

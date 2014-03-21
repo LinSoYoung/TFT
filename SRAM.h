@@ -2,7 +2,6 @@
 #define _SRAM_H
 
 #include <TFT.h>
-#include <DSPI.h>
 
 class SRAM : public DataStore {
     public:

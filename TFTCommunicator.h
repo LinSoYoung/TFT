@@ -1,6 +1,8 @@
 #ifndef _TFT_COMMUNICATOR_H
 #define _TFT_COMMUNICATOR_H
 
+#include <TFT.h>
+
 class TFTCommunicator
 {
     public:

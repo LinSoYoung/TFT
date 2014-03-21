@@ -1,7 +1,7 @@
 #ifndef _RAWPAR_H
 #define _RAWPAR_H
 
-#include <TFTCommunicator.h>
+#include <TFT.h>
 
 class RawPar : public TFTCommunicator 
 {

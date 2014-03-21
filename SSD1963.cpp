@@ -160,29 +160,40 @@ void SSD1963::fillScreen(uint16_t color) {
 }
 
 void SSD1963::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) {
-	if((x >= _width) || (y >= _height)) 
-		return;
-	if((x + w - 1) >= _width)  
-		w = _width  - x;
-	if((y + h - 1) >= _height) 
-		h = _height - y;
-
+    if (!clipToScreen(x, y, w, h)) {
+        return;
+    }
     _comm->streamStart();
 	setAddrWindow(x, y, x+w-1, y+h-1);
-	for(y=h; y>0; y--) {
-		for(x=w; x>0; x--) {
-            _comm->streamData16(color);
-		}
+	for(uint32_t i = 0; i < w * h; i++) {
+        _comm->streamData16(color);
 	}
     _comm->streamEnd();
 }
 
 void SSD1963::drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t color) {
-	// Rudimentary clipping
-	if((x >= _width) || (y >= _height)) 
-		return;
-	if((x+w-1) >= _width)  
-		w = _width-x;
+    if ((y < 0) || (y >= _height) || (w <= 0)) {
+        return;
+    }
+
+    if (x < 0) {
+        w += x;
+        x = 0;
+        if (w <= 0) {
+            return;
+        }
+    }
+
+    if (x >= _width) {
+        return;
+    }
+
+    if (x + w >= _width) {
+        w = _width-x;
+        if (w <= 0) {
+            return;
+        }
+    }
 
     _comm->streamStart();
 	setAddrWindow(x, y, x+w-1, y);
@@ -193,10 +204,28 @@ void SSD1963::drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t color
 }
 
 void SSD1963::drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t color) {
-	if((x >= _width) || (y >= _height)) 
-		return;
-	if((y+h-1) >= _height) 
-		h = _height-y;
+    if ((x < 0) || (x >= _width) || (h <= 0)) {
+        return;
+    }
+
+    if (y < 0) {
+        h += y;
+        y = 0;
+        if (h <= 0) {
+            return;
+        }
+    }
+
+    if (y >= _height) {
+        return;
+    }
+
+    if (y + h >= _height) {
+        h = _height-y;
+        if (h <= 0) {
+            return;
+        }
+    }
 
     _comm->streamStart();
 	setAddrWindow(x, y, x, y+h-1);

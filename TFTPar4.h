@@ -1,7 +1,7 @@
 #ifndef _TFTPAR4_H
 #define _TFTPAR4_H
 
-#include <TFTCommunicator.h>
+#include <TFT.h>
 
 class TFTPar4 : public TFTCommunicator 
 {

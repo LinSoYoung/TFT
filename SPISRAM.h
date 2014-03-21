@@ -2,7 +2,6 @@
 #define _SPISRAM_H
 
 #include <TFT.h>
-#include <DSPI.h>
 
 class SPISRAM : public DataStore {
     public:

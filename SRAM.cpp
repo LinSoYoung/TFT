@@ -1,4 +1,4 @@
-#include <SRAM.h>
+#include <TFT.h>
 
 void SRAM::initializeDevice() {
 	memset(_buffer, 0, _size);

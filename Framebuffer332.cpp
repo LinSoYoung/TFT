@@ -25,17 +25,17 @@ static inline uint16_t color332to565(uint8_t c) {
 }
 
 void Framebuffer332::setPixel(int16_t x, int16_t y, uint16_t color) {
-    translateCoordinates(&x, &y);
+ //   translateCoordinates(&x, &y);
 
     if (x < 0 || x >= _width || y < 0 || y >= _height) {
         return;
     }
 
-    buffer->write8(x + Math::FastUIntMpy(y, _width), color565to332(color));
+    buffer->write8(x +(y * _width), color565to332(color));
 }
 
 void Framebuffer332::fillScreen(uint16_t color) {
-    for (uint32_t x = 0; x < Math::FastUIntMpy(_width, _height); x++) {
+    for (uint32_t x = 0; x < (_width * _height); x++) {
         buffer->write8(x, color565to332(color));
     }
 }
@@ -61,13 +61,13 @@ uint16_t Framebuffer332::colorAt(int16_t x, int16_t y) {
     }
     struct sprite *s = spriteAt(x, y);
     if (s) {
-        uint32_t offset = Math::FastUIntMpy(Math::FastUIntMpy(s->width, s->height), s->currentframe);
-        uint8_t color = s->data[offset + Math::FastUIntMpy((y - s->ypos), s->width) + (x - s->xpos)];
+        uint32_t offset = ((s->width * s->height) * s->currentframe);
+        uint8_t color = s->data[offset + ((y - s->ypos) * s->width) + (x - s->xpos)];
         return color332to565(color);
     }
 
     if (!_antiAlias) {
-        uint16_t cmm = color332to565(buffer->read8(Math::FastUIntMpy(y, _width) + (x)));
+        uint16_t cmm = color332to565(buffer->read8((y * _width) + (x)));
         return cmm;
     }
 
@@ -102,9 +102,9 @@ uint16_t Framebuffer332::colorAt(int16_t x, int16_t y) {
         right = x;
     }
 
-    uint16_t topline = Math::FastUIntMpy(top, _width);
-    uint16_t midline = Math::FastUIntMpy(y, _width);
-    uint16_t bottomline = Math::FastUIntMpy(bottom, _width);
+    uint16_t topline = (top * _width);
+    uint16_t midline = (y * _width);
+    uint16_t bottomline = (bottom * _width);
 
     struct rgb565 ctl, ctm, ctr, cml, cmm, cmr, cbl, cbm, cbr;
 
@@ -165,18 +165,18 @@ uint16_t Framebuffer332::bgColorAt(int16_t x, int16_t y) {
     if (x < 0 || y < 0 || x >= _width || y >= _width) {
         return 0;
     }
-    uint32_t pos = Math::FastUIntMpy(y, _width) + x;
+    uint32_t pos = (y * _width) + x;
     return color332to565(buffer->read8(pos));
 }
 
 void Framebuffer332::getScanLine(uint16_t y, uint16_t x, uint16_t w, uint16_t *data) {
 	uint8_t bufferdata[w];
-	buffer->read8(Math::FastUIntMpy(y, getWidth()) + x, bufferdata, w);
+	buffer->read8((y * getWidth()) + x, bufferdata, w);
 	for (uint16_t px = 0; px < w; px++) {
 		struct sprite *s = spriteAt(x + px, y);
 		if (s) {
-			uint32_t offset = Math::FastUIntMpy(Math::FastUIntMpy(s->width, s->height), s->currentframe);
-			uint8_t color = s->data[offset + Math::FastUIntMpy((y - s->ypos), s->width) + (px - s->xpos)];
+			uint32_t offset = ((s->width * s->height) * s->currentframe);
+			uint8_t color = s->data[offset + ((y - s->ypos) * s->width) + (px - s->xpos)];
 			data[px] = color332to565(color);
 		} else {
             data[px] = color332to565(bufferdata[px]);

@@ -1,8 +1,7 @@
 #ifndef _TFTDSPI_H
 #define _TFTDSPI_H
 
-#include <TFTCommunicator.h>
-#include <DSPI.h>
+#include <TFT.h>
 
 class TFTDSPI : public TFTCommunicator 
 {

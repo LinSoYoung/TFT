@@ -5,6 +5,8 @@
 #ifndef _COLOR_H
 #define _COLOR_H
 
+#include <TFT.h>
+
 class Color {
     public: 
         const static uint16_t Snow                  = RGB(255,250,250);

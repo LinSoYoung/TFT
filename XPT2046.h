@@ -3,11 +3,6 @@
 
 #include <TFT.h>
 
-struct coord {
-    uint16_t x;
-    uint16_t y;
-};
-
 class XPT2046 : public Touch {
     public: 
         XPT2046(TFTCommunicator *comm, uint16_t w, uint16_t h) : Touch(comm, w, h) {}

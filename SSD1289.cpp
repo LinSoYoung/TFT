@@ -128,13 +128,9 @@ void SSD1289::fillScreen(uint16_t color) {
 }
 
 void SSD1289::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) {
-	if((x >= _width) || (y >= _height)) 
-		return;
-	if((x + w - 1) >= _width)  
-		w = _width  - x;
-	if((y + h - 1) >= _height) 
-		h = _height - y;
-
+    if (!clipToScreen(x, y, w, h)) {
+        return;
+    }
     _comm->streamStart();
 	setAddrWindow(x, y, x+w-1, y+h-1);
 	for(y=h; y>0; y--) {
@@ -146,33 +142,33 @@ void SSD1289::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t
 }
 
 void SSD1289::drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t color) {
-	// Rudimentary clipping
-	if((x >= _width) || (y >= _height)) 
-		return;
-	if((x+w-1) >= _width)  
-		w = _width-x;
+    int16_t h = 1;
+    if (!clipToScreen(x, y, w, h)) {
+        return;
+    }
 
     _comm->streamStart();
-	setAddrWindow(x, y, x+w-1, y);
-	while (w--) {
-		_comm->streamData16(color);
-	}
+    setAddrWindow(x, y, x+w-1, y);
+    while (w--) {
+        _comm->streamData16(color);
+    }
     _comm->streamEnd();
 }
 
 void SSD1289::drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t color) {
-	if((x >= _width) || (y >= _height)) 
-		return;
-	if((y+h-1) >= _height) 
-		h = _height-y;
+    int16_t w = 1;
+    if (!clipToScreen(x, y, w, h)) {
+        return;
+    }
 
     _comm->streamStart();
-	setAddrWindow(x, y, x, y+h-1);
-	while (h--) {
-		_comm->streamData16(color);
-	}
+    setAddrWindow(x, y, x, y+h-1);
+    while (h--) {
+        _comm->streamData16(color);
+    }
     _comm->streamEnd();
 }
+
 
 #define SSD1289_EMODE 0x0003
 
@@ -210,5 +206,22 @@ void SSD1289::update(Framebuffer *fb) {
         _comm->blockData(scanline, _width);
         _comm->streamEnd();
     }
+}
+
+void SSD1289::openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
+    setAddrWindow(x0, y0, x1, y1);
+}
+
+void SSD1289::windowData(uint16_t d) {
+    _comm->writeData16(d);
+}
+
+void SSD1289::windowData(uint16_t *d, uint32_t l) {
+    _comm->streamStart();
+    _comm->blockData(d, l);
+    _comm->streamEnd();
+}
+
+void SSD1289::closeWindow() {
 }
 

@@ -1,6 +1,8 @@
 #ifndef _FONTS_H
 #define _FONTS_H
 
+#include <TFT.h>
+
 class Fonts {
     public: 
         static const uint8_t Default[];

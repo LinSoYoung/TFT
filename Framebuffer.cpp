@@ -20,6 +20,10 @@ Framebuffer::Framebuffer() {
     setColor(13, Color::Cyan);
     setColor(14, Color::Yellow);
     setColor(15, Color::White);
+
+    _maxX = _maxY = 0;
+    _minX = _width;
+    _minY = _height;
 }
 
 Framebuffer::Framebuffer(int16_t w, int16_t h, DataStore *b) {
@@ -82,24 +86,53 @@ void Framebuffer::setPixel(int16_t x, int16_t y, uint16_t color) {
     uint8_t pcol = color & 0xFF;
     uint32_t pos = y * _width + x;
     bufferWrite(pos, pcol);
+
+    if (x < _minX) _minX = x;
+    if (x > _maxX) _maxX = x;
+    if (y < _minY) _minY = y;
+    if (y > _maxY) _maxY = y;
 }
 
 void Framebuffer::fillScreen(uint16_t color) {
+    _minX = _minY = 0;
+    _maxX = _width-1;
+    _maxY = _height-1;
     buffer->setAll8(color);
 }
 
 void Framebuffer::drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t color) {
-    drawLine(x, y, x, y+h-1, color);
+    int16_t w = 1;
+    if (!clipToScreen(x, y, w, h)) {
+        return;
+    }
+    for (int y1 = y; y1 < y + h; y1++) {
+        uint8_t pcol = color & 0xFF;
+        uint32_t pos = y1 * _width + x;
+        bufferWrite(pos, pcol);
+    }
 }
 
 void Framebuffer::drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t color) {
-    drawLine(x, y, x+w-1, y, color);
+    int16_t h = 1;
+    if (!clipToScreen(x, y, w, h)) {
+        return;
+    }
+    for (int x1 = x; x1 < x + w; x1++) {
+        uint8_t pcol = color & 0xFF;
+        uint32_t pos = y * _width + x1;
+        bufferWrite(pos, pcol);
+    }
 }
 
 void Framebuffer::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) {
-  for (int16_t i=x; i<x+w; i++) {
-    drawVerticalLine(i, y, h, color);
-  }
+    if (!clipToScreen(x, y, w, h)) {
+        return;
+    }
+    for (int y1 = y; y1 < y + h; y1++) {
+        for (int x1 = x; x1 < x + w; x1++) {
+            setPixel(x1, y1, color);
+        }
+    }
 }
 
 void Framebuffer::setColor(uint8_t color, uint16_t rgb) {
@@ -490,4 +523,17 @@ void Framebuffer::scroll(int16_t dx, int16_t dy) {
 
 void Framebuffer::setAntiAlias(uint8_t aa) {
     _antiAlias = aa ? true : false;
+}
+
+void Framebuffer::update(TFT *tft) {
+    tft->openWindow(0, 0, _width, _height);
+    uint16_t buf[_width];
+    for (uint32_t y = 0; y < _height; y++) {
+        uint32_t line = y * _width;
+        for (uint32_t x = 0; x < _width; x++) {
+            buf[x] = palette[buffer->read8(line + x)];
+        }
+        tft->windowData(buf, _width);
+    }
+    tft->closeWindow();
 }

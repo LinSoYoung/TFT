@@ -53,19 +53,7 @@ void BMP::draw(TFT *dev, int16_t x, int16_t y) {
                 if (p->a == 255) {
                     dev->setPixel(x + ix, y + iy, rgb(p->r, p->g, p->b));
                 } else {
-                    struct Color565 col;
-                    struct Color565 bg;
-                    struct Color565 n;
-                    col.value = rgb(p->r, p->g, p->b);
-                    bg.value = dev->bgColorAt(x + ix, y + iy);
-                    uint32_t temp;
-                    temp = (((int32_t)bg.r * (255-p->a)) / 255) + (((uint32_t)col.r * p->a) / 255);
-                    n.r = temp;
-                    temp = (((int32_t)bg.g * (255-p->a)) / 255) + (((uint32_t)col.g * p->a) / 255);
-                    n.g = temp;
-                    temp = (((int32_t)bg.b * (255-p->a)) / 255) + (((uint32_t)col.b * p->a) / 255);
-                    n.b = temp;
-                    dev->setPixel(x + ix, y + iy, n.value);
+                    dev->setPixel(x + ix, y + iy, dev->mix(dev->bgColorAt(x + ix, y + iy), rgb(p->r, p->g, p->b), p->a));
                 }
                     
             } else if (_info->biBitCount == 24) {
@@ -91,9 +79,10 @@ void BMP::draw(TFT *dev, int16_t x, int16_t y, uint16_t t) {
             if (_info->biBitCount == 32) {
                 uint32_t offset = pix * 4;
                 struct BitmapPixel32 *p = (struct BitmapPixel32 *)(_image + offset);
-                uint16_t c = rgb(p->r, p->g, p->b);
-                if (c != t) {
+                if (p->a == 255) {
                     dev->setPixel(x + ix, y + iy, rgb(p->r, p->g, p->b));
+                } else {
+                    dev->setPixel(x + ix, y + iy, dev->mix(t, rgb(p->r, p->g, p->b), p->a));
                 }
             } else if (_info->biBitCount == 24) {
                 uint32_t offset = pix * 3;

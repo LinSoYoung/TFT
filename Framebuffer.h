@@ -73,7 +73,7 @@ class Framebuffer : public TFT {
         struct sprite *sprites;
         struct sprite *selectedSprite;
         virtual uint8_t bufferRead(uint32_t addr);
-        virtual void bufferWrite(uint32_t addr, uint8_t value);
+        virtual void inline bufferWrite(uint32_t addr, uint8_t value);
         virtual void setRotation(uint8_t rot);
 
         virtual uint16_t getWidth();
@@ -84,10 +84,13 @@ class Framebuffer : public TFT {
 
         virtual void scroll(int16_t dx, int16_t dy);
 
-    private:
+        virtual void update(TFT *tft);
+
+        int32_t _minX, _minY, _maxX, _maxY;
+
+    protected:
         uint16_t _masterWidth;
         uint16_t _masterHeight;
-    protected:
         uint8_t _antiAlias;
 };
 
