@@ -452,25 +452,35 @@ uint8_t TFT::drawChar(int16_t x, int16_t y, unsigned char c, uint16_t color, uin
 
     uint32_t bitmask = (1 << header->bitsPerPixel) - 1;
 
-    for (int8_t i = 0; i < header->linesPerCharacter; i++ ) {
-        uint64_t line = 0;
-        for (int8_t j = 0; j < header->bytesPerLine; j++) {
-            line <<= 8;
-            line |= font[charstart + (i * header->bytesPerLine) + j];
-        }
+    for (int8_t lineNumber = 0; lineNumber < header->linesPerCharacter; lineNumber++ ) {
+//        uint64_t line = 0;
+//        for (int8_t j = 0; j < header->bytesPerLine; j++) {
+//            line <<= 8;
+//            line |= font[charstart + (i * header->bytesPerLine) + j];
+//        }
+        uint8_t lineData = 0;
 
-        for (int8_t j = 0; j < charwidth; j++) {
-            uint32_t pixelValue = line & bitmask;
+        int8_t bitsLeft = -1;
+        uint8_t byteNumber = 0;
+
+        for (int8_t pixelNumber = 0; pixelNumber < charwidth; pixelNumber++) {
+            if (bitsLeft <= 0) {
+                bitsLeft = 8;
+                lineData = font[charstart + (lineNumber * header->bytesPerLine) + (header->bytesPerLine - byteNumber - 1)];
+                byteNumber++;
+            }
+            uint32_t pixelValue = lineData & bitmask;
             if (pixelValue > 0) {
                 uint16_t bgc = bg;
                 if (bg == color) {
-                    bgc = colorAt(x+j, y+i);
+                    bgc = colorAt(x+pixelNumber, y+lineNumber);
                 }
-                setPixel(x+j, y+i, mix(bgc, color, 255 * pixelValue / bitmask));
+                setPixel(x+pixelNumber, y+lineNumber, mix(bgc, color, 255 * pixelValue / bitmask));
             } else if (bg != color) {
-                setPixel(x+j, y+i, bg);
+                setPixel(x+pixelNumber, y+lineNumber, bg);
             }
-            line >>= header->bitsPerPixel;
+            lineData >>= header->bitsPerPixel;
+            bitsLeft -= header->bitsPerPixel;
         }
     }
     return charwidth;

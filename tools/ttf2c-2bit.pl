@@ -69,10 +69,10 @@ $size->{bpl} = int($size->{width} / 4) + 1;
 
 #print "Bytes per line: " . $size->{bpl} . "\n";
 
-if ($size->{bpl} > 8) {
-    print "ERROR: Font is too wide!\n";
-    exit(10);
-}
+#if ($size->{bpl} > 8) {
+#    print "ERROR: Font is too wide!\n";
+#    exit(10);
+#}
 
 my $img = GD::Image->new($size->{width},$size->{height},1);
 my $bg = $img->colorAllocate(0,0,0);
@@ -101,27 +101,47 @@ while($char < $end)
     printf(OUT "    %2d,", $width);
     my $line = 0;
     my $byte = 0;
+        print chr($char) . "\n";
     while($line < $size->{height})
     {
-        my $data = 0;
+        my $data = "";
         my $bit = 0;
+        my $bits = 0;
+        my $chunk = 0;
+        my $dlen = 0;
         while($bit < $width)
         {
             my $pixel = $img->getPixel($width-$bit,$line);
             my $v = ($pixel & 0xFF) >> 6;
-            $data = $data << 2;
-            $data |= $v;
+            $chunk = $chunk << 2;
+            $chunk |= $v;
+            $bit++;
+            $bits += 2;
+            if ($bits == 8) {
+                $data .= chr($chunk);
+                $chunk = 0;
+                $bits = 0;
+                $dlen++;
+            }
+        }
+        $bit = 0;
+        while ($bit < $size->{bpl} - $dlen)
+        {
+            printf(OUT "0x00,");
             $bit++;
         }
-        $bit = $size->{bpl};
-        while($bit > 0)
+        $bit = 0;
+        while($bit < $dlen)
         {
-            $bit--;
-            printf(OUT " 0x%02X,", ($data >> ($bit * 8)) & 0xFF)
+            printf(OUT " 0x%02X,", ord(substr($data, $bit, 1)));
+            printf("%02X", ord(substr($data, $bit, 1)));
+            $bit++;
         }
         $line++;
+        print "\n";
     }
     print OUT "\n";
+    print "\n";
 
     $char++;
 }

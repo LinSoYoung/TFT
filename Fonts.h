@@ -102,6 +102,11 @@ class Fonts {
         static const uint8_t Ubuntu42[];
         static const uint8_t Ubuntu44[];
         static const uint8_t Ubuntu8[];
+        static const uint8_t Hazard10[];
+        static const uint8_t Hazard12[];
+        static const uint8_t Hazard14[];
+        static const uint8_t Hazard16[];
+        static const uint8_t Hazard40[];
 };
 
 #endif
