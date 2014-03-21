@@ -84,10 +84,15 @@ my $offset = 0;
 
 open(OUT,">$out");
 print OUT "#include <TFT.h>\n\n";
-print OUT "const uint8_t Fonts::" . $name . "[] = {\n";
+print OUT "const uint8_t Fonts::" . $name . "[] = \"";
 
-printf(OUT "    %d, %d, 0x%02X, 0x%02X, 2,\n",
-    $size->{height}, $size->{bpl}, $start, $end);
+eout($size->{height});
+eout($size->{bpl});
+eout($start);
+eout($end);
+eout(2);
+
+print OUT "\"\n";
 
 my $char = $start;
 
@@ -97,11 +102,11 @@ while($char < $end)
     my @bb = $img->stringFT($fg,$file,$points,0,$size->{origin}->{x},$size->{origin}->{y},chr($char));
 
     my $width = $bb[2] - $bb[0];
+    print OUT "    \"";
+    eout($width);
 
-    printf(OUT "    %2d,", $width);
     my $line = 0;
     my $byte = 0;
-        print chr($char) . "\n";
     while($line < $size->{height})
     {
         my $data = "";
@@ -127,26 +132,23 @@ while($char < $end)
         $bit = 0;
         while ($bit < $size->{bpl} - $dlen)
         {
-            printf(OUT "0x00,");
+            eout(0);
             $bit++;
         }
         $bit = 0;
         while($bit < $dlen)
         {
-            printf(OUT " 0x%02X,", ord(substr($data, $bit, 1)));
-            printf("%02X", ord(substr($data, $bit, 1)));
+            eout(ord(substr($data, $bit, 1)));
             $bit++;
         }
         $line++;
-        print "\n";
     }
-    print OUT "\n";
-    print "\n";
-
     $char++;
+    print OUT "\"\n";
 }
 
-print OUT "};\n";
+print OUT ";\n";
+
 
 sub findFontSize()
 {
@@ -194,3 +196,7 @@ sub findFontSize()
     return $data;
 }
 
+sub eout($) {
+    my $val = shift;
+    printf OUT "\\x%02X", $val;
+}
