@@ -29,7 +29,7 @@
  */
 
 /*
- * High S[eed Wave
+ * High Speed Wave
  * 
  * This requires an audio input to A0.  It should have a Vcc/2 offset imposed on it and be decoupled with a capacitor.
  * 
@@ -78,7 +78,7 @@ void loop() {
 	for (int y = 0; y < 255; y++) {
 		for (int x = 0; x < 320; x++) {
 			if (y == 128) {
-				tft.windowData(Color::Blue);				
+				tft.windowData(Color::Green);				
 			} else if (y < 128) {
 				if (window[x] > 128-y) {
 					tft.windowData(rgb((127-y)*2, 255-((127-y)*2), 0));
