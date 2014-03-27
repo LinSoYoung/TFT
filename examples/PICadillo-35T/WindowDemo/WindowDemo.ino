@@ -65,7 +65,7 @@ void loop() {
 	static uint32_t ts = millis();
 	static uint32_t count = 0;
 
-	tft.openWindow(32, 128, 255, 255);
+	tft.openWindow(32, 128, 256, 256);
 	for (int y = 0; y < 256; y++) {
 		for (int x = 0; x < 256; x++) {
 			uint8_t red = (x + offr);

@@ -64,15 +64,24 @@ void loop() {
 	for (int x = 0; x < 319; x++) {
 		data[x] = data[x+1];
 	}
-	data[319] = abs(analogRead(0)-512)>>1;
-	tft.openWindow(0, 128, 319, 255);
+
+    int16_t os = 0;
+    for (int i = 0; i < 10; i++) {
+        int16_t vs = abs(analogRead(0)-512)>>1;
+        if (vs > os) {
+            os = vs;
+        }
+    }
+    data[319] = os;
+
+	tft.openWindow(0, 128, 320, 255);
 	for (int y = 0; y < 255; y++) {
 		for (int x = 0; x < 320; x++) {
 			if (y == 128) {
 				tft.windowData(Color::Blue);				
 			} else if (y < 128) {
 				if (data[x] > 128-y) {
-					tft.windowData(rgb((128-y)*2, 255-((128-y)*2), 0));
+					tft.windowData(rgb((127-y)*2, 255-((127-y)*2), 0));
 				} else {
 					tft.windowData(rgb(0, 0, data[64+y]));
 				}
