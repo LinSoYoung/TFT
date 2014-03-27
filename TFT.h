@@ -189,6 +189,7 @@ class TFT : public Print
 #include "SSD1289.h"
 #include "SSD1963.h"
 #include "HX8357.h"
+#include "PICadillo35t.h"
 
 // Touchscreen devices
 #include "Touch.h"

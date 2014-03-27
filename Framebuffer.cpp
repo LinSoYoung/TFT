@@ -526,7 +526,11 @@ void Framebuffer::setAntiAlias(uint8_t aa) {
 }
 
 void Framebuffer::update(TFT *tft) {
-    tft->openWindow(0, 0, _width, _height);
+    update(tft, 0, 0);
+}
+
+void Framebuffer::update(TFT *tft, int16_t x0, int16_t y0) {
+    tft->openWindow(x0, y0, _width, _height);
     uint16_t buf[_width];
     for (uint32_t y = 0; y < _height; y++) {
         uint32_t line = y * _width;
@@ -537,3 +541,4 @@ void Framebuffer::update(TFT *tft) {
     }
     tft->closeWindow();
 }
+

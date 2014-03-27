@@ -1,7 +1,6 @@
 #include <TFT.h>
 
-TFTPMP pmp;
-HX8357 tft(&pmp);
+PICadillo35t tft;
 
 int zOff = 150;
 int xOff = 0;

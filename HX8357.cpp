@@ -270,7 +270,7 @@ void HX8357::displayOff()
 }
 
 void HX8357::openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
-    setAddrWindow(x0, y0, x0 + x1, y0 + y1);
+    setAddrWindow(x0, y0, x0 + x1 - 1, y0 + y1 - 1);
     _comm->streamStart();
 }
 

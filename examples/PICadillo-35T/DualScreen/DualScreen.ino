@@ -38,8 +38,7 @@
 #include <TFT.h>
 
 // Configure the display
-TFTPMP myPMP;
-HX8357 tft(&myPMP);
+PICadillo35t tft;
 TFTSoftSPI mySPI(11, 13, 10, 8);
 ST7735 tft2(&mySPI, ST7735::BlackTab);
 

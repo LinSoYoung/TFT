@@ -4,13 +4,7 @@
 #include "4d.h"
 BMP logo(logo_4d);
 
-#define RS_pin 22 //RC2
-//#define CS_pin 49 //RD11
-
-
-// Set up the screen to use
-TFTPMP pmp;
-HX8357 tft(&pmp);
+PICadillo35t tft;
 
 void setup()
 {

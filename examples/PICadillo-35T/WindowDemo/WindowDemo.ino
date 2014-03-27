@@ -39,8 +39,7 @@
 #include <TFT.h>
 
 // Configure the display
-TFTPMP myPMP;
-HX8357 tft(&myPMP);
+PICadillo35t tft;
 
 void printCentered(uint16_t pos, char *data) {
 	uint16_t w = tft.stringWidth(data);

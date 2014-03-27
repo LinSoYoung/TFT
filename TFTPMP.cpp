@@ -12,32 +12,37 @@ TFTPMP::TFTPMP() {
 
 void TFTPMP::initializeDevice() {
 
-    PMCON = 0;
+    PMCONbits.ON = 0;
     asm volatile("nop");
 
-    //PMCON = 1<<9 | 1<<8;
-	PMCON = (1<<9) | (1<<8) | (2<<6); // Read and Write Strobe enabled, CS's enabled
+    PMCONbits.PTWREN = 1;
+    PMCONbits.PTRDEN = 1;
+    PMCONbits.CSF = 0;
 
     /*if (_rsPin != 255) 
 	{
         //PMAEN = 0; // Disable PMA0 pin functionality
-		PMAEN = 0x4000; // Disable PMA0 pin functionality, CS1 as CS	
+		PMAEN = 0x0000; // Disable PMA0 pin functionality, CS1 as CS	
 		TRISCCLR = (1 << 2); // Set RS pin as Output (RS is RC2)
 		LATCCLR = (1 << 2); // Write RS pin Low (RS is RC2)
     } 
 	else 
 	{
         //PMAEN = 1; // Enable PMA0 pin for RS pin
-		PMAEN = 0x4001; // Enable PMA0 pin for RS pin and CS1 as CS
+		PMAEN = 0x0001; // Enable PMA0 pin for RS pin and CS1 as CS
     }*/
-	PMAEN = 0x4001; // Enable PMA0 pin for RS pin and CS1 as CS
+	PMAEN = 0x0001; // Enable PMA0 pin for RS pin and CS1 as CS
 
-    //                          WAITB   WAITM    WAITE
-    PMMODE = 1<<10 | 0b10<<8 | (0<<6) | (0<<2) | 0;
+    PMMODEbits.MODE16 = 1;
+    PMMODEbits.MODE = 0b10;
+    PMMODEbits.WAITB = 0;
+    PMMODEbits.WAITM = 0;
+    PMMODEbits.WAITE = 0;
+    
     //PMADDR = 0; // Set current address to 0
-	PMADDR = 0x4000; // Set current address to 0, CS1 Active
+	PMADDR = 0x0000; // Set current address to 0, CS1 Active
 
-    PMCONSET = 1<<15; // Turn on PMP
+    PMCONbits.ON = 1;
 }
 
 void TFTPMP::writeCommand8(uint8_t command) {
@@ -53,10 +58,10 @@ void TFTPMP::writeCommand16(uint16_t command) {
 	else 
 	{
 		//PMADDR = 0; // Command register is at address 0
-		PMADDR = 0x4000; // Set current address to 0, CS1 Active
+		PMADDR = 0x0000; // Set current address to 0, CS1 Active
     }*/
-//    while (PMSTAT & (1<<15));
-	PMADDR = 0x4000; // Set current address to 0, CS1 Active
+    while (PMMODEbits.BUSY == 1);
+	PMADDR = 0x0000; // Set current address to 0, CS1 Active
     PMDIN = command;
 }
 
@@ -66,7 +71,7 @@ void TFTPMP::writeCommand32(uint32_t command) {
 }
 
 void TFTPMP::streamStart() {
-	PMADDR = 0x4001; // Data register is at address 1, CS1 Active
+	PMADDR = 0x0001; // Data register is at address 1, CS1 Active
 }
 
 void TFTPMP::streamEnd() {
@@ -84,10 +89,10 @@ void TFTPMP::writeData16(uint16_t data) {
     } else 
 	{
         //PMADDR = 1; // Data register is at address 1
-		PMADDR = 0x4001; // Data register is at address 1, CS1 Active
+		PMADDR = 0x0001; // Data register is at address 1, CS1 Active
     }*/
-//    while (PMSTAT & (1<<15));
-	PMADDR = 0x4001; // Data register is at address 1, CS1 Active
+    while (PMMODEbits.BUSY == 1);
+	PMADDR = 0x0001; // Data register is at address 1, CS1 Active
     PMDIN = data;
 }
 
@@ -98,25 +103,25 @@ void TFTPMP::writeData32(uint32_t data) {
 
 void TFTPMP::streamCommand8(uint8_t data) {
     writeCommand8(data);
-	PMADDR = 0x4001; // Data register is at address 1, CS1 Active
+	PMADDR = 0x0001; // Data register is at address 1, CS1 Active
 }
 
 void TFTPMP::streamCommand16(uint16_t data) {
     writeCommand16(data);
-	PMADDR = 0x4001; // Data register is at address 1, CS1 Active
+	PMADDR = 0x0001; // Data register is at address 1, CS1 Active
 }
 
 void TFTPMP::streamCommand32(uint32_t data) {
     writeCommand32(data);
-	PMADDR = 0x4001; // Data register is at address 1, CS1 Active
+	PMADDR = 0x0001; // Data register is at address 1, CS1 Active
 }
 
 void TFTPMP::streamData8(uint8_t data) {
     writeData8(data);
 }
 
-void TFTPMP::streamData16(uint16_t data) {
-//    while (PMSTAT & (1<<15));
+void inline TFTPMP::streamData16(uint16_t data) {
+    while (PMMODEbits.BUSY == 1);
     PMDIN = data;
 }
 

@@ -40,9 +40,7 @@
 #include <BMPFile.h>
 
 // Configure the display
-TFTPMP myPMP;
-HX8357 tft(&myPMP);
-
+PICadillo35t tft;
 
 void setup() {
 	analogWrite(PIN_BACKLIGHT, 255);

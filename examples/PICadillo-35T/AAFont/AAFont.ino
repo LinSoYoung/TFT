@@ -1,7 +1,6 @@
 #include <TFT.h>
 
-TFTPMP pmp;
-HX8357 tft(&pmp);
+PICadillo35t tft;
 
  
 void setup()

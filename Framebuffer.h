@@ -85,7 +85,9 @@ class Framebuffer : public TFT {
         virtual void scroll(int16_t dx, int16_t dy);
 
         virtual void update(TFT *tft);
+        virtual void update(TFT *tft, int16_t x0, int16_t y0);
         virtual void update(TFT &tft) { update(&tft); }
+        virtual void update(TFT &tft, int16_t x0, int16_t y0) { update(&tft, x0, y0); }
 
         int32_t _minX, _minY, _maxX, _maxY;
 

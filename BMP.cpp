@@ -51,6 +51,9 @@ BMP::BMP(const char *data) {
 }
 
 void BMP::drawIdx(TFT *dev, int16_t x, int16_t y, int32_t trans) {
+    if (trans < 0) {
+        dev->openWindow(x, y, getWidth(), getHeight());
+    }
     for (uint32_t iy = 0; iy < getHeight(); iy++) {
         uint32_t line = getHeight() - iy - 1;
         for (uint32_t ix = 0; ix < getWidth(); ix++) {
@@ -58,7 +61,7 @@ void BMP::drawIdx(TFT *dev, int16_t x, int16_t y, int32_t trans) {
             struct BitmapPixel32 *p = &_palette[_image[pix]];
             uint16_t col = rgb(p->g, p->b, p->a);
             if (trans < 0) {
-                dev->setPixel(x + ix, y + iy, col);
+                dev->windowData(col);
             } else {
                 if (col != trans) {
                     dev->setPixel(x + ix, y + iy, col);
@@ -66,9 +69,15 @@ void BMP::drawIdx(TFT *dev, int16_t x, int16_t y, int32_t trans) {
             }
         }
     }
+    if (trans < 0) {
+        dev->closeWindow();
+    }
 }
 
 void BMP::draw565(TFT *dev, int16_t x, int16_t y, int32_t trans) {
+    if (trans < 0) {
+        dev->openWindow(x, y, getWidth(), getHeight());
+    }
     for (uint32_t iy = 0; iy < getHeight(); iy++) {
         uint32_t line = getHeight() - iy - 1;
         for (uint32_t ix = 0; ix < getWidth(); ix++) {
@@ -76,7 +85,7 @@ void BMP::draw565(TFT *dev, int16_t x, int16_t y, int32_t trans) {
             uint32_t offset = pix * 2;
             uint16_t *p = (uint16_t *)(_image + offset);
             if (trans < 0) {
-                dev->setPixel(x + ix, y + iy, *p);
+                dev->windowData(*p);
             } else {
                 if (*p != trans) {
                     dev->setPixel(x + ix, y + iy, *p);
@@ -84,9 +93,15 @@ void BMP::draw565(TFT *dev, int16_t x, int16_t y, int32_t trans) {
             }
         }
     }
+    if (trans < 0) {
+        dev->closeWindow();
+    }
 }
 
 void BMP::drawRGB(TFT *dev, int16_t x, int16_t y, int32_t trans) {
+    if (trans < 0) {
+        dev->openWindow(x, y, getWidth(), getHeight());
+    }
     for (uint32_t iy = 0; iy < getHeight(); iy++) {
         uint32_t line = getHeight() - iy - 1;
         for (uint32_t ix = 0; ix < getWidth(); ix++) {
@@ -95,13 +110,16 @@ void BMP::drawRGB(TFT *dev, int16_t x, int16_t y, int32_t trans) {
             struct BitmapPixel24 *p = (struct BitmapPixel24 *)(_image + offset);
             uint16_t col = rgb(p->r, p->g, p->b);
             if (trans < 0) {
-                dev->setPixel(x + ix, y + iy, col);
+                dev->windowData(col);
             } else {
                 if (col != trans) {
                     dev->setPixel(x + ix, y + iy, col);
                 }
             }
         }
+    }
+    if (trans < 0) {
+        dev->closeWindow();
     }
 }
 

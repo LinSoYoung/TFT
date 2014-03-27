@@ -183,3 +183,18 @@ void Framebuffer332::getScanLine(uint16_t y, uint16_t x, uint16_t w, uint16_t *d
 		}
 	}
 }
+
+void Framebuffer332::update(TFT *tft) {
+    update(tft, 0, 0);
+}
+
+void Framebuffer332::update(TFT *tft, int16_t x0, int16_t y0) {
+    tft->openWindow(x0, y0, _width, _height);
+    uint16_t buf[_width];
+    for (uint32_t y = 0; y < _height; y++) {
+        getScanLine(y, 0, _width, buf);
+        tft->windowData(buf, _width);
+    }
+    tft->closeWindow();
+}
+

@@ -1,7 +1,6 @@
 #include <TFT.h>
 
-TFTPMP pmp;
-HX8357 tft(&pmp);
+PICadillo35t tft;
 AnalogTouch ts(LCD_XL, LCD_XR, LCD_YU, LCD_YD, 320, 480);
 
 const int btnSize = 64;
