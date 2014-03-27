@@ -55,7 +55,7 @@ void TFTPMP::writeCommand16(uint16_t command) {
 		//PMADDR = 0; // Command register is at address 0
 		PMADDR = 0x4000; // Set current address to 0, CS1 Active
     }*/
-    while (PMSTAT & (1<<15));
+//    while (PMSTAT & (1<<15));
 	PMADDR = 0x4000; // Set current address to 0, CS1 Active
     PMDIN = command;
 }
@@ -86,7 +86,7 @@ void TFTPMP::writeData16(uint16_t data) {
         //PMADDR = 1; // Data register is at address 1
 		PMADDR = 0x4001; // Data register is at address 1, CS1 Active
     }*/
-    while (PMSTAT & (1<<15));
+//    while (PMSTAT & (1<<15));
 	PMADDR = 0x4001; // Data register is at address 1, CS1 Active
     PMDIN = data;
 }

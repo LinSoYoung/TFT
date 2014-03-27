@@ -15,6 +15,15 @@ class HD44780 : public TFT {
                 _bits = 8;
             }
         };
+		HD44780(TFTCommunicator &comm, uint8_t w, uint8_t h) : TFT(comm) { 
+            _width = w; 
+            _height = h; 
+            if (comm.nativeWidth() == 4) {
+                _bits = 4;
+            } else {
+                _bits = 8;
+            }
+        };
 
 
         void fillScreen(uint16_t color);

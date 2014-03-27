@@ -40,67 +40,178 @@ BMP::BMP(const char *data) {
     _image = _data + _header->bfBitmapOffset;
     _width = _info->biWidth;
     _height = _info->biHeight;
+
+    if (_info->biBitCount < 16) {
+        _palette = (struct BitmapPixel32 *)(_data + sizeof(struct BitmapFileHeader) + sizeof(struct BitmapInfoHeader));
+        _paletteSize = _info->biClrUsed;
+        if (_paletteSize == 0) {
+            _paletteSize = 1<<_info->biBitCount;
+        }
+    }
 }
 
-void BMP::draw(TFT *dev, int16_t x, int16_t y) {
+void BMP::drawIdx(TFT *dev, int16_t x, int16_t y, int32_t trans) {
     for (uint32_t iy = 0; iy < getHeight(); iy++) {
         uint32_t line = getHeight() - iy - 1;
         for (uint32_t ix = 0; ix < getWidth(); ix++) {
             uint32_t pix = line * getWidth() + ix;
-            if (_info->biBitCount == 32) {
-                uint32_t offset = pix * 4;
-                struct BitmapPixel32 *p = (struct BitmapPixel32 *)(_image + offset);
-                if (p->a == 255) {
-                    dev->setPixel(x + ix, y + iy, rgb(p->r, p->g, p->b));
-                } else {
-                    dev->setPixel(x + ix, y + iy, dev->mix(dev->bgColorAt(x + ix, y + iy), rgb(p->r, p->g, p->b), p->a));
-                }
-                    
-            } else if (_info->biBitCount == 24) {
-                uint32_t offset = pix * 3;
-                struct BitmapPixel24 *p = (struct BitmapPixel24 *)(_image + offset);
-                dev->setPixel(x + ix, y + iy, rgb(p->r, p->g, p->b));
-            } else if (_info->biBitCount == 16) {
-                uint32_t offset = pix * 2;
-                uint16_t *p = (uint16_t *)(_image + offset);
-                dev->setPixel(x + ix, y + iy, *p);
+            struct BitmapPixel32 *p = &_palette[_image[pix]];
+            uint16_t col = rgb(p->g, p->b, p->a);
+            if (trans < 0) {
+                dev->setPixel(x + ix, y + iy, col);
             } else {
-                dev->setPixel(x + ix, y + iy, rand() & 0xFFFF);
+                if (col != trans) {
+                    dev->setPixel(x + ix, y + iy, col);
+                }
             }
         }
     }
 }
 
-void BMP::draw(TFT *dev, int16_t x, int16_t y, uint16_t t) {
+void BMP::draw565(TFT *dev, int16_t x, int16_t y, int32_t trans) {
     for (uint32_t iy = 0; iy < getHeight(); iy++) {
         uint32_t line = getHeight() - iy - 1;
         for (uint32_t ix = 0; ix < getWidth(); ix++) {
             uint32_t pix = line * getWidth() + ix;
-            if (_info->biBitCount == 32) {
-                uint32_t offset = pix * 4;
-                struct BitmapPixel32 *p = (struct BitmapPixel32 *)(_image + offset);
-                if (p->a == 255) {
-                    dev->setPixel(x + ix, y + iy, rgb(p->r, p->g, p->b));
-                } else {
-                    dev->setPixel(x + ix, y + iy, dev->mix(t, rgb(p->r, p->g, p->b), p->a));
-                }
-            } else if (_info->biBitCount == 24) {
-                uint32_t offset = pix * 3;
-                struct BitmapPixel24 *p = (struct BitmapPixel24 *)(_image + offset);
-                uint16_t c = rgb(p->r, p->g, p->b);
-                if (c != t) {
-                    dev->setPixel(x + ix, y + iy, rgb(p->r, p->g, p->b));
-                }
-            } else if (_info->biBitCount == 16) {
-                uint32_t offset = pix * 2;
-                uint16_t *p = (uint16_t *)(_image + offset);
-                uint16_t c = *p;
-                if (c != t) {
+            uint32_t offset = pix * 2;
+            uint16_t *p = (uint16_t *)(_image + offset);
+            if (trans < 0) {
+                dev->setPixel(x + ix, y + iy, *p);
+            } else {
+                if (*p != trans) {
                     dev->setPixel(x + ix, y + iy, *p);
                 }
-            } else {
-                dev->setPixel(x + ix, y + iy, rand() & 0xFFFF);
             }
+        }
+    }
+}
+
+void BMP::drawRGB(TFT *dev, int16_t x, int16_t y, int32_t trans) {
+    for (uint32_t iy = 0; iy < getHeight(); iy++) {
+        uint32_t line = getHeight() - iy - 1;
+        for (uint32_t ix = 0; ix < getWidth(); ix++) {
+            uint32_t pix = line * getWidth() + ix;
+            uint32_t offset = pix * 3;
+            struct BitmapPixel24 *p = (struct BitmapPixel24 *)(_image + offset);
+            uint16_t col = rgb(p->r, p->g, p->b);
+            if (trans < 0) {
+                dev->setPixel(x + ix, y + iy, col);
+            } else {
+                if (col != trans) {
+                    dev->setPixel(x + ix, y + iy, col);
+                }
+            }
+        }
+    }
+}
+
+void BMP::drawRGBA(TFT *dev, int16_t x, int16_t y, int32_t trans) {
+    int rShift = 0;
+    int gShift = 8;
+    int bShift = 16;
+    int aShift = 24;
+    uint32_t rMask = 0x000000FF;
+    uint32_t gMask = 0x0000FF00;
+    uint32_t bMask = 0x00FF0000;
+    uint32_t aMask = 0xFF000000;
+    if (_info->biCompression==3) {
+        uint32_t t = _info->biMaskRed;
+        rMask = _info->biMaskRed;
+        while ((t & 1) == 0) {
+            t >>= 1;
+            rShift++;
+        }
+        t = _info->biMaskGreen;
+        gMask = _info->biMaskGreen;
+        while ((t & 1) == 0) {
+            t >>= 1;
+            gShift++;
+        }
+        t = _info->biMaskBlue;
+        bMask = _info->biMaskBlue;
+        while ((t & 1) == 0) {
+            t >>= 1;
+            bShift++;
+        }
+        t = _info->biMaskAlpha;
+        aMask = _info->biMaskAlpha;
+        while ((t & 1) == 0) {
+            t >>= 1;
+            aShift++;
+        }
+    } 
+    for (uint32_t iy = 0; iy < getHeight(); iy++) {
+        uint32_t line = getHeight() - iy - 1;
+        for (uint32_t ix = 0; ix < getWidth(); ix++) {
+            uint32_t pix = line * getWidth() + ix;
+            uint32_t offset = pix * 4;
+            uint32_t red, green, blue, alpha;
+            struct BitmapPixel32 *p = (struct BitmapPixel32 *)(_image + offset);
+            red = ((p->value & rMask) >> rShift);
+            green = ((p->value & gMask) >> gShift);
+            blue = ((p->value & bMask) >> bShift);
+            alpha = ((p->value & aMask) >> aShift);
+            int16_t fg = rgb(red, green, blue);
+            int16_t bg;
+            if (trans < 0) {
+                bg = dev->colorAt(x + ix, y + iy);
+            } else {
+                bg = trans;
+            }
+
+            if (alpha == 255) {
+                dev->setPixel(x + ix, y + iy, fg);
+            } else if(alpha > 0) {
+                dev->setPixel(x + ix, y + iy, dev->mix(bg, fg, alpha));
+            }
+        }
+    }
+}
+
+void BMP::draw(TFT *dev, int16_t x, int16_t y) {
+    switch (_info->biBitCount) {
+        case 8:
+            drawIdx(dev, x, y, -1);
+            return;
+        case 16:
+            draw565(dev, x, y, -1);
+            return;
+        case 24:
+            drawRGB(dev, x, y, -1);
+            return;
+        case 32:
+            drawRGBA(dev, x, y, -1);
+            return;
+    }
+        
+    // Unable to decode the image - use colour fuzz instead.
+    for (uint32_t iy = 0; iy < getHeight(); iy++) {
+        for (uint32_t ix = 0; ix < getWidth(); ix++) {
+            dev->setPixel(x + ix, y + iy, rand() & 0xFFFF);
+        }
+    }
+}
+
+void BMP::draw(TFT *dev, int16_t x, int16_t y, uint16_t trans) {
+    switch (_info->biBitCount) {
+        case 8:
+            drawIdx(dev, x, y, trans);
+            return;
+        case 16:
+            draw565(dev, x, y, trans);
+            return;
+        case 24:
+            drawRGB(dev, x, y, trans);
+            return;
+        case 32:
+            drawRGBA(dev, x, y, trans);
+            return;
+    }
+        
+    // Unable to decode the image - use colour fuzz instead.
+    for (uint32_t iy = 0; iy < getHeight(); iy++) {
+        for (uint32_t ix = 0; ix < getWidth(); ix++) {
+            dev->setPixel(x + ix, y + iy, rand() & 0xFFFF);
         }
     }
 }

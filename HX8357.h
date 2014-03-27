@@ -10,6 +10,7 @@ class HX8357 : public TFT
         static const uint16_t Height     = 480;
 
 		HX8357(TFTCommunicator *comms) : TFT(comms) {}
+		HX8357(TFTCommunicator &comms) : TFT(comms) {}
 
 		void setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
         void fillScreen(uint16_t color);
@@ -25,6 +26,11 @@ class HX8357 : public TFT
         void initializeDevice();
 
         //void update(Framebuffer *fb); // Not implemented
+
+        void openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
+        void windowData(uint16_t d);
+        void windowData(uint16_t *d, uint32_t l);
+        void closeWindow();
 		
 	protected:
 		uint8_t colstart, rowstart;

@@ -6,6 +6,7 @@
 class DOGMe : public HD44780 {
     public:
         DOGMe(TFTCommunicator *comm, uint8_t w, uint8_t h) : HD44780(comm, w, h) {};
+        DOGMe(TFTCommunicator &comm, uint8_t w, uint8_t h) : HD44780(comm, w, h) {};
         void initializeDevice();
         void table(uint8_t tab);
         void setBits(uint8_t b);

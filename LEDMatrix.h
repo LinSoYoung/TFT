@@ -10,6 +10,7 @@ class LEDMatrix : public TFT {
         const static int16_t Height = 32;
 
 		LEDMatrix(TFTCommunicator *row, TFTCommunicator *col) : TFT(NULL), _row(row), _col(col) {}
+		LEDMatrix(TFTCommunicator &row, TFTCommunicator &col) : TFT(NULL), _row(&row), _col(&col) {}
 
         void fillScreen(uint16_t color);
         void setPixel(int16_t x, int16_t y, uint16_t color);

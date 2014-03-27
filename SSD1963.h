@@ -86,6 +86,7 @@ class SSD1963 : public TFT {
         static const uint16_t Height     = 480;
 
 		SSD1963(TFTCommunicator *comms) : TFT(comms) {}
+		SSD1963(TFTCommunicator &comms) : TFT(comms) {}
 
 		void setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
         void fillScreen(uint16_t color);

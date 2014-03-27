@@ -19,6 +19,7 @@ class ST7735 : public TFT {
         static const uint8_t Height     = 160;
 
 		ST7735(TFTCommunicator *comms, uint8_t variant) : TFT(comms), _variant(variant) {}
+		ST7735(TFTCommunicator &comms, uint8_t variant) : TFT(comms), _variant(variant) {}
 
 		void setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
         void fillScreen(uint16_t color);

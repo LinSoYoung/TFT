@@ -40,6 +40,15 @@ TFT::TFT(TFTCommunicator *comm) {
     font = NULL; //Fonts::Default;
 }
 
+TFT::TFT(TFTCommunicator &comm) {
+    _comm = &comm;
+    cursor_y = cursor_x = 0;
+    textcolor = 0xFFFF;
+    textbgcolor = 0;
+    wrap = true;
+    font = NULL; //Fonts::Default;
+}
+
 
 // draw a circle outline
 void TFT::drawCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color) {
@@ -361,17 +370,13 @@ uint16_t TFT::stringWidth(char *text) {
     if (font == NULL) {
         return 0;
     }
-
-    uint8_t lpc = font[0];
-    uint8_t bpl = font[1];
-    uint8_t startGlyph = font[2]; // First character in data
-    uint8_t endGlyph = font[3]; // Last character in data
+    FontHeader *header = (FontHeader *)font;
 
     for (char *t = text; *t; t++) {
         char c = *t;
-        if (c >= startGlyph && c <= endGlyph) {
-            uint8_t co = c - startGlyph;
-            uint16_t charstart = (co * ((lpc * bpl) + 1)) + 4; // Start of character data
+        if (c >= header->startGlyph && c <= header->endGlyph) {
+            uint8_t co = c - header->startGlyph;
+            uint32_t charstart = (co * ((header->linesPerCharacter * header->bytesPerLine) + 1)) + sizeof(FontHeader); // Start of character data
             uint8_t charwidth = font[charstart++];
             w += charwidth;
         }
@@ -384,10 +389,9 @@ uint16_t TFT::stringHeight(char *text) {
     if (font == NULL) {
         return 0;
     }
+    FontHeader *header = (FontHeader *)font;
 
-    uint8_t lpc = font[0];
-
-    return lpc;
+    return header->linesPerCharacter;
 }
         
 
@@ -402,23 +406,20 @@ void TFT::write(uint8_t c) {
         return;
     }
 #endif
-    uint8_t lpc = font[0];
-    uint8_t bpl = font[1];
-    uint8_t startGlyph = font[2]; // First character in data
-    uint8_t endGlyph = font[3]; // Last character in data
+    FontHeader *header = (FontHeader *)font;
 
     if (c == '\n') {
-        cursor_y += lpc;
+        cursor_y += header->linesPerCharacter;
         cursor_x = 0;
     } else if (c == '\r') {
         // skip em
     } else {
-        if (c >= startGlyph && c <= endGlyph) {
-            uint8_t co = c - startGlyph;
-            uint16_t charstart = (co * ((lpc * bpl) + 1)) + 4; // Start of character data
+        if (c >= header->startGlyph && c <= header->endGlyph) {
+            uint8_t co = c - header->startGlyph;
+            uint32_t charstart = (co * ((header->linesPerCharacter * header->bytesPerLine) + 1)) + sizeof(FontHeader); // Start of character data
             uint8_t charwidth = font[charstart++];
             if (wrap && (cursor_x > (getWidth() - charwidth))) {
-                cursor_y += lpc;
+                cursor_y += header->linesPerCharacter;
                 cursor_x = 0;
             }
             cursor_x += drawChar(cursor_x, cursor_y, c, textcolor, textbgcolor);
@@ -490,6 +491,15 @@ void TFT::setCursor(int16_t x, int16_t y) {
     cursor_x = x;
     cursor_y = y;
 }
+
+int16_t TFT::getCursorX() {
+    return cursor_x;
+}
+
+int16_t TFT::getCursorY() {
+    return cursor_y;
+}
+
 int16_t TFT::getCursor(boolean x) {
     if( x )
         return cursor_x;
@@ -701,11 +711,11 @@ void TFT::openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
 void TFT::windowData(uint16_t d) {
     setPixel(winx0 + winpx, winy0 + winpy, d);
     winpx++;
-    if (winpx + winx0 > winx1) {
+    if (winpx + winx0 >= winx1) {
         winpx = 0;
         winpy++;
     }
-    if (winpy + winy0 > winy1) {
+    if (winpy + winy0 >= winy1) {
         winpy = 0;
     }
 }

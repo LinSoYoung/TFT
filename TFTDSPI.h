@@ -7,6 +7,7 @@ class TFTDSPI : public TFTCommunicator
 {
     public:
         TFTDSPI(DSPI *spi, uint8_t cs, uint8_t dc = 255, uint32_t sp=40000000UL) : _spi(spi), _cs(cs), _dc(dc), _speed(sp) {}
+        TFTDSPI(DSPI &spi, uint8_t cs, uint8_t dc = 255, uint32_t sp=40000000UL) : _spi(&spi), _cs(cs), _dc(dc), _speed(sp) {}
 
         void initializeDevice();
         uint8_t readCommand8();

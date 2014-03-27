@@ -268,3 +268,21 @@ void HX8357::displayOff()
 {
 	_comm->writeCommand8(HX8357_DISPLAYOFF);
 }
+
+void HX8357::openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
+    setAddrWindow(x0, y0, x0 + x1, y0 + y1);
+    _comm->streamStart();
+}
+
+void HX8357::windowData(uint16_t d) {
+    _comm->streamData16(d);
+}
+
+void HX8357::windowData(uint16_t *d, uint32_t l) {
+    _comm->blockData(d, l);
+}
+
+void HX8357::closeWindow() {
+    _comm->streamEnd();
+}
+

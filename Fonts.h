@@ -107,6 +107,7 @@ class Fonts {
         static const uint8_t Hazard14[];
         static const uint8_t Hazard16[];
         static const uint8_t Hazard40[];
+        static const uint8_t Hazard60[];
 };
 
 #endif

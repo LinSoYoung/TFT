@@ -67,6 +67,7 @@ class MCP23S17 : public ParallelIO {
     
     public:
         MCP23S17(DSPI *spi, uint8_t cs, uint8_t addr);
+        MCP23S17(DSPI &spi, uint8_t cs, uint8_t addr);
         void pinMode(uint16_t pin, uint8_t mode);
         void digitalWrite(uint16_t pin, uint8_t value);
         uint8_t digitalRead(uint16_t pin);

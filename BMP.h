@@ -55,6 +55,10 @@ struct BitmapInfoHeader {
     int32_t  biYPelsPerMeter;
     uint32_t biClrUsed;
     uint32_t biClrImportant;
+    uint32_t biMaskRed;
+    uint32_t biMaskGreen;
+    uint32_t biMaskBlue;
+    uint32_t biMaskAlpha;
 } __attribute__((packed));
 
 struct BitmapPixel24 {
@@ -64,10 +68,15 @@ struct BitmapPixel24 {
 } __attribute__((packed));
 
 struct BitmapPixel32 {
-    uint8_t a;
-    uint8_t b;
-    uint8_t g;
-    uint8_t r;
+    union {
+        uint32_t value;
+        struct {
+            uint8_t a;
+            uint8_t b;
+            uint8_t g;
+            uint8_t r;
+        } __attribute__((packed));
+    } __attribute__((packed));
 } __attribute__((packed));
 
 class BMP : public Image {
@@ -76,6 +85,14 @@ class BMP : public Image {
         const char *_image;
         struct BitmapFileHeader *_header;
         struct BitmapInfoHeader *_info;
+        struct BitmapPixel32 *_palette;
+        uint16_t _paletteSize;
+
+    private:
+        void drawIdx(TFT *dev, int16_t x, int16_t y, int32_t trans);
+        void draw565(TFT *dev, int16_t x, int16_t y, int32_t trans);
+        void drawRGB(TFT *dev, int16_t x, int16_t y, int32_t trans);
+        void drawRGBA(TFT *dev, int16_t x, int16_t y, int32_t trans);
 
     public:
         BMP(const char *data);
