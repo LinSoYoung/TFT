@@ -19,6 +19,8 @@ class AnalogTouch : public Touch {
         void scaleX(float v);
         void scaleY(float v);
 
+        uint16_t pressure();
+
     private:
         struct coord _pos;
         boolean _pressed;
@@ -28,6 +30,7 @@ class AnalogTouch : public Touch {
         uint8_t _xr;
         float _scale_x;
         float _scale_y;
+        uint16_t _pressure;
 };
 
 #endif

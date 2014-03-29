@@ -27,16 +27,16 @@ boolean AnalogTouch::isPressed() {
 }
 
 int AnalogTouch::getSample(uint8_t pin) {
-    int thisSample, lastSample = -1;
+    int thisSample = 0;
     for (int i = 0; i < ANALOGTOUCH_SMPSIZE; i++) {
-        thisSample = analogRead(pin);
-        if (thisSample == lastSample) {
-            return thisSample;
-        }
-        lastSample = thisSample;
+        thisSample += analogRead(pin);
     }
-    return -1;
+    return thisSample/ANALOGTOUCH_SMPSIZE;
 }
+
+#if !defined(max)
+#define max(A,B) ((A) > (B) ? (A) : (B))
+#endif
 
 void AnalogTouch::sample() {
     pinMode(_xl, OUTPUT);
@@ -71,7 +71,6 @@ void AnalogTouch::sample() {
     digitalWrite(_yd, LOW);
     int y2 = getSample(_xl);
 
-
     _pressed = false;
     if (
         (x1 >= 10) &&
@@ -89,6 +88,8 @@ void AnalogTouch::sample() {
             _pos.y = (_height / 2) + ((y1 - y2) / _scale_y);
         }
     }
+
+    _pressure = max(abs(x1 - x2), abs(y1 - y2));
 }
 
 void AnalogTouch::scaleX(float v) {
@@ -99,4 +100,6 @@ void AnalogTouch::scaleY(float v) {
     _scale_y = v;
 }
 
-
+uint16_t AnalogTouch::pressure() {
+    return _pressure;
+}
