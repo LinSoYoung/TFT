@@ -30,9 +30,6 @@ class KS0108 : public TFT {
 
         void updateScreen();
 
-        void update(Framebuffer *fb);
-        void update(Framebuffer *fb, int16_t x, int16_t y);
-
 	protected:
 		void streamCommands(uint8_t *cmdlist);
 		uint8_t colstart, rowstart;

@@ -203,7 +203,6 @@ void TFT::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t colo
     }
 }
 
-
 // draw a rectangle
 void TFT::drawRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) {
     drawHorizontalLine(x, y, w, color);
@@ -529,18 +528,6 @@ uint16_t TFT::color565(uint8_t r, uint8_t g, uint8_t b) {
 
 void TFT::setFont(const uint8_t *f) {
     font = f;
-}
-
-void TFT::update(Framebuffer *fb) {
-    update(fb, 0, 0);
-}
-
-void TFT::update(Framebuffer *fb, int16_t dx, int16_t dy) {
-    for (int y = 0; y < getHeight(); y++) {
-        for (int x = 0; x < getWidth(); x++) {
-            setPixel(x, y, fb->colorAt(x + dx, y + dy));
-        }
-    }
 }
 
 uint16_t TFT::getTextColor() {

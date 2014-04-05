@@ -30,7 +30,6 @@ class ILI9340 : public TFT {
 
         void initializeDevice();
 
-        void update(Framebuffer *fb);
 };
 
 #endif

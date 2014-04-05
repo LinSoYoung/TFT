@@ -25,8 +25,6 @@ class HX8357 : public TFT
 
         void initializeDevice();
 
-        //void update(Framebuffer *fb); // Not implemented
-
         void openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
         void windowData(uint16_t d);
         void windowData(uint16_t *d, uint32_t l);

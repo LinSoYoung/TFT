@@ -25,8 +25,6 @@ class BD663474 : public TFT {
 
         void initializeDevice();
 
-        void update(Framebuffer *fb);
-
 };
 
 #endif

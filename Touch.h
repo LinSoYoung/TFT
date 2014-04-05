@@ -17,6 +17,7 @@ class Touch {
         virtual uint16_t x() = 0;
         virtual uint16_t y() = 0;
         virtual boolean isPressed() = 0;
+        virtual uint16_t pressure() { return 0; }
 
     protected:
         TFTCommunicator *_comm;

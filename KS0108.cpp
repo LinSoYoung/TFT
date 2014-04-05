@@ -112,18 +112,3 @@ void KS0108::updateScreen() {
         }
     }
 }
-
-void KS0108::update(Framebuffer *fb) {
-    update(fb, 0, 0);
-}
-
-void KS0108::update(Framebuffer *fb, int16_t x, int16_t y) {
-    uint16_t buf[64];
-    for (uint16_t dy = 0; dy < 64; dy++) {
-        fb->getScanLine(y + dy, x, 64, buf);
-        for (uint16_t dx = 0; dx < 64; dx++) {
-            doSetPixel(dx, dy, buf[dx]);
-        }
-    }
-    updateScreen();
-}

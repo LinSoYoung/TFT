@@ -55,8 +55,6 @@ typedef struct {
     } __attribute__((packed));
 } __attribute__((packed)) Color565;
 
-class Framebuffer;
-
 extern uint16_t rgb(uint32_t c);
 extern uint16_t rgb(uint8_t r, uint8_t g, uint8_t b);
 
@@ -98,8 +96,6 @@ class TFT : public Print
         virtual void displayOn() = 0;
         virtual void displayOff() = 0;
         virtual void invertDisplay(boolean i) = 0;
-        virtual void update(Framebuffer *fb);
-        virtual void update(Framebuffer *fb, int16_t dx, int16_t dy);
         virtual uint16_t stringWidth(char *text);
         virtual uint16_t stringHeight(char *text);
 
@@ -161,6 +157,7 @@ class TFT : public Print
 #include "TFTSoftSPI.h"
 #include "TFTPar4.h"
 #include "TFTPar8.h"
+#include "TFTPar16.h"
 #include "RawPar.h"
 #include "TFTPMP.h"
 #include "MCP23S17.h"

@@ -255,21 +255,3 @@ void BD663474::invertDisplay(boolean i) {
 //	_comm->writeCommand(i ? BD663474_INVON : BD663474_INVOFF);
 }
 
-void BD663474::update(Framebuffer *fb) {
-    uint32_t pixpair = 0;
-    uint16_t color = 0;
-
-    _comm->streamStart();
-    setAddrWindow(0, 0, _width, _height);
-    for (int y = 0; y < _height; y++) {
-        for (int x = 0; x < _width; x+=2) {
-            color = fb->colorAt(x, y);
-            pixpair = color << 16;
-            color = fb->colorAt(x+1, y);
-            pixpair |= color;
-            _comm->streamData32(pixpair);
-        }
-    }
-    _comm->streamEnd();
-}
-

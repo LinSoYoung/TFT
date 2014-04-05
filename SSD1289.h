@@ -25,8 +25,6 @@ class SSD1289 : public TFT {
 
         void initializeDevice();
 
-        void update(Framebuffer *fb);
-
         virtual void openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
         virtual void windowData(uint16_t d);
         virtual void windowData(uint16_t *d, uint32_t l);

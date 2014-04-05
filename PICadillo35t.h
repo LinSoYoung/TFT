@@ -5,13 +5,20 @@
 
 class PICadillo35t : public TFT 
 {
+    private:
+        static const uint8_t opWrite = 0;
+        static const uint8_t opRead = 1;
+
+        uint8_t _lastOp;
+
 	public:
         static const uint16_t Width      = 320;
         static const uint16_t Height     = 480;
 
-		PICadillo35t() : TFT(NULL) {}
+		PICadillo35t() : TFT(NULL), _lastOp(PICadillo35t::opWrite) {}
 
 		void setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
+		void setAddrWindowRead(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
         void fillScreen(uint16_t color);
         void setPixel(int16_t x, int16_t y, uint16_t color);
         void drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t color);
@@ -21,10 +28,9 @@ class PICadillo35t : public TFT
         void invertDisplay(boolean i);
         void displayOn();  
         void displayOff();  
+        uint16_t colorAt(int16_t x, int16_t y);
 
         void initializeDevice();
-
-        //void update(Framebuffer *fb); // Not implemented
 
         void openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
         void windowData(uint16_t d);

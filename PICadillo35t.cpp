@@ -34,12 +34,14 @@ void inline __attribute__((alwaysinline)) PICadillo35t::writeCommand(uint16_t c)
     while (PMMODEbits.BUSY == 1);
     PMADDR = 0x0000;
     PMDIN = c;
+    _lastOp = opWrite;
 }
 
 void inline __attribute__((alwaysinline)) PICadillo35t::writeData(uint16_t c) {
     while (PMMODEbits.BUSY == 1);
     PMADDR = 0x0001;
     PMDIN = c;
+    _lastOp = opWrite;
 }
 
 //==============================================================
@@ -190,6 +192,23 @@ void PICadillo35t::setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t
     writeCommand(HX8357_WRITE_MEMORY_START); //Write SRAM Data
 }
 
+void PICadillo35t::setAddrWindowRead(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) 
+{
+    writeCommand(HX8357_SET_COLUMN_ADDRESS); // Column addr set
+    writeData((x0+colstart) >> 8);
+    writeData(x0+colstart);     // XSTART 
+    writeData((x1+colstart) >> 8);
+    writeData(x1+colstart);     // XEND
+
+    writeCommand(HX8357_SET_PAGE_ADDRESS); // Row addr set
+    writeData((y0+rowstart) >> 8);
+    writeData(y0+rowstart);     // YSTART
+    writeData((y1+rowstart) >> 8);
+    writeData(y1+rowstart);     // YEND
+
+    writeCommand(HX8357_READ_MEMORY_START); //Read SRAM Data
+}
+
 void PICadillo35t::setPixel(int16_t x, int16_t y, uint16_t color) 
 {
 	if((x < 0) ||(x >= _width) || (y < 0) || (y >= _height)) 
@@ -197,6 +216,7 @@ void PICadillo35t::setPixel(int16_t x, int16_t y, uint16_t color)
 	setAddrWindow(x,y,x+1,y+1);
     PMADDR = 0x0001;
     PMDIN = color;
+    _lastOp = opWrite;
 }
 
 void PICadillo35t::fillScreen(uint16_t color) 
@@ -218,6 +238,7 @@ void PICadillo35t::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uin
             PMDIN = color;
 		}
 	}
+    _lastOp = opWrite;
 }
 
 void PICadillo35t::drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t color) 
@@ -233,6 +254,7 @@ void PICadillo35t::drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t 
 	while (w--) {
 		PMDIN = color;
 	}
+    _lastOp = opWrite;
 }
 
 void PICadillo35t::drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t color) 
@@ -248,6 +270,7 @@ void PICadillo35t::drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t co
 	while (h--) {
         PMDIN = color;
 	}
+    _lastOp = opWrite;
 }
 
 void PICadillo35t::setRotation(uint8_t m) 
@@ -305,14 +328,45 @@ void PICadillo35t::openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1
 
 void PICadillo35t::windowData(uint16_t d) {
     PMDIN = d;
+    _lastOp = opWrite;
 }
 
 void PICadillo35t::windowData(uint16_t *d, uint32_t l) {
     for (uint32_t i = 0; i < l; i++) {
         PMDIN = d[i];
     }
+    _lastOp = opWrite;
 }
 
 void PICadillo35t::closeWindow() {
 }
 
+
+uint16_t PICadillo35t::colorAt(int16_t x, int16_t y) {
+    uint16_t start;
+    uint16_t val1;
+    uint16_t val2;
+    uint16_t calc;
+    uint16_t values[20];
+	if((x < 0) ||(x >= _width) || (y < 0) || (y >= _height)) 
+		return 0;
+	setAddrWindowRead(x,y,x+1,y+1);
+    _lastOp = opRead;
+    PMADDR = 0x0001;
+    start = PMDIN;
+
+    for (int i = 0; i < 5; i++) {
+        while (PMMODEbits.BUSY == 1);
+        values[i] = PMDIN;
+    }
+
+    while (PMMODEbits.BUSY == 1);
+    val1 = PMDIN;
+    while (PMMODEbits.BUSY == 1);
+    val2 = PMDIN;
+
+    calc = rgb(val1 >> 8, val1 & 0xFF, val2 >> 8);
+
+
+    return calc;
+}

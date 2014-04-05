@@ -101,8 +101,6 @@ class SSD1963 : public TFT {
 
         void initializeDevice();
 
-        void update(Framebuffer *fb);
-
 };
 
 #endif

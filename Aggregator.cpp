@@ -80,15 +80,3 @@ void Aggregator::drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t c) {
         setPixel(x, y + i, c);
     }
 }
-
-
-void Aggregator::update(Framebuffer *fb) {
-    update(fb, 0, 0);
-}
-
-void Aggregator::update(Framebuffer *fb, int16_t dx, int16_t dy) {
-    struct AggregatorList *s;
-    for (s = _displays; s; s = s->next) {
-        s->display->update(fb, dx + s->x, dy + s->y);
-    }
-}

@@ -5,6 +5,11 @@
 
 class TFTPMP : public TFTCommunicator 
 {
+    private:
+        static const uint8_t opWrite = 0;
+        static const uint8_t opRead = 1;
+        uint8_t _lastOp;
+
     public:
         TFTPMP();
         uint8_t inline readCommand8();

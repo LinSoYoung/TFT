@@ -256,20 +256,3 @@ void SSD1963::invertDisplay(boolean i) {
 	_comm->writeCommand16(i ? SSD1963_EnterInvertMode : SSD1963_ExitInvertMode);
 }
 
-void SSD1963::update(Framebuffer *fb) {
-    uint32_t pixpair = 0;
-    uint16_t color = 0;
-
-    uint16_t scanline[_width];
-
-    _comm->streamStart();
-    setAddrWindow(0, 0, _width-1, _height-1);
-    _comm->streamEnd();
-    for (int y = 0; y < _height; y++) {
-        fb->getScanLine(y, scanline);
-        _comm->streamStart();
-        _comm->blockData(scanline, _width);
-        _comm->streamEnd();
-    }
-}
-

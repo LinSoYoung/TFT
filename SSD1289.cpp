@@ -191,23 +191,6 @@ void SSD1289::invertDisplay(boolean i) {
 //	_comm->writeCommand(i ? SSD1289_INVON : SSD1289_INVOFF);
 }
 
-void SSD1289::update(Framebuffer *fb) {
-    uint32_t pixpair = 0;
-    uint16_t color = 0;
-
-    uint16_t scanline[_width];
-
-    _comm->streamStart();
-    setAddrWindow(0, 0, _width-1, _height-1);
-    _comm->streamEnd();
-    for (int y = 0; y < _height; y++) {
-        fb->getScanLine(y, scanline);
-        _comm->streamStart();
-        _comm->blockData(scanline, _width);
-        _comm->streamEnd();
-    }
-}
-
 void SSD1289::openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
     setAddrWindow(x0, y0, x1, y1);
 }

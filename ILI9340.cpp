@@ -293,13 +293,4 @@ void ILI9340::invertDisplay(boolean i) {
 	_comm->writeCommand8(i ? ILI9340_INVON : ILI9340_INVOFF);
 }
 
-void ILI9340::update(Framebuffer *fb) {
-    setAddrWindow(0, 0, _width, _height);
-    uint16_t linebuffer[_width];
-
-    for (int y = 0; y < _height; y++) {
-	fb->getScanLine(y, linebuffer);
-	_comm->blockData(linebuffer, _width);
-    }
-}
 

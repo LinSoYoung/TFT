@@ -133,6 +133,10 @@ void BMP::drawRGBA(TFT *dev, int16_t x, int16_t y, int32_t trans) {
     uint32_t bMask = 0x00FF0000;
     uint32_t aMask = 0xFF000000;
     if (_info->biCompression==3) {
+        rShift = 0;
+        gShift = 0;
+        bShift = 0;
+        aShift = 0;
         uint32_t t = _info->biMaskRed;
         rMask = _info->biMaskRed;
         while ((t & 1) == 0) {
@@ -170,16 +174,16 @@ void BMP::drawRGBA(TFT *dev, int16_t x, int16_t y, int32_t trans) {
             blue = ((p->value & bMask) >> bShift);
             alpha = ((p->value & aMask) >> aShift);
             int16_t fg = rgb(red, green, blue);
-            int16_t bg;
-            if (trans < 0) {
-                bg = dev->colorAt(x + ix, y + iy);
-            } else {
-                bg = trans;
-            }
 
             if (alpha == 255) {
                 dev->setPixel(x + ix, y + iy, fg);
             } else if(alpha > 0) {
+                int16_t bg;
+                if (trans < 0) {
+                    bg = dev->colorAt(x + ix, y + iy);
+                } else {
+                    bg = trans;
+                }
                 dev->setPixel(x + ix, y + iy, dev->mix(bg, fg, alpha));
             }
         }

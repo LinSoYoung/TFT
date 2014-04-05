@@ -31,9 +31,6 @@ class Aggregator : public TFT {
         uint16_t getWidth() { return _width; }
         uint16_t getHeight() { return _height; }
 
-        void update(Framebuffer *fb);
-        void update(Framebuffer *fb, int16_t dx, int16_t dy);
-
 	protected:
         struct AggregatorList *_displays;
         uint16_t _width;
