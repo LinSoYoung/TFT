@@ -5,13 +5,26 @@
 
 class PICadillo35t : public TFT 
 {
-    private:
+	public:
         static const uint8_t opWrite = 0;
         static const uint8_t opRead = 1;
 
+        static const uint8_t cacheInvalid = 0;
+        static const uint8_t cacheClean = 1;
+        static const uint8_t cacheDirty = 2;
+
+        static const uint8_t cacheDimension = 4;
+        uint16_t _cacheData[(1<<cacheDimension) * (1<<cacheDimension)];
+        uint8_t _cacheState;
+
+        int16_t _cacheX;
+        int16_t _cacheY;
+
         uint8_t _lastOp;
 
-	public:
+        void loadCacheBlock(int16_t x, int16_t y);
+        void flushCacheBlock();
+
         static const uint16_t Width      = 320;
         static const uint16_t Height     = 480;
 

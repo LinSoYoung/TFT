@@ -173,6 +173,7 @@ void PICadillo35t::initializeDevice()
 	writeCommand(HX8357_SET_DISPLAY_ON); //Display On
 	delay(10);
 	writeCommand(HX8357_WRITE_MEMORY_START); //Write SRAM Data
+    _cacheState = cacheInvalid;
 }
 
 void PICadillo35t::setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) 
@@ -217,11 +218,13 @@ void PICadillo35t::setPixel(int16_t x, int16_t y, uint16_t color)
     PMADDR = 0x0001;
     PMDIN = color;
     _lastOp = opWrite;
+    _cacheState = cacheInvalid;
 }
 
 void PICadillo35t::fillScreen(uint16_t color) 
 {
 	fillRectangle(0, 0,  _width, _height, color);
+    _cacheState = cacheInvalid;
 }
 
 void PICadillo35t::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) 
@@ -239,6 +242,7 @@ void PICadillo35t::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uin
 		}
 	}
     _lastOp = opWrite;
+    _cacheState = cacheInvalid;
 }
 
 void PICadillo35t::drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t color) 
@@ -255,6 +259,7 @@ void PICadillo35t::drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t 
 		PMDIN = color;
 	}
     _lastOp = opWrite;
+    _cacheState = cacheInvalid;
 }
 
 void PICadillo35t::drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t color) 
@@ -271,6 +276,7 @@ void PICadillo35t::drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t co
         PMDIN = color;
 	}
     _lastOp = opWrite;
+    _cacheState = cacheInvalid;
 }
 
 void PICadillo35t::setRotation(uint8_t m) 
@@ -304,6 +310,7 @@ void PICadillo35t::setRotation(uint8_t m)
 			_height = PICadillo35t::Width;
 			break;
 	}
+    _cacheState = cacheInvalid;
 }
 
 void PICadillo35t::invertDisplay(boolean i) 
@@ -336,6 +343,7 @@ void PICadillo35t::windowData(uint16_t *d, uint32_t l) {
         PMDIN = d[i];
     }
     _lastOp = opWrite;
+    _cacheState = cacheInvalid;
 }
 
 void PICadillo35t::closeWindow() {
@@ -343,30 +351,92 @@ void PICadillo35t::closeWindow() {
 
 
 uint16_t PICadillo35t::colorAt(int16_t x, int16_t y) {
-    uint16_t start;
-    uint16_t val1;
-    uint16_t val2;
-    uint16_t calc;
-    uint16_t values[20];
 	if((x < 0) ||(x >= _width) || (y < 0) || (y >= _height)) 
 		return 0;
-	setAddrWindowRead(x,y,x+1,y+1);
+    loadCacheBlock(x, y);
+
+    int16_t xo = x & ((1 << PICadillo35t::cacheDimension) - 1);
+    int16_t yo = y & ((1 << PICadillo35t::cacheDimension) - 1);
+
+    uint32_t offset = yo * (1 << PICadillo35t::cacheDimension) + xo;
+
+    return _cacheData[offset];
+}
+
+extern PICadillo35t tft;
+void PICadillo35t::loadCacheBlock(int16_t x, int16_t y) {
+    int16_t x0 = x & ~((1 << cacheDimension) - 1);
+    int16_t y0 = y & ~((1 << cacheDimension) - 1);
+    int16_t x1 = x0 + ((1 << cacheDimension) - 1);
+    int16_t y1 = y0 + ((1 << cacheDimension) - 1);
+
+    if (
+        (x >= _cacheX) && 
+        (x < _cacheX + (1 << cacheDimension))  && 
+        (y >= _cacheY) && 
+        (y < _cacheY + (1 << cacheDimension)) && 
+        (_cacheState != cacheInvalid)
+    ) {
+        return;
+    }
+
+    if (_cacheState == cacheDirty) {
+        flushCacheBlock();
+    }
+
+
+	setAddrWindowRead(x0,y0,x1,y1);
     _lastOp = opRead;
     PMADDR = 0x0001;
-    start = PMDIN;
+    uint16_t start = PMDIN;
 
     for (int i = 0; i < 5; i++) {
         while (PMMODEbits.BUSY == 1);
-        values[i] = PMDIN;
+        volatile uint16_t value = PMDIN;
     }
 
-    while (PMMODEbits.BUSY == 1);
-    val1 = PMDIN;
-    while (PMMODEbits.BUSY == 1);
-    val2 = PMDIN;
+    uint16_t values[96];
+    uint32_t vc = 0;
 
-    calc = rgb(val1 >> 8, val1 & 0xFF, val2 >> 8);
+    char temp[100];
+    for (uint32_t cpos = 0; cpos < ((1 << cacheDimension) * (1 << cacheDimension)); cpos+=2) {
+        while (PMMODEbits.BUSY == 1);
+        uint16_t val1 = PMDIN;
+        values[vc++] = val1;
+        while (PMMODEbits.BUSY == 1);
+        uint16_t val2 = PMDIN;
+        values[vc++] = val2;
+        while (PMMODEbits.BUSY == 1);
+        uint16_t val3 = PMDIN;
+        values[vc++] = val3;
 
+        
+        _cacheData[cpos] = rgb(val1 >> 8, val1 & 0xFF, val2 >> 8);
+        _cacheData[cpos+1] = rgb(val2 & 0xFF, val3 >> 8, val3 & 0xFF);
+    }
+    _cacheState = cacheClean;
+    _cacheX = x0;
+    _cacheY = y0;
+//    tft.setCursor(0, 0);
+//    tft.print("Block: ");
+//    tft.print(x0); tft.print("-"); tft.print(y0); tft.print(" to ");
+//    tft.print(x1); tft.print("-"); tft.println(y1);
 
-    return calc;
+//    drawRectangle(x0, y0, (1 << cacheDimension), (1 << cacheDimension), Color::Red);
+//    for (int i = 0; i < 96; i++) {
+//        sprintf(temp, "%04X ", values[i]);
+//        tft.print(temp);
+//    }
+//    delay(1000);
 }
+
+void PICadillo35t::flushCacheBlock() {
+    if (_cacheState != cacheDirty) {
+        return;
+    }
+    openWindow(_cacheX, _cacheY, 1 << cacheDimension, 1 << cacheDimension);
+    windowData(_cacheData, ((1 << cacheDimension) * (1 << cacheDimension)));
+    closeWindow();
+    _cacheState = cacheClean;
+}
+
