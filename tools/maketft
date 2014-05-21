@@ -1,0 +1,18 @@
+#!/bin/bash
+
+MODEL=$1
+WIDTH=$2
+HEIGHT=$3
+
+cp TFTScreen.h.template ${MODEL}.h
+cp TFTScreen.cpp.template ${MODEL}.cpp
+
+sed -i "s/%MODEL%/${MODEL}/g" ${MODEL}.h
+sed -i "s/%MODEL%/${MODEL}/g" ${MODEL}.cpp
+
+sed -i "s/%WIDTH%/${WIDTH}/g" ${MODEL}.h
+sed -i "s/%WIDTH%/${WIDTH}/g" ${MODEL}.cpp
+
+sed -i "s/%HEIGHT%/${HEIGHT}/g" ${MODEL}.h
+sed -i "s/%HEIGHT%/${HEIGHT}/g" ${MODEL}.cpp
+

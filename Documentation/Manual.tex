@@ -1,0 +1,598 @@
+%% LyX 2.0.6 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[oneside,english]{book}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{colortbl}
+\definecolor{Snow}{rgb}{1,0.980392156862745,0.980392156862745}
+\definecolor{GhostWhite}{rgb}{0.972549019607843,0.972549019607843,1}
+\definecolor{WhiteSmoke}{rgb}{0.96078431372549,0.96078431372549,0.96078431372549}
+\definecolor{Gainsboro}{rgb}{0.862745098039216,0.862745098039216,0.862745098039216}
+\definecolor{FloralWhite}{rgb}{1,0.980392156862745,0.941176470588235}
+\definecolor{OldLace}{rgb}{0.992156862745098,0.96078431372549,0.901960784313726}
+\definecolor{Linen}{rgb}{0.980392156862745,0.941176470588235,0.901960784313726}
+\definecolor{AntiqueWhite}{rgb}{0.980392156862745,0.92156862745098,0.843137254901961}
+\definecolor{PapayaWhip}{rgb}{1,0.937254901960784,0.835294117647059}
+\definecolor{BlanchedAlmond}{rgb}{1,0.92156862745098,0.803921568627451}
+\definecolor{Bisque}{rgb}{1,0.894117647058824,0.768627450980392}
+\definecolor{PeachPuff}{rgb}{1,0.854901960784314,0.725490196078431}
+\definecolor{NavajoWhite}{rgb}{1,0.870588235294118,0.67843137254902}
+\definecolor{Moccasin}{rgb}{1,0.894117647058824,0.709803921568627}
+\definecolor{Cornsilk}{rgb}{1,0.972549019607843,0.862745098039216}
+\definecolor{Ivory}{rgb}{1,1,0.941176470588235}
+\definecolor{LemonChiffon}{rgb}{1,0.980392156862745,0.803921568627451}
+\definecolor{Seashell}{rgb}{1,0.96078431372549,0.933333333333333}
+\definecolor{Honeydew}{rgb}{0.941176470588235,1,0.941176470588235}
+\definecolor{MintCream}{rgb}{0.96078431372549,1,0.980392156862745}
+\definecolor{Azure}{rgb}{0.941176470588235,1,1}
+\definecolor{AliceBlue}{rgb}{0.941176470588235,0.972549019607843,1}
+\definecolor{Lavender}{rgb}{0.901960784313726,0.901960784313726,0.980392156862745}
+\definecolor{LavenderBlush}{rgb}{1,0.941176470588235,0.96078431372549}
+\definecolor{MistyRose}{rgb}{1,0.894117647058824,0.882352941176471}
+\definecolor{White}{rgb}{1,1,1}
+\definecolor{Black}{rgb}{0,0,0}
+\definecolor{DarkSlateGray}{rgb}{0.184313725490196,0.309803921568627,0.309803921568627}
+\definecolor{DimGray}{rgb}{0.411764705882353,0.411764705882353,0.411764705882353}
+\definecolor{SlateGray}{rgb}{0.43921568627451,0.501960784313725,0.564705882352941}
+\definecolor{LightSlateGray}{rgb}{0.466666666666667,0.533333333333333,0.6}
+\definecolor{Gray}{rgb}{0.745098039215686,0.745098039215686,0.745098039215686}
+\definecolor{LightGray}{rgb}{0.827450980392157,0.827450980392157,0.827450980392157}
+\definecolor{MidnightBlue}{rgb}{0.0980392156862745,0.0980392156862745,0.43921568627451}
+\definecolor{Navy}{rgb}{0,0,0.501960784313725}
+\definecolor{NavyBlue}{rgb}{0,0,0.501960784313725}
+\definecolor{CornflowerBlue}{rgb}{0.392156862745098,0.584313725490196,0.929411764705882}
+\definecolor{DarkSlateBlue}{rgb}{0.282352941176471,0.23921568627451,0.545098039215686}
+\definecolor{SlateBlue}{rgb}{0.415686274509804,0.352941176470588,0.803921568627451}
+\definecolor{MediumSlateBlue}{rgb}{0.482352941176471,0.407843137254902,0.933333333333333}
+\definecolor{LightSlateBlue}{rgb}{0.517647058823529,0.43921568627451,1}
+\definecolor{MediumBlue}{rgb}{0,0,0.803921568627451}
+\definecolor{RoyalBlue}{rgb}{0.254901960784314,0.411764705882353,0.882352941176471}
+\definecolor{Blue}{rgb}{0,0,1}
+\definecolor{DodgerBlue}{rgb}{0.117647058823529,0.564705882352941,1}
+\definecolor{DeepSkyBlue}{rgb}{0,0.749019607843137,1}
+\definecolor{SkyBlue}{rgb}{0.529411764705882,0.807843137254902,0.92156862745098}
+\definecolor{LightSkyBlue}{rgb}{0.529411764705882,0.807843137254902,0.980392156862745}
+\definecolor{SteelBlue}{rgb}{0.274509803921569,0.509803921568627,0.705882352941177}
+\definecolor{LightSteelBlue}{rgb}{0.690196078431373,0.768627450980392,0.870588235294118}
+\definecolor{LightBlue}{rgb}{0.67843137254902,0.847058823529412,0.901960784313726}
+\definecolor{PowderBlue}{rgb}{0.690196078431373,0.87843137254902,0.901960784313726}
+\definecolor{PaleTurquoise}{rgb}{0.686274509803922,0.933333333333333,0.933333333333333}
+\definecolor{DarkTurquoise}{rgb}{0,0.807843137254902,0.819607843137255}
+\definecolor{MediumTurquoise}{rgb}{0.282352941176471,0.819607843137255,0.8}
+\definecolor{Turquoise}{rgb}{0.250980392156863,0.87843137254902,0.815686274509804}
+\definecolor{Cyan}{rgb}{0,1,1}
+\definecolor{LightCyan}{rgb}{0.87843137254902,1,1}
+\definecolor{CadetBlue}{rgb}{0.372549019607843,0.619607843137255,0.627450980392157}
+\definecolor{MediumAquamarine}{rgb}{0.4,0.803921568627451,0.666666666666667}
+\definecolor{Aquamarine}{rgb}{0.498039215686275,1,0.831372549019608}
+\definecolor{DarkGreen}{rgb}{0,0.392156862745098,0}
+\definecolor{DarkOliveGreen}{rgb}{0.333333333333333,0.419607843137255,0.184313725490196}
+\definecolor{DarkSeaGreen}{rgb}{0.56078431372549,0.737254901960784,0.56078431372549}
+\definecolor{SeaGreen}{rgb}{0.180392156862745,0.545098039215686,0.341176470588235}
+\definecolor{MediumSeaGreen}{rgb}{0.235294117647059,0.701960784313725,0.443137254901961}
+\definecolor{LightSeaGreen}{rgb}{0.125490196078431,0.698039215686274,0.666666666666667}
+\definecolor{PaleGreen}{rgb}{0.596078431372549,0.984313725490196,0.596078431372549}
+\definecolor{SpringGreen}{rgb}{0,1,0.498039215686275}
+\definecolor{LawnGreen}{rgb}{0.486274509803922,0.988235294117647,0}
+\definecolor{Green}{rgb}{0,1,0}
+\definecolor{Chartreuse}{rgb}{0.498039215686275,1,0}
+\definecolor{MediumSpringGreen}{rgb}{0,0.980392156862745,0.603921568627451}
+\definecolor{GreenYellow}{rgb}{0.67843137254902,1,0.184313725490196}
+\definecolor{LimeGreen}{rgb}{0.196078431372549,0.803921568627451,0.196078431372549}
+\definecolor{YellowGreen}{rgb}{0.603921568627451,0.803921568627451,0.196078431372549}
+\definecolor{ForestGreen}{rgb}{0.133333333333333,0.545098039215686,0.133333333333333}
+\definecolor{OliveDrab}{rgb}{0.419607843137255,0.556862745098039,0.137254901960784}
+\definecolor{DarkKhaki}{rgb}{0.741176470588235,0.717647058823529,0.419607843137255}
+\definecolor{Khaki}{rgb}{0.941176470588235,0.901960784313726,0.549019607843137}
+\definecolor{PaleGoldenrod}{rgb}{0.933333333333333,0.909803921568627,0.666666666666667}
+\definecolor{LightGoldenrodYellow}{rgb}{0.980392156862745,0.980392156862745,0.823529411764706}
+\definecolor{LightYellow}{rgb}{1,1,0.87843137254902}
+\definecolor{Yellow}{rgb}{1,1,0}
+\definecolor{Gold}{rgb}{1,0.843137254901961,0}
+\definecolor{LightGoldenrod}{rgb}{0.933333333333333,0.866666666666667,0.509803921568627}
+\definecolor{Goldenrod}{rgb}{0.854901960784314,0.647058823529412,0.125490196078431}
+\definecolor{DarkGoldenrod}{rgb}{0.72156862745098,0.525490196078431,0.0431372549019608}
+\definecolor{RosyBrown}{rgb}{0.737254901960784,0.56078431372549,0.56078431372549}
+\definecolor{IndianRed}{rgb}{0.803921568627451,0.36078431372549,0.36078431372549}
+\definecolor{SaddleBrown}{rgb}{0.545098039215686,0.270588235294118,0.0745098039215686}
+\definecolor{Sienna}{rgb}{0.627450980392157,0.32156862745098,0.176470588235294}
+\definecolor{Peru}{rgb}{0.803921568627451,0.52156862745098,0.247058823529412}
+\definecolor{Burlywood}{rgb}{0.870588235294118,0.72156862745098,0.529411764705882}
+\definecolor{Beige}{rgb}{0.96078431372549,0.96078431372549,0.862745098039216}
+\definecolor{Wheat}{rgb}{0.96078431372549,0.870588235294118,0.701960784313725}
+\definecolor{SandyBrown}{rgb}{0.956862745098039,0.643137254901961,0.376470588235294}
+\definecolor{Tan}{rgb}{0.823529411764706,0.705882352941177,0.549019607843137}
+\definecolor{Chocolate}{rgb}{0.823529411764706,0.411764705882353,0.117647058823529}
+\definecolor{Firebrick}{rgb}{0.698039215686274,0.133333333333333,0.133333333333333}
+\definecolor{Brown}{rgb}{0.647058823529412,0.164705882352941,0.164705882352941}
+\definecolor{DarkSalmon}{rgb}{0.913725490196078,0.588235294117647,0.47843137254902}
+\definecolor{Salmon}{rgb}{0.980392156862745,0.501960784313725,0.447058823529412}
+\definecolor{LightSalmon}{rgb}{1,0.627450980392157,0.47843137254902}
+\definecolor{Orange}{rgb}{1,0.647058823529412,0}
+\definecolor{DarkOrange}{rgb}{1,0.549019607843137,0}
+\definecolor{Coral}{rgb}{1,0.498039215686275,0.313725490196078}
+\definecolor{LightCoral}{rgb}{0.941176470588235,0.501960784313725,0.501960784313725}
+\definecolor{Tomato}{rgb}{1,0.388235294117647,0.27843137254902}
+\definecolor{OrangeRed}{rgb}{1,0.270588235294118,0}
+\definecolor{Red}{rgb}{1,0,0}
+\definecolor{HotPink}{rgb}{1,0.411764705882353,0.705882352941177}
+\definecolor{DeepPink}{rgb}{1,0.0784313725490196,0.576470588235294}
+\definecolor{Pink}{rgb}{1,0.752941176470588,0.796078431372549}
+\definecolor{LightPink}{rgb}{1,0.713725490196078,0.756862745098039}
+\definecolor{PaleVioletRed}{rgb}{0.858823529411765,0.43921568627451,0.576470588235294}
+\definecolor{Maroon}{rgb}{0.690196078431373,0.188235294117647,0.376470588235294}
+\definecolor{MediumVioletRed}{rgb}{0.780392156862745,0.0823529411764706,0.52156862745098}
+\definecolor{VioletRed}{rgb}{0.815686274509804,0.125490196078431,0.564705882352941}
+\definecolor{Magenta}{rgb}{1,0,1}
+\definecolor{Violet}{rgb}{0.933333333333333,0.509803921568627,0.933333333333333}
+\definecolor{Plum}{rgb}{0.866666666666667,0.627450980392157,0.866666666666667}
+\definecolor{Orchid}{rgb}{0.854901960784314,0.43921568627451,0.83921568627451}
+\definecolor{MediumOrchid}{rgb}{0.729411764705882,0.333333333333333,0.827450980392157}
+\definecolor{DarkOrchid}{rgb}{0.6,0.196078431372549,0.8}
+\definecolor{DarkViolet}{rgb}{0.580392156862745,0,0.827450980392157}
+\definecolor{BlueViolet}{rgb}{0.541176470588235,0.168627450980392,0.886274509803922}
+\definecolor{Purple}{rgb}{0.627450980392157,0.125490196078431,0.941176470588235}
+\definecolor{MediumPurple}{rgb}{0.576470588235294,0.43921568627451,0.858823529411765}
+\definecolor{Thistle}{rgb}{0.847058823529412,0.749019607843137,0.847058823529412}
+\definecolor{Gray0}{rgb}{0,0,0}
+\definecolor{Gray1}{rgb}{0.0117647058823529,0.0117647058823529,0.0117647058823529}
+\definecolor{Gray2}{rgb}{0.0196078431372549,0.0196078431372549,0.0196078431372549}
+\definecolor{Gray3}{rgb}{0.0313725490196078,0.0313725490196078,0.0313725490196078}
+\definecolor{Gray4}{rgb}{0.0392156862745098,0.0392156862745098,0.0392156862745098}
+\definecolor{Gray5}{rgb}{0.0509803921568627,0.0509803921568627,0.0509803921568627}
+\definecolor{Gray6}{rgb}{0.0588235294117647,0.0588235294117647,0.0588235294117647}
+\definecolor{Gray7}{rgb}{0.0705882352941176,0.0705882352941176,0.0705882352941176}
+\definecolor{Gray8}{rgb}{0.0784313725490196,0.0784313725490196,0.0784313725490196}
+\definecolor{Gray9}{rgb}{0.0901960784313725,0.0901960784313725,0.0901960784313725}
+\definecolor{Gray10}{rgb}{0.101960784313725,0.101960784313725,0.101960784313725}
+\definecolor{Gray11}{rgb}{0.109803921568627,0.109803921568627,0.109803921568627}
+\definecolor{Gray12}{rgb}{0.12156862745098,0.12156862745098,0.12156862745098}
+\definecolor{Gray13}{rgb}{0.129411764705882,0.129411764705882,0.129411764705882}
+\definecolor{Gray14}{rgb}{0.141176470588235,0.141176470588235,0.141176470588235}
+\definecolor{Gray15}{rgb}{0.149019607843137,0.149019607843137,0.149019607843137}
+\definecolor{Gray16}{rgb}{0.16078431372549,0.16078431372549,0.16078431372549}
+\definecolor{Gray17}{rgb}{0.168627450980392,0.168627450980392,0.168627450980392}
+\definecolor{Gray18}{rgb}{0.180392156862745,0.180392156862745,0.180392156862745}
+\definecolor{Gray19}{rgb}{0.188235294117647,0.188235294117647,0.188235294117647}
+\definecolor{Gray20}{rgb}{0.2,0.2,0.2}
+\definecolor{Gray21}{rgb}{0.211764705882353,0.211764705882353,0.211764705882353}
+\definecolor{Gray22}{rgb}{0.219607843137255,0.219607843137255,0.219607843137255}
+\definecolor{Gray23}{rgb}{0.231372549019608,0.231372549019608,0.231372549019608}
+\definecolor{Gray24}{rgb}{0.23921568627451,0.23921568627451,0.23921568627451}
+\definecolor{Gray25}{rgb}{0.250980392156863,0.250980392156863,0.250980392156863}
+\definecolor{Gray26}{rgb}{0.258823529411765,0.258823529411765,0.258823529411765}
+\definecolor{Gray27}{rgb}{0.270588235294118,0.270588235294118,0.270588235294118}
+\definecolor{Gray28}{rgb}{0.27843137254902,0.27843137254902,0.27843137254902}
+\definecolor{Gray29}{rgb}{0.290196078431373,0.290196078431373,0.290196078431373}
+\definecolor{Gray30}{rgb}{0.301960784313725,0.301960784313725,0.301960784313725}
+\definecolor{Gray31}{rgb}{0.309803921568627,0.309803921568627,0.309803921568627}
+\definecolor{Gray32}{rgb}{0.32156862745098,0.32156862745098,0.32156862745098}
+\definecolor{Gray33}{rgb}{0.329411764705882,0.329411764705882,0.329411764705882}
+\definecolor{Gray34}{rgb}{0.341176470588235,0.341176470588235,0.341176470588235}
+\definecolor{Gray35}{rgb}{0.349019607843137,0.349019607843137,0.349019607843137}
+\definecolor{Gray36}{rgb}{0.36078431372549,0.36078431372549,0.36078431372549}
+\definecolor{Gray37}{rgb}{0.368627450980392,0.368627450980392,0.368627450980392}
+\definecolor{Gray38}{rgb}{0.380392156862745,0.380392156862745,0.380392156862745}
+\definecolor{Gray39}{rgb}{0.388235294117647,0.388235294117647,0.388235294117647}
+\definecolor{Gray40}{rgb}{0.4,0.4,0.4}
+\definecolor{Gray41}{rgb}{0.411764705882353,0.411764705882353,0.411764705882353}
+\definecolor{Gray42}{rgb}{0.419607843137255,0.419607843137255,0.419607843137255}
+\definecolor{Gray43}{rgb}{0.431372549019608,0.431372549019608,0.431372549019608}
+\definecolor{Gray44}{rgb}{0.43921568627451,0.43921568627451,0.43921568627451}
+\definecolor{Gray45}{rgb}{0.450980392156863,0.450980392156863,0.450980392156863}
+\definecolor{Gray46}{rgb}{0.458823529411765,0.458823529411765,0.458823529411765}
+\definecolor{Gray47}{rgb}{0.470588235294118,0.470588235294118,0.470588235294118}
+\definecolor{Gray48}{rgb}{0.47843137254902,0.47843137254902,0.47843137254902}
+\definecolor{Gray49}{rgb}{0.490196078431373,0.490196078431373,0.490196078431373}
+\definecolor{Gray50}{rgb}{0.498039215686275,0.498039215686275,0.498039215686275}
+\definecolor{Gray51}{rgb}{0.509803921568627,0.509803921568627,0.509803921568627}
+\definecolor{Gray52}{rgb}{0.52156862745098,0.52156862745098,0.52156862745098}
+\definecolor{Gray53}{rgb}{0.529411764705882,0.529411764705882,0.529411764705882}
+\definecolor{Gray54}{rgb}{0.541176470588235,0.541176470588235,0.541176470588235}
+\definecolor{Gray55}{rgb}{0.549019607843137,0.549019607843137,0.549019607843137}
+\definecolor{Gray56}{rgb}{0.56078431372549,0.56078431372549,0.56078431372549}
+\definecolor{Gray57}{rgb}{0.568627450980392,0.568627450980392,0.568627450980392}
+\definecolor{Gray58}{rgb}{0.580392156862745,0.580392156862745,0.580392156862745}
+\definecolor{Gray59}{rgb}{0.588235294117647,0.588235294117647,0.588235294117647}
+\definecolor{Gray60}{rgb}{0.6,0.6,0.6}
+\definecolor{Gray61}{rgb}{0.611764705882353,0.611764705882353,0.611764705882353}
+\definecolor{Gray62}{rgb}{0.619607843137255,0.619607843137255,0.619607843137255}
+\definecolor{Gray63}{rgb}{0.631372549019608,0.631372549019608,0.631372549019608}
+\definecolor{Gray64}{rgb}{0.63921568627451,0.63921568627451,0.63921568627451}
+\definecolor{Gray65}{rgb}{0.650980392156863,0.650980392156863,0.650980392156863}
+\definecolor{Gray66}{rgb}{0.658823529411765,0.658823529411765,0.658823529411765}
+\definecolor{Gray67}{rgb}{0.670588235294118,0.670588235294118,0.670588235294118}
+\definecolor{Gray68}{rgb}{0.67843137254902,0.67843137254902,0.67843137254902}
+\definecolor{Gray69}{rgb}{0.690196078431373,0.690196078431373,0.690196078431373}
+\definecolor{Gray70}{rgb}{0.701960784313725,0.701960784313725,0.701960784313725}
+\definecolor{Gray71}{rgb}{0.709803921568627,0.709803921568627,0.709803921568627}
+\definecolor{Gray72}{rgb}{0.72156862745098,0.72156862745098,0.72156862745098}
+\definecolor{Gray73}{rgb}{0.729411764705882,0.729411764705882,0.729411764705882}
+\definecolor{Gray74}{rgb}{0.741176470588235,0.741176470588235,0.741176470588235}
+\definecolor{Gray75}{rgb}{0.749019607843137,0.749019607843137,0.749019607843137}
+\definecolor{Gray76}{rgb}{0.76078431372549,0.76078431372549,0.76078431372549}
+\definecolor{Gray77}{rgb}{0.768627450980392,0.768627450980392,0.768627450980392}
+\definecolor{Gray78}{rgb}{0.780392156862745,0.780392156862745,0.780392156862745}
+\definecolor{Gray79}{rgb}{0.788235294117647,0.788235294117647,0.788235294117647}
+\definecolor{Gray80}{rgb}{0.8,0.8,0.8}
+\definecolor{Gray81}{rgb}{0.811764705882353,0.811764705882353,0.811764705882353}
+\definecolor{Gray82}{rgb}{0.819607843137255,0.819607843137255,0.819607843137255}
+\definecolor{Gray83}{rgb}{0.831372549019608,0.831372549019608,0.831372549019608}
+\definecolor{Gray84}{rgb}{0.83921568627451,0.83921568627451,0.83921568627451}
+\definecolor{Gray85}{rgb}{0.850980392156863,0.850980392156863,0.850980392156863}
+\definecolor{Gray86}{rgb}{0.858823529411765,0.858823529411765,0.858823529411765}
+\definecolor{Gray87}{rgb}{0.870588235294118,0.870588235294118,0.870588235294118}
+\definecolor{Gray88}{rgb}{0.87843137254902,0.87843137254902,0.87843137254902}
+\definecolor{Gray89}{rgb}{0.890196078431372,0.890196078431372,0.890196078431372}
+\definecolor{Gray90}{rgb}{0.898039215686275,0.898039215686275,0.898039215686275}
+\definecolor{Gray91}{rgb}{0.909803921568627,0.909803921568627,0.909803921568627}
+\definecolor{Gray92}{rgb}{0.92156862745098,0.92156862745098,0.92156862745098}
+\definecolor{Gray93}{rgb}{0.929411764705882,0.929411764705882,0.929411764705882}
+\definecolor{Gray94}{rgb}{0.941176470588235,0.941176470588235,0.941176470588235}
+\definecolor{Gray95}{rgb}{0.949019607843137,0.949019607843137,0.949019607843137}
+\definecolor{Gray96}{rgb}{0.96078431372549,0.96078431372549,0.96078431372549}
+\definecolor{Gray97}{rgb}{0.968627450980392,0.968627450980392,0.968627450980392}
+\definecolor{Gray98}{rgb}{0.980392156862745,0.980392156862745,0.980392156862745}
+\definecolor{Gray99}{rgb}{0.988235294117647,0.988235294117647,0.988235294117647}
+\definecolor{Gray100}{rgb}{1,1,1}
+\definecolor{DarkGray}{rgb}{0.662745098039216,0.662745098039216,0.662745098039216}
+\definecolor{DarkBlue}{rgb}{0,0,0.545098039215686}
+\definecolor{DarkCyan}{rgb}{0,0.545098039215686,0.545098039215686}
+\definecolor{DarkMagenta}{rgb}{0.545098039215686,0,0.545098039215686}
+\definecolor{DarkRed}{rgb}{0.545098039215686,0,0}
+\definecolor{LightGreen}{rgb}{0.564705882352941,0.933333333333333,0.564705882352941}
+
+\makeatother
+
+\usepackage{babel}
+\begin{document}
+
+\title{TFT Library}
+
+
+\author{Majenko Technologies}
+
+
+\date{31 March 2014}
+
+\maketitle
+\tableofcontents{}
+
+
+\chapter{Theory of Operation}
+
+The TFT library is a modular system in which a number of different
+classes interact with each other to describe a specific display system.
+It relies heavily on \textit{C++ polymorphism} (class inhertiance)
+to group different objects together into drivers with a common interface.
+There are four basic types of object, each with its own special base
+class.
+
+TFT objects are drivers for specific hardware display devices. They
+define how you display data on the screen, control the screen, and
+otherwise interact at a software level with the screen. The TFT base
+class also contains all the primitive drawing operations for drawing
+lines, boxes, circles, etc. TFT drivers communicate with the physical
+hardware through a TFTCommunicator based object.
+
+TFTCommunicator objects define the physical interface to a display,
+be that SPI, 16-bit parallel, abstracted through an IO expander, etc.
+The TFT driver sends data and commands to the display through the
+standard interface these objects provide. This gives the maximum flexibility
+for any screen to be driven through any communication medium. It does
+have the trade-off of slightly reduced throughput though, so some
+objects have been combined into ``Super'' display objects. These
+contain both the TFT control code (though not the primitive drawing
+code) and the TFTCommunicator code and are highly optimised for high
+speed throughput. They are mainly used specifically for pre-defined
+display systems with their own embedded microcontroller.
+
+Complementing these display drivers are also the Touch drivers. These
+communicate, again through TFTCommunicator objects (where such communication
+is apt), with the touch screen interface of a display. 
+
+The TFT class is also the parent class of a number of virtual display
+drivers. These can be used exactly as other display drivers, but they
+don't have any physical output of their own and are used purely from
+within your own program for special purposes. They include the Aggregator
+display which can join a number of physical displays into one single
+virtual display, and the Framebuffer devices which can be used to
+build up an internal ``off-screen'' buffer image prior to high-speed
+pushing of the entire imate to a display. The Framebuffer devices
+require a backing data store to work in, which uses the Datastore
+based objects. Datastore objects provide a standard interface for
+storing image data in a number of locations. The simplest is to store
+the data in the internal SRAM of the microcontroller, however external
+SRAM using SPI can also be used with no change to the internal programming
+of your software.
+
+Every device has a constructor, and those that require an extra device
+to operate, such as a TFTCommunicator device, have this extra device
+passed as a parameter to the constructor.
+
+Every device also has an initializeDevice() member function to configure
+the hardware and software. This must be called once from setup for
+the top-level devices. It is the device's responsibility to then call
+the initializeDevice() functions of any devices it relies on.
+
+A simple program, using the Adafruit \textit{``1.8\textquotedbl{}
+TFT Shield with Joystick and microSD''}, might look like this:
+\begin{quote}
+\texttt{\#include <TFT.h>}~\\
+\texttt{}~\\
+\texttt{DSPI0 spi;}~\\
+\texttt{TFTDSPI mySPI(spi, 10, 8);}~\\
+\texttt{ST7735 tft(mySPI, ST7735::BlackTab);}~\\
+\texttt{}~\\
+\texttt{void setup() \{}~\\
+\texttt{~~~~tft.initializeDevice();}~\\
+\texttt{~~~~tft.fillScreen(Color::Black);}~\\
+\texttt{\}}~\\
+\texttt{}~\\
+\texttt{void loop() \{}~\\
+\texttt{~~~~tft.setPixel(random(0, tft.getWidth()), random(0,
+tft.getHeight()), random(0, 65535));}~\\
+\texttt{\}}
+\end{quote}
+Let's take a quick look at how this program works. Quite simply it
+plots random color pixels at random locations on the display, but
+let's break it down line by line.
+\begin{quote}
+\texttt{\#include <TFT.h>}
+\end{quote}
+This includes the TFT library into your program, just like any other
+library.
+\begin{quote}
+\texttt{DSPI0 spi;}
+\end{quote}
+Create a new \textit{DSPI} object called ``spi'' which communicates
+on DSPI channel 0. This is usually pins 10-13 on boards with an Arduino-like
+footprint.
+\begin{quote}
+\texttt{TFTDSPI mySPI(spi, 10, 8);}
+\end{quote}
+This links the \textit{DSPI} object created above to a \textit{TFTCommunicator}
+object. It takes two extra parameters for the main Chip Select pin
+(10) and the Register/Data select pin (8). These two pins are automatically
+controlled by the TFT library to access the TFT display.
+\begin{quote}
+\texttt{ST7735 tft(mySPI, ST7735::BlackTab);}
+\end{quote}
+This creates the actual TFT object for controlling the display. The
+Adafruit 1.8'' display uses the \textit{ST7735} chip, so we use that
+driver. This specific driver takes an extra parameter to define which
+actual display is on the module, since they have released a number
+of different versions with different displays. See the ST7735 driver
+information for more detail on this option.
+\begin{quote}
+\texttt{tft.initializeDevice();}
+\end{quote}
+This initializes the TFT display. It also initializes the \textit{TFTDSPI}
+object ``mySPI'' by calling the \textit{initializeDevice()} on that
+class. The \textit{TFTDSPI} class then also configures the \textit{DSPI}
+object passed to it earlier.
+\begin{quote}
+\texttt{tft.fillScreen(Color::Black);}
+\end{quote}
+We want to start off with a blank canvass. Without this option the
+screen will be displaying garbage, or an image left over from the
+last time a program ran. Filling the whole screen with Color::Black
+(see the \textit{Color Library} for a list of available color names)
+erases the whole contents of the screen. You can also use numeric
+values between 0 and 65535 or hexadecimal between 0x0000 and 0xFFFF.
+For the meaning of the values please see the \textit{Color Model}
+section.
+\begin{quote}
+\texttt{tft.setPixel(random(0, tft.getWidth()), random(0, tft.getHeight()),
+random(0, 65535));}
+\end{quote}
+The \textit{setPixel()} member function logically sets a single pixel
+on the screen to a specific color. In this case we choose the location
+randomly. The bounds of our random numbers are defined by the size
+of the screen, which we enquire using the \textit{getWidth()} and
+\textit{getHeight()} member functions.
+
+
+\chapter{Primitive Drawing Functions}
+
+drawCircle
+
+fillCircle
+
+drawLine
+
+drawRectangle
+
+drawRoundRect
+
+fillRoundRect
+
+drawTriangle
+
+fillTriangle
+
+fillScreen
+
+fillRectangle
+
+setPixel
+
+drawHorizontalLine
+
+drawVerticalLine
+
+
+\chapter{Advanced Drawing Facilities}
+
+openWindow
+
+closeWindow
+
+windowData
+
+invertDisplay
+
+
+\chapter{Text and Fonts}
+
+setFont
+
+setTextColor
+
+invertTextColor
+
+setTextWrap
+
+stringWidth
+
+stringHeight
+
+setCursor
+
+getCursor
+
+getCursorX
+
+getCursorY
+
+getTextColor
+
+
+\chapter{Framebuffers}
+
+colorAt
+
+bgColorAt
+
+update
+
+
+\chapter{Touch Screens}
+
+initializeDevice
+
+sample
+
+x
+
+y
+
+pressure
+
+
+\chapter{TFT Interface}
+
+Required functions
+
+setPixel
+
+drawHorizontalLine
+
+drawVerticalLine
+
+initializeDevice
+
+displayOn
+
+displayOff
+
+invertDisplay
+
+
+\chapter{TFTCommunicator Interface}
+
+readCommandX
+
+readDataX
+
+writeCommandX
+
+writeDataX
+
+streamStart
+
+streamEnd
+
+streamCommandX
+
+streamDataX
+
+blockData
+
+initializeDevice
+
+
+\chapter{Font Library}
+
+
+\chapter{Color Library}
+
+The color names are taken from the standard X11R6 color library (aka
+rgb.txt).
+
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+Name & Red & Green & Blue & 16-bit Hex & Color\tabularnewline
+\hline 
+\hline 
+Snow & 255 & 250 & 250 & 0xFFDF & \cellcolor{Snow}\tabularnewline
+\hline 
+GhostWhite & 248 & 248 & 255 & 0xFFDF & \cellcolor{GhostWhite}\tabularnewline
+\hline 
+WhiteSmoke & 245 & 245 & 245 & 0xF7BE & \cellcolor{WhiteSmoke}\tabularnewline
+\hline 
+Gainsboro & 220 & 220 & 220 & 0xDEFB & \cellcolor{Gainsboro}\tabularnewline
+\hline 
+FloralWhite & 255 & 250 & 240 & 0xFFDE & \cellcolor{FloralWhite}\tabularnewline
+\hline 
+OldLace & 253 & 245 & 230 & 0xFFBC & \cellcolor{OldLace}\tabularnewline
+\hline 
+Linen & 250 & 240 & 230 & 0xFF9C & \cellcolor{Linen}\tabularnewline
+\hline 
+AntiqueWhite & 250 & 235 & 215 & 0xFF5A & \cellcolor{AntiqueWhite}\tabularnewline
+\hline 
+PapayaWhip & 255 & 239 & 213 & 0xFF7A & \cellcolor{PapayaWhip}\tabularnewline
+\hline 
+BlanchedAlmond & 255 & 235 & 205 & 0xFF59 & \cellcolor{BlanchedAlmond}\tabularnewline
+\hline 
+Bisque & 255 & 228 & 196 & 0xFF38 & \cellcolor{Bisque}\tabularnewline
+\hline 
+PeachPuff & 255 & 218 & 185 & 0xFED7 & \cellcolor{PeachPuff}\tabularnewline
+\hline 
+NavajoWhite & 255 & 222 & 173 & 0xFEF5 & \cellcolor{NavajoWhite}\tabularnewline
+\hline 
+Moccasin & 255 & 228 & 181 & 0xFF36 & \cellcolor{Moccasin}\tabularnewline
+\hline 
+Cornsilk & 255 & 248 & 220 & 0xFFDB & \cellcolor{Cornsilk}\tabularnewline
+\hline 
+Ivory & 255 & 255 & 240 & 0xFFFE & \cellcolor{Ivory}\tabularnewline
+\hline 
+LemonChiffon & 255 & 250 & 205 & 0xFFD9 & \cellcolor{LemonChiffon}\tabularnewline
+\hline 
+Seashell & 255 & 245 & 238 & 0xFFBD & \cellcolor{Seashell}\tabularnewline
+\hline 
+Honeydew & 240 & 255 & 240 & 0xF7FE & \cellcolor{Honeydew}\tabularnewline
+\hline 
+MintCream & 245 & 255 & 250 & 0xF7FF & \cellcolor{MintCream}\tabularnewline
+\hline 
+Azure & 240 & 255 & 255 & 0xF7FF & \cellcolor{Azure}\tabularnewline
+\hline 
+AliceBlue & 240 & 248 & 255 & 0xF7DF & \cellcolor{AliceBlue}\tabularnewline
+\hline 
+Lavender & 230 & 230 & 250 & 0xE73F & \cellcolor{Lavender}\tabularnewline
+\hline 
+LavenderBlush & 255 & 240 & 245 & 0xFF9E & \cellcolor{LavenderBlush}\tabularnewline
+\end{tabular}
+
+
+\end{document}

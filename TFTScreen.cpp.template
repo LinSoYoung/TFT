@@ -1,0 +1,145 @@
+#include <TFT.h>
+
+void %MODEL%::initializeDevice() 
+{
+	_comm->initializeDevice();
+    _width  = %MODEL%::Width;
+    _height = %MODEL%::Height;
+
+    // Init code here
+}
+
+void %MODEL%::setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) 
+{
+    // Window code here
+}
+
+void %MODEL%::setPixel(int16_t x, int16_t y, uint16_t color) 
+{
+	if((x < 0) ||(x >= _width) || (y < 0) || (y >= _height)) 
+		return;
+	setAddrWindow(x,y,x+1,y+1);
+	_comm->writeData16(color);
+}
+
+void %MODEL%::fillScreen(uint16_t color) 
+{
+	fillRectangle(0, 0,  _width, _height, color);
+}
+
+void %MODEL%::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) 
+{
+    if (!clipToScreen(x, y, w, h)) {
+        return;
+    }
+	setAddrWindow(x, y, x+w-1, y+h-1);
+	uint8_t hi = color >> 8, lo = color;
+
+    _comm->streamStart();
+	for(y=h; y>0; y--) {
+		for(x=w; x>0; x--) {
+            _comm->streamData16(color);
+		}
+	}
+    _comm->streamEnd();
+}
+
+void %MODEL%::drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t color) 
+{
+    int16_t h = 1;
+    if (!clipToScreen(x, y, w, h)) {
+        return;
+    }
+	setAddrWindow(x, y, x+w-1, y);
+	uint8_t hi = color >> 8, lo = color;
+
+    _comm->streamStart();
+	while (w--) {
+		_comm->streamData16(color);
+	}
+    _comm->streamEnd();
+}
+
+void %MODEL%::drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t color) 
+{
+    int16_t w = 1;
+    if (!clipToScreen(x, y, w, h)) {
+        return;
+    }
+	setAddrWindow(x, y, x, y+h-1);
+	uint8_t hi = color >> 8, lo = color;
+
+    _comm->streamStart();
+	while (h--) {
+		_comm->streamData16(color);
+	}
+    _comm->streamEnd();
+}
+
+void %MODEL%::setRotation(uint8_t m) 
+{
+    // Use your own rotation settings here!!!!
+
+	_comm->writeCommand8(%MODEL%_SET_ADDRESS_MODE);
+	rotation = m % 4; // can't be higher than 3
+	switch (rotation) 
+	{
+		case 0:
+			//PORTRAIT
+			_comm->writeData16(0x0000);
+			_width  = %MODEL%::Width;
+			_height = %MODEL%::Height;
+			break;
+		case 1:
+		    //LANDSCAPE
+			_comm->writeData16(0x0060);
+			_width  = %MODEL%::Height;
+			_height = %MODEL%::Width;
+			break;
+		case 2:	
+			//UPSIDE DOWN PORTRAIT
+			_comm->writeData16(0x00C0);
+			_width  = %MODEL%::Width;
+			_height = %MODEL%::Height;
+			break;
+		case 3:
+			//UPSIDE DOWN LANDSCAPE
+			_comm->writeData16(0x00A0);
+			_width  = %MODEL%::Height;
+			_height = %MODEL%::Width;
+			break;
+	}
+}
+
+void %MODEL%::invertDisplay(boolean i) 
+{
+	_comm->writeCommand8(i ? %MODEL%_INVON : %MODEL%_INVOFF);
+}
+
+void %MODEL%::displayOn() 
+{
+	_comm->writeCommand8(%MODEL%_DISPLAYON);
+}
+
+void %MODEL%::displayOff() 
+{
+	_comm->writeCommand8(%MODEL%_DISPLAYOFF);
+}
+
+void %MODEL%::openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
+    setAddrWindow(x0, y0, x0 + x1 - 1, y0 + y1 - 1);
+    _comm->streamStart();
+}
+
+void %MODEL%::windowData(uint16_t d) {
+    _comm->streamData16(d);
+}
+
+void %MODEL%::windowData(uint16_t *d, uint32_t l) {
+    _comm->blockData(d, l);
+}
+
+void %MODEL%::closeWindow() {
+    _comm->streamEnd();
+}
+
