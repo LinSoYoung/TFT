@@ -1,13 +1,28 @@
 #include <TFT.h>
 #include <BMPFile.h>
 #include <Widgets.h>
+#include <PICadillo.h>
 
 PICadillo35t tft;
 AnalogTouch ts(LCD_XL, LCD_XR, LCD_YU, LCD_YD, 320, 480);
 
 const int btnSize = 64;
 
-const int backlight = PIN_BACKLIGHT;
+//const int backlight = PIN_BACKLIGHT;
+const int backlight = 13;
+
+#define NOTE_C4  262
+#define NOTE_CS4 277
+#define NOTE_D4  294
+#define NOTE_DS4 311
+#define NOTE_E4  330
+#define NOTE_F4  349
+#define NOTE_FS4 370
+#define NOTE_G4  392
+#define NOTE_GS4 415
+#define NOTE_A4  440
+#define NOTE_AS4 466
+#define NOTE_B4  494
 
 uint16_t colors[8] = {
 	Color::Black,
@@ -36,7 +51,7 @@ void error(char *message) {
 }
 
 void setup() {
-	analogWrite(backlight, 0);
+	setBacklight(0);
 	ts.initializeDevice();
 
 	// These set the touch screen resolution.
@@ -65,23 +80,30 @@ void setup() {
 }
 
 void tinkle() {
-	pinMode(PIN_AUDENB, OUTPUT);
-	digitalWrite(PIN_AUDENB, LOW);
-	for (int i = 0; i < 4; i++) {
-		tone(PIN_AUDIO, 262, 50);
+	audioOn();
+	for (int j = 0; j < 2; j++) {
+		for (int i = 0; i < 10; i++) {
+			tone(PIN_AUDIO, NOTE_C4, 20);
+			delay(20);
+			tone(PIN_AUDIO, NOTE_E4, 20);
+			delay(20);
+			tone(PIN_AUDIO, NOTE_G4, 20);
+			delay(20);
+		}
 		delay(100);
-		tone(PIN_AUDIO, 294, 50);
-		delay(100);
-		tone(PIN_AUDIO, 330, 50);
-		delay(100);
-		tone(PIN_AUDIO, 392, 50);
-		delay(100);
-		tone(PIN_AUDIO, 440, 50);
+		for (int i = 0; i < 10; i++) {
+			tone(PIN_AUDIO, NOTE_C4, 20);
+			delay(20);
+			tone(PIN_AUDIO, NOTE_F4, 20);
+			delay(20);
+			tone(PIN_AUDIO, NOTE_A4, 20);
+			delay(20);
+		}
 		delay(100);
 	}
-    pinMode(PIN_AUDENB, OUTPUT);
-    digitalWrite(PIN_AUDENB, HIGH);
+	audioOff();
 }
+
 
 void doContinue() {
 	cont.render();
@@ -106,21 +128,25 @@ void doContinue() {
 		tft.fillTriangle(lx-4, 0, lx, 4, lx+4, 0, Color::White);		
 		tft.fillTriangle(lx-4, 479, lx, 479-4, lx+4, 479, Color::White);		
 	}
-	pinMode(PIN_AUDENB, OUTPUT);
-	digitalWrite(PIN_AUDENB, HIGH);
+	audioOn();
+	delay(10);
+	tone(PIN_AUDIO, 2000, 5);
+	delay(50);
+	audioOff();
+	
 	fadeDown();	
 }
 
 void fadeUp() {
 	for (int i = 0; i < 255; i++) {
-		analogWrite(backlight, i);
+		setBacklight(i);
 		delay(1);
 	}	
 }
 
 void fadeDown() {
 	for (int i = 0; i < 255; i++) {
-		analogWrite(backlight, 255 - i);
+		setBacklight(255 - i);
 		delay(1);
 	}	
 }
