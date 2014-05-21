@@ -66,7 +66,7 @@ void setup() {
 
 void tinkle() {
 	pinMode(PIN_AUDENB, OUTPUT);
-	digitalWrite(PIN_AUDENB, HIGH);
+	digitalWrite(PIN_AUDENB, LOW);
 	for (int i = 0; i < 4; i++) {
 		tone(PIN_AUDIO, 262, 50);
 		delay(100);
@@ -78,9 +78,9 @@ void tinkle() {
 		delay(100);
 		tone(PIN_AUDIO, 440, 50);
 		delay(100);
-		pinMode(PIN_AUDENB, OUTPUT);
-		digitalWrite(PIN_AUDENB, LOW);
 	}
+    pinMode(PIN_AUDENB, OUTPUT);
+    digitalWrite(PIN_AUDENB, HIGH);
 }
 
 void doContinue() {
