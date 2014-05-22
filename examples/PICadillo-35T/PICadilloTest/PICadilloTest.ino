@@ -1,7 +1,6 @@
 #include <TFT.h>
 #include <BMPFile.h>
 #include <Widgets.h>
-#include <PICadillo.h>
 
 PICadillo35t tft;
 AnalogTouch ts(LCD_XL, LCD_XR, LCD_YU, LCD_YD, 320, 480);
@@ -24,19 +23,19 @@ const int backlight = 13;
 #define NOTE_AS4 466
 #define NOTE_B4  494
 
-uint16_t colors[8] = {
-	Color::Black,
-	Color::Red,
-	Color::Green,
-	Color::Yellow,
-	Color::Blue,
-	Color::Magenta,
-	Color::Cyan,
-	Color::White
-};
+void setBacklight(int val) {
+    analogWrite(PIN_BACKLIGHT, val);
+}
 
-uint16_t color = 1;
-uint16_t size = 2;
+void audioOn() {
+    pinMode(PIN_AUDENB, OUTPUT);
+    digitalWrite(PIN_AUDENB, LOW);
+}
+
+void audioOff() {
+    pinMode(PIN_AUDENB, OUTPUT);
+    digitalWrite(PIN_AUDENB, HIGH);
+}
 
 twButton cont(tft, ts, 75, 300, 170, 75, "CONTINUE");
 
