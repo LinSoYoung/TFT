@@ -7,8 +7,7 @@ AnalogTouch ts(LCD_XL, LCD_XR, LCD_YU, LCD_YD, 320, 480);
 
 const int btnSize = 64;
 
-//const int backlight = PIN_BACKLIGHT;
-const int backlight = 13;
+const int backlight = PIN_BACKLIGHT;
 
 #define NOTE_C4  262
 #define NOTE_CS4 277
