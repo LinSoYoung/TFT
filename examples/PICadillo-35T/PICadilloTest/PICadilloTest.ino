@@ -145,7 +145,7 @@ void fadeUp() {
 
 void fadeDown() {
 	for (int i = 0; i < 255; i++) {
-		setBacklight(255 - i);
+		setBacklight(254 - i);
 		delay(1);
 	}	
 }
@@ -185,7 +185,6 @@ void scribble() {
 void prims() {
 	for (int i = 0; i < 1000; i++) {
 		int primno = rand() % 7;
-	
 		switch (primno) {
 			case 0:
 				drawLine();

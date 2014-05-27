@@ -47,8 +47,9 @@ void menu() {
 void setup() {
 	analogWrite(PIN_BACKLIGHT, 255);
 	ts.initializeDevice();
-	ts.scaleX(4.1);
-	ts.scaleY(3.2);
+	ts.scaleX(4.3);
+	ts.scaleY(3.3);
+	ts.offsetY(5);
 	tft.initializeDevice();
 	tft.setFont(Fonts::Topaz);
 	tft.setTextColor(Color::White, Color::Black);

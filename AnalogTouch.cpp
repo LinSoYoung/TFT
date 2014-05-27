@@ -1,6 +1,6 @@
 #include <TFT.h>
 
-#define ANALOGTOUCH_SMPSIZE 100
+#define ANALOGTOUCH_SMPSIZE 50
 
 void AnalogTouch::initializeDevice() {
     pinMode(_xl, INPUT);
@@ -54,7 +54,7 @@ int AnalogTouch::getSample(uint8_t pin) {
             break;
         }
     }
-    if (mostcount < 10) {
+    if (mostcount < (ANALOGTOUCH_SMPSIZE/10)) {
         return 2000;
     }
     return most;
