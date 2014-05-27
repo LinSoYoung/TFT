@@ -18,6 +18,8 @@ class AnalogTouch : public Touch {
 
         void scaleX(float v);
         void scaleY(float v);
+        void offsetX(int16_t v);
+        void offsetY(int16_t v);
 
         uint16_t pressure();
 
@@ -30,6 +32,8 @@ class AnalogTouch : public Touch {
         uint8_t _xr;
         float _scale_x;
         float _scale_y;
+        int16_t _offset_x;
+        int16_t _offset_y;
         uint16_t _pressure;
 };
 

@@ -1,6 +1,6 @@
 #include <TFT.h>
 
-#define ANALOGTOUCH_SMPSIZE 10
+#define ANALOGTOUCH_SMPSIZE 100
 
 void AnalogTouch::initializeDevice() {
     pinMode(_xl, INPUT);
@@ -15,11 +15,11 @@ void AnalogTouch::initializeDevice() {
 }
 
 uint16_t AnalogTouch::x() {
-    return _pos.x;
+    return _pos.x + _offset_x;
 }
 
 uint16_t AnalogTouch::y() {
-    return _pos.y;
+    return _pos.y + _offset_y;
 }
 
 boolean AnalogTouch::isPressed() {
@@ -27,11 +27,37 @@ boolean AnalogTouch::isPressed() {
 }
 
 int AnalogTouch::getSample(uint8_t pin) {
+    int samples[ANALOGTOUCH_SMPSIZE];
     int thisSample = 0;
     for (int i = 0; i < ANALOGTOUCH_SMPSIZE; i++) {
-        thisSample += analogRead(pin);
+        samples[i] = analogRead(pin);
     }
-    return thisSample/ANALOGTOUCH_SMPSIZE;
+    int most = samples[0];
+    int mostcount = 1;
+    for(int pos = 0; pos < ANALOGTOUCH_SMPSIZE; pos++) {
+        int current = samples[pos];
+        int currentcount = 0;
+        for(int inner = pos + 1; inner < ANALOGTOUCH_SMPSIZE; inner++) {
+            if(samples[inner] == current) {
+                currentcount++;
+            }
+        }
+        if(currentcount > mostcount) {
+            most = current;
+            mostcount = currentcount;
+        }
+        // If we have less array slices left than the current
+        // maximum count, then there is no room left to find
+        // a bigger count.  We have finished early and we can
+        // go home.
+        if(ANALOGTOUCH_SMPSIZE - pos < mostcount) {
+            break;
+        }
+    }
+    if (mostcount < 10) {
+        return 2000;
+    }
+    return most;
 }
 
 #if !defined(max)
@@ -82,7 +108,7 @@ void AnalogTouch::sample() {
         (y1 < 1000) &&
         (y2 < 1000) 
     ) {
-        if (abs(x1 - x2) < 900 && abs(y1 - y2) < 900) {
+        if (abs(x1 - x2) < 1000 && abs(y1 - y2) < 1000) {
             _pressed = true;
             _pos.x = (_width / 2) + ((x1 - x2) / _scale_x);
             _pos.y = (_height / 2) + ((y1 - y2) / _scale_y);
@@ -103,3 +129,13 @@ void AnalogTouch::scaleY(float v) {
 uint16_t AnalogTouch::pressure() {
     return _pressure;
 }
+
+void AnalogTouch::offsetX(int16_t v) {
+    _offset_x = v;
+}
+
+void AnalogTouch::offsetY(int16_t v) {
+    _offset_y = v;
+}
+
+

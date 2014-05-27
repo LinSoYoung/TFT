@@ -54,8 +54,9 @@ void setup() {
 	ts.initializeDevice();
 
 	// These set the touch screen resolution.
-	ts.scaleX(4.1);
-	ts.scaleY(3.2);
+	ts.scaleX(4.3);
+	ts.scaleY(3.3);
+	ts.offsetY(5);
 
 	tft.initializeDevice();
 	tft.setFont(Fonts::Topaz);
