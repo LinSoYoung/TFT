@@ -108,6 +108,25 @@ class Fonts {
         static const uint8_t Hazard16[];
         static const uint8_t Hazard40[];
         static const uint8_t Hazard60[];
+
+        static const uint8_t Open24Display8[];
+        static const uint8_t Open24Display10[];
+        static const uint8_t Open24Display12[];
+        static const uint8_t Open24Display14[];
+        static const uint8_t Open24Display16[];
+        static const uint8_t Open24Display18[];
+        static const uint8_t Open24Display20[];
+        static const uint8_t Open24Display22[];
+        static const uint8_t Open24Display24[];
+        static const uint8_t Open24Display26[];
+        static const uint8_t Open24Display28[];
+        static const uint8_t Open24Display30[];
+        static const uint8_t Open24Display32[];
+        static const uint8_t Open24Display34[];
+        static const uint8_t Open24Display36[];
+        static const uint8_t Open24Display38[];
+        static const uint8_t Open24Display40[];
+    
 };
 
 #endif
