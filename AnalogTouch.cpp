@@ -12,14 +12,41 @@ void AnalogTouch::initializeDevice() {
     _pressed = false;
     _scale_x = 1900 / (_width);
     _scale_y = 1700 / (_height);
+    _rotation = 0;
 }
 
 uint16_t AnalogTouch::x() {
-    return _pos.x + _offset_x;
+    int x = _pos.x + _offset_x;
+    int y = _pos.y + _offset_y;
+
+    switch (_rotation) {
+        case 0:
+            return x;
+        case 3:
+            return _height - y;
+        case 2:
+            return _width - x;
+        case 1:
+            return y;
+    }
+    return 0;
 }
 
 uint16_t AnalogTouch::y() {
-    return _pos.y + _offset_y;
+    int x = _pos.x + _offset_x;
+    int y = _pos.y + _offset_y;
+
+    switch (_rotation) {
+        case 0:
+            return y;
+        case 3:
+            return x;
+        case 2:
+            return _height - y;
+        case 1:
+            return _width - x;
+    }
+    return 0;
 }
 
 boolean AnalogTouch::isPressed() {
@@ -138,4 +165,6 @@ void AnalogTouch::offsetY(int16_t v) {
     _offset_y = v;
 }
 
-
+void AnalogTouch::setRotation(uint8_t r) {
+    _rotation = r % 4;
+}

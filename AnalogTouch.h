@@ -23,6 +23,8 @@ class AnalogTouch : public Touch {
 
         uint16_t pressure();
 
+        void setRotation(uint8_t r);
+
     private:
         struct coord _pos;
         boolean _pressed;
@@ -35,6 +37,7 @@ class AnalogTouch : public Touch {
         int16_t _offset_x;
         int16_t _offset_y;
         uint16_t _pressure;
+        uint8_t _rotation;
 };
 
 #endif

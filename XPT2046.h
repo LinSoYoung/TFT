@@ -15,9 +15,12 @@ class XPT2046 : public Touch {
 
         void initializeDevice();
 
+        void setRotation(uint8_t r);
+
     private:
         struct coord pos;
         boolean pressed;
+        uint8_t _rotation;
 };
 
 #endif

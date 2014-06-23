@@ -10,15 +10,43 @@ void XPT2046::initializeDevice() {
     pressed = false;
     pos.x = 0;
     pos.y = 0;
+    _rotation = 0;
 }
 
 uint16_t XPT2046::x() {
-    return pos.x * _width / 4096;
+    int x = pos.x * _width / 4096;
+    int y = pos.y * _height / 4096;
+
+    switch (_rotation) {
+        case 0:
+            return x;
+        case 3:
+            return _height - y;
+        case 2:
+            return _width - x;
+        case 1:
+            return y;
+    }
+    return 0;
 }
 
 uint16_t XPT2046::y() {
-    return pos.y * _height / 4096;
+    int x = pos.x * _width / 4096;
+    int y = pos.y * _height / 4096;
+
+    switch (_rotation) {
+        case 0:
+            return y;
+        case 3:
+            return x;
+        case 2:
+            return _height - y;
+        case 1:
+            return _width - x;
+    }
+    return 0;
 }
+
 
 boolean XPT2046::isPressed() {
     return pressed;
@@ -52,5 +80,9 @@ void XPT2046::sample() {
     }
     
     pressed = 1;
+}
+
+void XPT2046::setRotation(uint8_t r) {
+    _rotation = r % 4;
 }
 
