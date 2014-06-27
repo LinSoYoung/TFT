@@ -1229,6 +1229,8 @@ void TFT::fillCircleHelper(int16_t x0, int16_t y0, int16_t r, uint8_t cornername
     }
 }
 
+#define max(X,Y) ((X) > (Y) ? (X) : (Y))
+
 /*! Display a fatal error
  *  =====================
  *  Used internally by various functions and libraries to display
@@ -1246,24 +1248,30 @@ void TFT::fatalError(const char *title, const char *message) {
     setFont(Fonts::Default);
     int sx = 1;
     int16_t swidth = stringWidth((char *)message);
-    while (swidth < width) {
+    int16_t twidth = stringWidth((char *)title);
+    uint16_t mwidth = max(swidth, twidth);
+    while (mwidth < width) {
         sx++;
         setFontScaleX(sx);
         swidth = stringWidth((char *)message);
+        twidth = stringWidth((char *)title);
+        mwidth = max(swidth, twidth);
     }
     sx--;
     setFontScaleY(sx);
     setFontScaleX(sx);
     swidth = stringWidth((char *)message);
     int16_t sheight = stringHeight((char *)message);
-    int16_t twidth = stringWidth((char *)title);
+    twidth = stringWidth((char *)title);
+    mwidth = max(swidth, twidth);
 
     int16_t strw2 = swidth / 2;
     int16_t ttlw2 = twidth / 2;
+    int16_t maxw2 = mwidth / 2;
     int16_t scrw2 = width / 2;
     int16_t scrh2 = height / 2;
-    fillRoundRect(scrw2 - strw2 - 10, scrh2 - sheight - 10, swidth + 20, sheight * 2 + 20, 9, Color::Red);
-    drawRoundRect(scrw2 - strw2 - 12, scrh2 - sheight - 12, swidth + 24, sheight * 2 + 24, 12, Color::Red);
+    fillRoundRect(scrw2 - maxw2 - 10, scrh2 - sheight - 10, mwidth + 20, sheight * 2 + 20, 9, Color::Red);
+    drawRoundRect(scrw2 - maxw2 - 12, scrh2 - sheight - 12, mwidth + 24, sheight * 2 + 24, 12, Color::Red);
 
     setTextColor(Color::Black, Color::Red);
     setCursor(scrw2 - ttlw2, scrh2 - sheight - 1);
