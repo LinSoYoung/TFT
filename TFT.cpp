@@ -1280,7 +1280,14 @@ void TFT::fatalError(const char *title, const char *message) {
     setCursor(scrw2 - strw2, scrh2 + 1);
     print(message);
 
-    while(1);
+    while(1) {
+        delay(500);
+        drawRoundRect(scrw2 - maxw2 - 12, scrh2 - sheight - 12, mwidth + 24, sheight * 2 + 24, 12, Color::Black);
+        drawRoundRect(scrw2 - maxw2 - 14, scrh2 - sheight - 14, mwidth + 28, sheight * 2 + 28, 12, Color::Red);
+        delay(500);
+        drawRoundRect(scrw2 - maxw2 - 12, scrh2 - sheight - 12, mwidth + 24, sheight * 2 + 24, 12, Color::Red);
+        drawRoundRect(scrw2 - maxw2 - 14, scrh2 - sheight - 14, mwidth + 28, sheight * 2 + 28, 12, Color::Black);
+    }
 }
 
 /**@}*/
