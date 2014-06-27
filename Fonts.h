@@ -39,30 +39,6 @@ namespace Fonts {
         extern const uint8_t ArialBold40[];
         extern const uint8_t ArialBold8[];
         extern const uint8_t Default[];
-        extern const uint8_t Liberation10[];
-        extern const uint8_t Liberation12[];
-        extern const uint8_t Liberation14[];
-        extern const uint8_t Liberation16[];
-        extern const uint8_t Liberation18[];
-        extern const uint8_t Liberation20[];
-        extern const uint8_t Liberation22[];
-        extern const uint8_t Liberation24[];
-        extern const uint8_t Liberation26[];
-        extern const uint8_t Liberation28[];
-        extern const uint8_t Liberation30[];
-        extern const uint8_t Liberation32[];
-        extern const uint8_t Liberation34[];
-        extern const uint8_t Liberation36[];
-        extern const uint8_t Liberation8[];
-        extern const uint8_t OCR_A10[];
-        extern const uint8_t OCR_A12[];
-        extern const uint8_t OCR_A14[];
-        extern const uint8_t OCR_A16[];
-        extern const uint8_t OCR_A18[];
-        extern const uint8_t OCR_A20[];
-        extern const uint8_t OCR_A22[];
-        extern const uint8_t OCR_A24[];
-        extern const uint8_t OCR_A8[];
         extern const uint8_t OldStandard10[];
         extern const uint8_t OldStandard12[];
         extern const uint8_t OldStandard14[];
@@ -101,31 +77,6 @@ namespace Fonts {
         extern const uint8_t Ubuntu42[];
         extern const uint8_t Ubuntu44[];
         extern const uint8_t Ubuntu8[];
-        extern const uint8_t Hazard10[];
-        extern const uint8_t Hazard12[];
-        extern const uint8_t Hazard14[];
-        extern const uint8_t Hazard16[];
-        extern const uint8_t Hazard40[];
-        extern const uint8_t Hazard60[];
-
-        extern const uint8_t Open24Display8[];
-        extern const uint8_t Open24Display10[];
-        extern const uint8_t Open24Display12[];
-        extern const uint8_t Open24Display14[];
-        extern const uint8_t Open24Display16[];
-        extern const uint8_t Open24Display18[];
-        extern const uint8_t Open24Display20[];
-        extern const uint8_t Open24Display22[];
-        extern const uint8_t Open24Display24[];
-        extern const uint8_t Open24Display26[];
-        extern const uint8_t Open24Display28[];
-        extern const uint8_t Open24Display30[];
-        extern const uint8_t Open24Display32[];
-        extern const uint8_t Open24Display34[];
-        extern const uint8_t Open24Display36[];
-        extern const uint8_t Open24Display38[];
-        extern const uint8_t Open24Display40[];
-   
 };
 
 #endif
