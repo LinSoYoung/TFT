@@ -3,12 +3,15 @@
 
 #include <TFT.h>
 
+/*! The TFTPar16 class creates a full 16-bit parallel interface to a TFT device */
 class TFTPar16 : public TFTCommunicator 
 {
     public:
-        static const uint8_t IteadAdapter[];
+        /*! Interface profile for the ITead Studios Arduino Mega TFT Interface Adapter */
+        static const uint8_t IteadAdapter[]; 
 
     public:
+        /*! Construct a new 16-bit parallel device using individual pins */
         TFTPar16(uint8_t cs, uint8_t dc, uint8_t clk, 
             uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, 
             uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
@@ -20,6 +23,7 @@ class TFTPar16 : public TFTCommunicator
                 _d8(d8), _d9(d9), _d10(d10), _d11(d11),
                 _d12(d12), _d13(d13), _d14(d14), _d15(d15) {}
 
+        /*! Construct a new 16-bit parallel device using a pre-programmed profile */
         TFTPar16(const uint8_t *profile) :
             _cs(profile[0]), _dc(profile[1]), _clk(profile[2]),
             _d0(profile[3]), _d1(profile[4]), _d2(profile[5]), _d3(profile[6]),

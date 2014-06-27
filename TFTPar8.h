@@ -3,9 +3,19 @@
 
 #include <TFT.h>
 
+/*! The TFTPar8 class defines an 8-bit parallel interface incorporating the normal TFT control signals. */
 class TFTPar8 : public TFTCommunicator 
 {
     public:
+        /*! Construct a new TFTPar8 device
+         *  ==============================
+         *  This class constructor creates a new 8-bit parallel interface.  It requires a ParallelIO device pointer (*dev) to
+         *  access the IO pins.  Also required are the Chip Select (cs), Data/Command (dc) Clock (clk) and data pins 0-7 (d0-d7);
+         *
+         *  Example:
+         *
+         *      TFTPar8 pardev(&core, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 11);
+         */
         TFTPar8(ParallelIO *dev, uint8_t cs, uint8_t dc, uint8_t clk, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7);
         void writeCommand8(uint8_t command);
         void writeCommand16(uint16_t command);

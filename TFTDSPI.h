@@ -3,11 +3,21 @@
 
 #include <TFT.h>
 
+/*! The TFTDSPI class creates a new SPI interface using the chipKIT DSPI library. */
 class TFTDSPI : public TFTCommunicator 
 {
     public:
+        /**@{*/
+        /*! Construct a new SPI communication object.  Pass either a pointer or reference to a DSPI object, a Chip Select pin, a Data/Command pin and (optionally) a communication speed.
+         *
+         *  Example:
+         *
+         *      DSPI0 spi;
+         *      TFTDSPI mySPI(spi, 10, 8);
+         */
         TFTDSPI(DSPI *spi, uint8_t cs, uint8_t dc = 255, uint32_t sp=40000000UL) : _spi(spi), _cs(cs), _dc(dc), _speed(sp) {}
         TFTDSPI(DSPI &spi, uint8_t cs, uint8_t dc = 255, uint32_t sp=40000000UL) : _spi(&spi), _cs(cs), _dc(dc), _speed(sp) {}
+        /**@}*/
 
         void initializeDevice();
         uint8_t readCommand8();

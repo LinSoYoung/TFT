@@ -81,14 +81,18 @@
 
 class SSD1963 : public TFT {
 
+    private:
+		void setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
+
 	public:
+        /*! The width of the screen is 800 pixels */
         static const uint16_t Width      = 800;
+        /*! The height of the screen is 480 pixels */
         static const uint16_t Height     = 480;
 
 		SSD1963(TFTCommunicator *comms) : TFT(comms) {}
 		SSD1963(TFTCommunicator &comms) : TFT(comms) {}
 
-		void setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
         void fillScreen(uint16_t color);
         void setPixel(int16_t x, int16_t y, uint16_t color);
         void drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t color);
@@ -96,8 +100,10 @@ class SSD1963 : public TFT {
         void fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
         void setRotation(uint8_t r);
         void invertDisplay(boolean i);
-        void displayOn() {} // Not implemented
-        void displayOff() {} // Not implemented
+        /*! Not currently implemented */
+        void displayOn() {} 
+        /*! Not currently implemented */
+        void displayOff() {} 
 
         void initializeDevice();
 

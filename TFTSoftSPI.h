@@ -3,10 +3,21 @@
 
 #include <TFT.h>
 
+/*! The TFTSoftSPI communicator creates an SPI channel on any IO pins.  Not as fast as hardware SPI, but allows extra flexibility. */
 class TFTSoftSPI : public TFTCommunicator 
 {
     public:
+        /*! Create a new software SPI communicator 
+         *  ======================================
+         *  This constructor takes 4 IO pins and creates a uni-directional (write-only) software SPI channel.
+         *  The pins required are Serial Data Out (sdo), Serial Clock (sck), Chip Select (cs) and Data/Command (dc).
+         *
+         *  Example:
+         *
+         *      TFTSoftSPI mySPI(4, 5, 6, 7);
+         */
         TFTSoftSPI(uint8_t sdo, uint8_t sck, uint8_t cs, uint8_t dc);
+
         void writeCommand8(uint8_t command);
         void writeCommand16(uint16_t command);
         void writeCommand32(uint32_t command);

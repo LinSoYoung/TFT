@@ -3,10 +3,19 @@
 
 #include <TFT.h>
 
+/*! The TFTPar4 class creates a new 4-bit interface compatible with popular text only LCD screens */
 class TFTPar4 : public TFTCommunicator 
 {
     public:
+        /*! Create a new TFTPar4 object
+         *  ===========================
+         *  This creates a new 4-bit TFT interface, including the Data/Command (dc) pin, Clock (clk) (sometimes called E) and data bits d0 - d3.
+         */
         TFTPar4(uint8_t dc, uint8_t clk, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3);
+        /*! Create a new TFTPar4 object
+         *  ===========================
+         *  This creates a new 4-bit full TFT interface, including the Chip Select (cs) pin, Data/Command (dc) pin, Clock (clk) (sometimes called E) and data bits d0 - d3.
+         */
         TFTPar4(uint8_t cs, uint8_t dc, uint8_t clk, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3);
         void writeCommand8(uint8_t command);
         void writeCommand16(uint16_t command);

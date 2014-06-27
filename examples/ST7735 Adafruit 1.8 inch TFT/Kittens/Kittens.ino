@@ -72,7 +72,7 @@ void setup() {
 	// Start with a black screen
 	fb.fillScreen(0);
 	fb.setAntiAlias(true);
-	tft.update(&fb);
+	fb.update(&tft);
 }
 
 void loop()
@@ -81,19 +81,19 @@ void loop()
 	// Draw the image into the framebuffer
 	kitten1.draw(&fb, 0, 0);
 	// Push the contents of the framebuffer out to the display
-	tft.update(&fb);
+	fb.update(&tft);
 	delay(5000);
 
 	// And do the same with the other images.
 	kitten2.draw(&fb, 0, 0);
-	tft.update(&fb);
+	fb.update(&tft);
 	delay(5000);
 	
 	kitten3.draw(&fb, 0, 0);
-	tft.update(&fb);
+	fb.update(&tft);
 	delay(5000);
 
 	kitten4.draw(&fb, 0, 0);
-	tft.update(&fb);
+	fb.update(&tft);
 	delay(5000);
 }

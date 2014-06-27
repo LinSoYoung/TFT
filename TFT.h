@@ -58,6 +58,12 @@ typedef struct {
 extern uint16_t rgb(uint32_t c);
 extern uint16_t rgb(uint8_t r, uint8_t g, uint8_t b);
 
+/*! The TFT class describes and controls all the TFT screens.  It acts as a polymorphic parent
+ *  class for the other screen drivers, and also contains the generic primative drawing routines.
+ *
+ *  It is expected that a TFT screen driver will override some functions from this class (some are
+ *  pure virtual and must be overridden).
+ */
 class TFT : public Print
 {
     public:
@@ -89,13 +95,87 @@ class TFT : public Print
 
         virtual void fillScreen(uint16_t color);
         virtual void fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
+
+
+        /*! \name Pure virtual functions
+         *  These are all functions that must be implemented in a TFT driver in order for it to function.
+         */
+         /**@{*/
+    
+        /*! Set screen rotation
+         *  ===================
+         *  This rotates the screen. Value is between 0 and 3, for 0°, 90°, 180° or 270°.
+         *
+         *  Example:
+         *
+         *      tft.setRotation(1);
+         */
+        virtual void setRotation(uint8_t rotation) = 0;
+        /*! Draw a pixel
+         *  ============
+         *  A pixel, coloured (color) is drawn at (x,y).
+         *  
+         *  Example:
+         *  
+         *      tft.drawPixel(100, 100, Color::Green);
+         */
         virtual void setPixel(int16_t x, int16_t y, uint16_t color) = 0;
+        /*! Draw a horizontal line
+         *  ======================
+         *  A horizontal line of width (w) is drawn from point (x,y) in colour (color);
+         * 
+         *  Example:
+         *
+         *      tft.drawHorizontalLine(10, 10, 50, Color::Blue);
+         */
         virtual void drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t color) = 0;
+        /*! Draw a vertical line
+         *  ====================
+         *  A vertical line of height (h) is drawn from point (x,y) in colour (color);
+         * 
+         *  Example:
+         *
+         *      tft.drawVerticalLine(10, 10, 50, Color::Blue);
+         */
         virtual void drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t color) = 0;
+        /*! Initialize the display
+         *  ======================
+         *  The display is configured and made ready to work.  This function *must* be called
+         *  before anything can happen on the screen, and it *should* be called before any other function.
+         *
+         *  Example:
+         *
+         *      tft.initializeDevice();
+         */
         virtual void initializeDevice() = 0;
+        /*! Turn on the display
+         *  ===================
+         *  Enable the video output of the display (if supported).
+         *
+         *  Example:
+         *
+         *      tft.displayOn();
+         */
         virtual void displayOn() = 0;
+        /*! Turn off the display
+         *  ====================
+         *  Disable the video output of the display (if supported).
+         *
+         *  Example:
+         *
+         *      tft.displayOff();
+         */
         virtual void displayOff() = 0;
+        /*! Invert the display colours
+         *  ==========================
+         *  All colours become reversed.  Black becomes white, red becomes cyan, etc.
+         *
+         *  Example:
+         *
+         *      tft.invertDisplay(true);
+         */
         virtual void invertDisplay(boolean i) = 0;
+         /**@}*/
         virtual uint16_t stringWidth(char *text);
         virtual uint16_t stringHeight(char *text);
 
@@ -111,17 +191,44 @@ class TFT : public Print
 #else
         void write(uint8_t c);
 #endif
+
+        /*! The device used to communicate with the TFT screen */
         TFTCommunicator *_comm;
-        int16_t cursor_x, cursor_y;
-        uint8_t textsize;
+        /*! The text cursor X position */
+        int16_t cursor_x;
+        /*! The text cursor Y position */
+        int16_t cursor_y;
+        /*! Whether or not text wrapping is enabled */
         boolean wrap;
-        uint16_t textcolor, textbgcolor;
+        /*! Text foreground colour */
+        uint16_t textcolor;
+        /*! Text background colour */
+        uint16_t textbgcolor;
+        /*! Width of the TFT screen */
         uint16_t _width;
+        /*! Height of the TFT screen */
         uint16_t _height;
+        /*! Current rotation */
         uint8_t rotation;
         uint8_t drawChar(int16_t x, int16_t y, unsigned char c, uint16_t color, uint16_t bg);
 
+        /*! Get screen width
+         *  ================
+         *  Returns the width (in pixels) of the screen.
+         *
+         *  Example:
+         *
+         *    int width = tft.getWidth();
+         */
         virtual uint16_t getWidth() { return _width; };
+        /*! Get screen height
+         *  =================
+         *  Returns the height (in pixels) of the screen.
+         *
+         *  Example:
+         *
+         *    int height = tft.getHeight();
+         */
         virtual uint16_t getHeight() { return _height; };
 
         point3d rgb2xyz(uint16_t c);
@@ -137,8 +244,18 @@ class TFT : public Print
 
         boolean clipToScreen(int16_t &x, int16_t &y, int16_t &w, int16_t &h);
 
+        void fatalError(const char *title, const char *message);
+
+        void setFontScaleX(uint8_t sx);
+        void setFontScaleY(uint8_t sy);
+
     protected:
+        /*! A pointer to the currently selected font table */
         const uint8_t *font;
+        /*! The current X scaling factor of the font */
+        uint8_t font_scale_x;
+        /*! The current Y scaling factor of the font */
+        uint8_t font_scale_y;
 
     private:
         uint16_t winx0;

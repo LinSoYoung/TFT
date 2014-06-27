@@ -39,6 +39,16 @@ void Aggregator::initializeDevice() {
     }
 }
 
+/*! Add a display
+ *  =============
+ *  You add displays to the aggregator virtual display with this function.  A display is passed
+ *  as a pointer, along with the X/Y coordinates of the upper-left point of the screen in virtual
+ *  display space.
+ *
+ *  Example:
+ * 
+ *      agg.addDisplay(&tft, 0, 320);
+ */
 void Aggregator::addDisplay(TFT *d, int16_t x, int16_t y) {
     struct AggregatorList *n = (struct AggregatorList *)malloc(sizeof(struct AggregatorList));
     struct AggregatorList *s;

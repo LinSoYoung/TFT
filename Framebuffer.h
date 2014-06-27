@@ -3,17 +3,29 @@
 
 #include <TFT.h>
 
+/*! A sprite is a small 8-bit indexed image overlaid on the screen at rendering time */
 struct sprite {
+    /*! X Position of the sprite */
     int16_t xpos;
+    /*! Y Position of the sprite */
     int16_t ypos;
+    /*! Width of the sprite */
     uint16_t width;
+    /*! Height of the sprite */
     uint16_t height;
+    /*! Transparent colour index */
     uint8_t transparent;
+    /*! Number of frames in the sprite */
     int8_t frames;
+    /*! Currently displayed frame number */
     int8_t currentframe;
+    /*! Direction the animation is running */
     int8_t animdir;
+    /*! Internal data store for sprite specific information */
     int8_t store[8];
+    /*! Pointer to graphical data for sprite */
     const uint8_t *data;
+    /*! Pointer to next sprite in the list */
     struct sprite *next;
 };
 

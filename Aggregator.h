@@ -10,6 +10,11 @@ struct AggregatorList {
     struct AggregatorList *next;
 };
 
+/*! The aggregator takes one or more physical screens and combines them
+ *  into a single virtual display.  Screens can occupy any location within
+ *  the virtual display space and do not need to be contiguous.
+ */
+ 
 class Aggregator : public TFT {
 	public:
 		Aggregator() : TFT(NULL), _displays(NULL), _width(0), _height(0) {};
