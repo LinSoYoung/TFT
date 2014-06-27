@@ -1244,7 +1244,13 @@ void TFT::fillCircleHelper(int16_t x0, int16_t y0, int16_t r, uint8_t cornername
 void TFT::fatalError(const char *title, const char *message) {
     int16_t width = getWidth();
     int16_t height = getHeight();
-    fillScreen(Color::Black);
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            if ((x + (y & 1)) & 1) {
+                setPixel(x, y, Color::Black);
+            }
+        }
+    }
     setFont(Fonts::Default);
     int sx = 1;
     int16_t swidth = stringWidth((char *)message);
@@ -1270,7 +1276,8 @@ void TFT::fatalError(const char *title, const char *message) {
     int16_t maxw2 = mwidth / 2;
     int16_t scrw2 = width / 2;
     int16_t scrh2 = height / 2;
-    fillRoundRect(scrw2 - maxw2 - 10, scrh2 - sheight - 10, mwidth + 20, sheight * 2 + 20, 9, Color::Red);
+    fillRoundRect(scrw2 - maxw2 - 14, scrh2 - sheight - 14, mwidth + 28, sheight * 2 + 28, 12, Color::Black);
+    fillRoundRect(scrw2 - maxw2 - 10, scrh2 - sheight - 10, mwidth + 20, sheight * 2 + 20, 10, Color::Red);
     drawRoundRect(scrw2 - maxw2 - 12, scrh2 - sheight - 12, mwidth + 24, sheight * 2 + 24, 12, Color::Red);
 
     setTextColor(Color::Black, Color::Red);
