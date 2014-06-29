@@ -136,6 +136,12 @@ void TFT::fillCircle(int16_t x0, int16_t y0, int16_t radius, uint16_t color) {
     }
 }
 
+static void inline swap(int16_t &i0, int16_t &i1) {
+    int i2 = i0;
+    i0 = i1;
+    i1 = i2;
+}
+
 /*! Draw a straight line
  *  ====================
  *  This function uses Bresenham's algorithm to draw a straight line.  The line
@@ -150,13 +156,13 @@ void TFT::fillCircle(int16_t x0, int16_t y0, int16_t radius, uint16_t color) {
 void TFT::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color) {
     int16_t steep = abs(y1 - y0) > abs(x1 - x0);
     if (steep) {
-        std::swap(x0, y0);
-        std::swap(x1, y1);
+        swap(x0, y0);
+        swap(x1, y1);
     }
 
     if (x0 > x1) {
-        std::swap(x0, x1);
-        std::swap(y0, y1);
+        swap(x0, x1);
+        swap(y0, y1);
     }
 
     int16_t dx, dy;
@@ -307,13 +313,13 @@ void TFT::fillTriangle ( int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t
 
     // Sort coordinates by Y order (y2 >= y1 >= y0)
     if (y0 > y1) {
-        std::swap(y0, y1); std::swap(x0, x1);
+        swap(y0, y1); swap(x0, x1);
     }
     if (y1 > y2) {
-        std::swap(y2, y1); std::swap(x2, x1);
+        swap(y2, y1); swap(x2, x1);
     }
     if (y0 > y1) {
-        std::swap(y0, y1); std::swap(x0, x1);
+        swap(y0, y1); swap(x0, x1);
     }
 
     if(y0 == y2) { // Handle awkward all-on-same-line case as its own thing
@@ -354,7 +360,7 @@ void TFT::fillTriangle ( int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t
         a = x0 + (x1 - x0) * (y - y0) / (y1 - y0);
         b = x0 + (x2 - x0) * (y - y0) / (y2 - y0);
         */
-        if(a > b) std::swap(a,b);
+        if(a > b) swap(a,b);
         drawHorizontalLine(a, y, b-a+1, color);
     }
 
@@ -371,7 +377,7 @@ void TFT::fillTriangle ( int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t
         a = x1 + (x2 - x1) * (y - y1) / (y2 - y1);
         b = x0 + (x2 - x0) * (y - y0) / (y2 - y0);
         */
-        if(a > b) std::swap(a,b);
+        if(a > b) swap(a,b);
         drawHorizontalLine(a, y, b-a+1, color);
     }
 }
