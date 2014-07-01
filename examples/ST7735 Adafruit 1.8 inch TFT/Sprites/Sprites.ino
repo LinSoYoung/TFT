@@ -250,7 +250,7 @@ void setup() {
 	fb.fillScreen(0);
 	fb.setCursor(0, 0);
 	fb.setFont(Fonts::Sinclair);
-	tft.update(&fb);
+	fb.update(tft);
 
 	// Add the hunter sprite to the sprite list
 	mySprite1 = fb.addSprite(target, 16, 16, '.', 5);
@@ -339,7 +339,7 @@ void loop() {
 	fb.print(score);
 
 	// And push the frame to the screen
-	tft.update(&fb);
+	fb.update(tft);
 }
 
 uint8_t js() {

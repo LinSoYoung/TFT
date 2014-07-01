@@ -48,6 +48,7 @@ ST7735 tft(&mySpi, ST7735::BlackTab);
 
 void setup() {
 	tft.initializeDevice();
+	tft.setRotation(1);
 	tft.fillScreen(Color::Black);
 	tft.setFont(Fonts::Topaz);
 	tft.setTextColor(Color::White, Color::Black);	
