@@ -1,6 +1,8 @@
 #ifndef _PICADILLO35T_H_
 #define _PICADILLO35T_H_
 
+#ifdef __PIC32MX__
+
 #include <TFT.h>
 
 class PICadillo35t : public TFT 
@@ -56,5 +58,5 @@ class PICadillo35t : public TFT
 	protected:
 		uint8_t colstart, rowstart;
 };
-
+#endif
 #endif

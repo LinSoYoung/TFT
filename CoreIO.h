@@ -3,7 +3,9 @@
 
 #include <TFT.h>
 
+#ifdef __PIC32MX__
 #include <Board_Defs.h>
+#endif
 
 class CoreIO : public ParallelIO {
     public:

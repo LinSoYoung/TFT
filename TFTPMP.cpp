@@ -1,5 +1,7 @@
 #include <TFT.h>
 
+#ifdef __PIC32MX__
+
 /*TFTPMP::TFTPMP(uint8_t rsPin) {	
     _rsPin = rsPin;
 	
@@ -218,6 +220,6 @@ uint32_t TFTPMP::readData32() {
     return out;
 } 
 
-
+#endif
 
 

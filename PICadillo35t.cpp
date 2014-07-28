@@ -1,4 +1,4 @@
-
+#ifdef __PIC32MX__
 #include <TFT.h>
 
 //--------------------------------------------------------------------------//
@@ -174,6 +174,7 @@ void PICadillo35t::initializeDevice()
 	delay(10);
 	writeCommand(HX8357_WRITE_MEMORY_START); //Write SRAM Data
     _cacheState = cacheInvalid;
+    clearClipping();
 }
 
 void PICadillo35t::setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) 
@@ -214,6 +215,8 @@ void PICadillo35t::setPixel(int16_t x, int16_t y, uint16_t color)
 {
 	if((x < 0) ||(x >= _width) || (y < 0) || (y >= _height)) 
 		return;
+    if ((x < _clip_x0) || (x > _clip_x1) || (y < _clip_y0) || (y > _clip_y1)) 
+        return;
 	setAddrWindow(x,y,x+1,y+1);
     PMADDR = 0x0001;
     PMDIN = color;
@@ -311,6 +314,7 @@ void PICadillo35t::setRotation(uint8_t m)
 			break;
 	}
     _cacheState = cacheInvalid;
+    clearClipping();
 }
 
 void PICadillo35t::invertDisplay(boolean i) 
@@ -440,3 +444,4 @@ void PICadillo35t::flushCacheBlock() {
     _cacheState = cacheClean;
 }
 
+#endif

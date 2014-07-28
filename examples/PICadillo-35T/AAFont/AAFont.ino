@@ -1,4 +1,6 @@
 #include <TFT.h>
+#include <Liberation.h>
+#include <Hazard.h>
 
 PICadillo35t tft;
 

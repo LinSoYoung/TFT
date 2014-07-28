@@ -17,7 +17,11 @@ class DOGMe : public HD44780 {
         void setFollower(uint8_t f);
         void singleHeight();
         void doubleHeight();
+#ifdef __PIC32MX__
         void write(uint8_t c);
+#else
+        size_t write(uint8_t c);
+#endif
 
     private:
         uint8_t _table;

@@ -72,9 +72,16 @@ void DOGMe::setContrast(uint8_t c) {
     table(0);
 }
 
+#ifdef __PIC32MX__
 void DOGMe::write(uint8_t c) {
     data(c);
 }
+#else 
+size_t DOGMe::write(uint8_t c) {
+    data(c);
+    return 1;
+}
+#endif
 
 void DOGMe::setFollower(uint8_t f) {
     table(1);

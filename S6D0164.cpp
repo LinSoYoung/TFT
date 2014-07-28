@@ -1,4 +1,5 @@
 #include <TFT.h>
+#ifdef __PIC32MX__
 
 #define S6D0164_SYSTEM                  0x00
 #define S6D0164_OUTPUT                  0x01
@@ -248,3 +249,4 @@ void S6D0164::windowData(uint16_t *d, uint32_t l) {
 void S6D0164::closeWindow() {
 }
 
+#endif

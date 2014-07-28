@@ -30,8 +30,10 @@
 
 #include <TFT.h>
 
+#ifdef __PIC32MX__
 MCP23S17::MCP23S17(DSPI *spi, uint8_t cs, uint8_t addr) {
-    _spi = spi;
+    _dspi = spi;
+    _spi = NULL;
     _cs = cs;
     _addr = addr;
 
@@ -60,21 +62,69 @@ MCP23S17::MCP23S17(DSPI *spi, uint8_t cs, uint8_t addr) {
     
     _buffer = 0;
 
-    _spi->begin();
-    _spi->setSpeed(MCP23S17_SPEED);
+    _dspi->begin();
+    setSpeed();
     ::pinMode(_cs, OUTPUT);
     ::digitalWrite(_cs, HIGH);
     uint8_t cmd = 0b01000000;
     ::digitalWrite(_cs, LOW);
-    _spi->transfer(cmd);
-    _spi->transfer(IOCONA);
-    _spi->transfer(0x18);
+    xfer(cmd);
+    xfer(IOCONA);
+    xfer(0x18);
     ::digitalWrite(_cs, HIGH);
     writeAll();
 }
 
 MCP23S17::MCP23S17(DSPI &spi, uint8_t cs, uint8_t addr) {
+    _dspi = &spi;
+    _spi = NULL;
+    _cs = cs;
+    _addr = addr;
+
+    _reg[IODIRA] = 0xFF;
+    _reg[IODIRB] = 0xFF;
+    _reg[IPOLA] = 0x00;
+    _reg[IPOLB] = 0x00;
+    _reg[GPINTENA] = 0x00;
+    _reg[GPINTENB] = 0x00;
+    _reg[DEFVALA] = 0x00;
+    _reg[DEFVALB] = 0x00;
+    _reg[INTCONA] = 0x00;
+    _reg[INTCONB] = 0x00;
+    _reg[IOCONA] = 0x18;
+    _reg[IOCONB] = 0x18;
+    _reg[GPPUA] = 0x00;
+    _reg[GPPUB] = 0x00;
+    _reg[INTFA] = 0x00;
+    _reg[INTFB] = 0x00;
+    _reg[INTCAPA] = 0x00;
+    _reg[INTCAPB] = 0x00;
+    _reg[GPIOA] = 0x00;
+    _reg[GPIOB] = 0x00;
+    _reg[OLATA] = 0x00;
+    _reg[OLATB] = 0x00;
+    
+    _buffer = 0;
+
+    _dspi->begin();
+    setSpeed();
+    ::pinMode(_cs, OUTPUT);
+    ::digitalWrite(_cs, HIGH);
+    uint8_t cmd = 0b01000000;
+    ::digitalWrite(_cs, LOW);
+    xfer(cmd);
+    xfer(IOCONA);
+    xfer(0x18);
+    ::digitalWrite(_cs, HIGH);
+    writeAll();
+}
+#endif
+
+MCP23S17::MCP23S17(SPIClass &spi, uint8_t cs, uint8_t addr) {
     _spi = &spi;
+#ifdef __PIC32MX__
+    _dspi = NULL;
+#endif
     _cs = cs;
     _addr = addr;
 
@@ -104,16 +154,81 @@ MCP23S17::MCP23S17(DSPI &spi, uint8_t cs, uint8_t addr) {
     _buffer = 0;
 
     _spi->begin();
-    _spi->setSpeed(MCP23S17_SPEED);
+    setSpeed();
     ::pinMode(_cs, OUTPUT);
     ::digitalWrite(_cs, HIGH);
     uint8_t cmd = 0b01000000;
     ::digitalWrite(_cs, LOW);
-    _spi->transfer(cmd);
-    _spi->transfer(IOCONA);
-    _spi->transfer(0x18);
+    xfer(cmd);
+    xfer(IOCONA);
+    xfer(0x18);
     ::digitalWrite(_cs, HIGH);
     writeAll();
+}
+
+MCP23S17::MCP23S17(SPIClass *spi, uint8_t cs, uint8_t addr) {
+    _spi = spi;
+#ifdef __PIC32MX__
+    _dspi = NULL;
+#endif
+    _cs = cs;
+    _addr = addr;
+
+    _reg[IODIRA] = 0xFF;
+    _reg[IODIRB] = 0xFF;
+    _reg[IPOLA] = 0x00;
+    _reg[IPOLB] = 0x00;
+    _reg[GPINTENA] = 0x00;
+    _reg[GPINTENB] = 0x00;
+    _reg[DEFVALA] = 0x00;
+    _reg[DEFVALB] = 0x00;
+    _reg[INTCONA] = 0x00;
+    _reg[INTCONB] = 0x00;
+    _reg[IOCONA] = 0x18;
+    _reg[IOCONB] = 0x18;
+    _reg[GPPUA] = 0x00;
+    _reg[GPPUB] = 0x00;
+    _reg[INTFA] = 0x00;
+    _reg[INTFB] = 0x00;
+    _reg[INTCAPA] = 0x00;
+    _reg[INTCAPB] = 0x00;
+    _reg[GPIOA] = 0x00;
+    _reg[GPIOB] = 0x00;
+    _reg[OLATA] = 0x00;
+    _reg[OLATB] = 0x00;
+    
+    _buffer = 0;
+
+    _spi->begin();
+    setSpeed();
+    ::pinMode(_cs, OUTPUT);
+    ::digitalWrite(_cs, HIGH);
+    uint8_t cmd = 0b01000000;
+    ::digitalWrite(_cs, LOW);
+    xfer(cmd);
+    xfer(IOCONA);
+    xfer(0x18);
+    ::digitalWrite(_cs, HIGH);
+    writeAll();
+}
+
+uint8_t MCP23S17::xfer(uint8_t d) {
+#ifdef __PIC32MX__
+    if (_dspi != NULL) {
+        return _dspi->transfer(d);
+    }
+#endif
+    return _spi->transfer(d);
+}
+
+void MCP23S17::setSpeed() {
+#ifdef __PIC32MX__
+    if (_dspi != NULL) {
+        _dspi->setSpeed(MCP23S17_SPEED);
+        return;
+    }
+#endif
+    _spi->setClockDivider(SPI_CLOCK_DIV2);
 }
 
 void MCP23S17::readRegister(uint8_t addr) {
@@ -121,11 +236,11 @@ void MCP23S17::readRegister(uint8_t addr) {
         return;
     }
     uint8_t cmd = 0b01000001 | ((_addr & 0b111) << 1);
-    _spi->setSpeed(MCP23S17_SPEED);
+    setSpeed();
     ::digitalWrite(_cs, LOW);
-    _spi->transfer(cmd);
-    _spi->transfer(addr);
-    _reg[addr] = _spi->transfer(0xFF);
+    xfer(cmd);
+    xfer(addr);
+    _reg[addr] = xfer(0xFF);
     ::digitalWrite(_cs, HIGH);
 }
 
@@ -134,34 +249,34 @@ void MCP23S17::writeRegister(uint8_t addr) {
         return;
     }
     uint8_t cmd = 0b01000000 | ((_addr & 0b111) << 1);
-    _spi->setSpeed(MCP23S17_SPEED);
+    setSpeed();
     ::digitalWrite(_cs, LOW);
-    _spi->transfer(cmd);
-    _spi->transfer(addr);
-    _spi->transfer(_reg[addr]);
+    xfer(cmd);
+    xfer(addr);
+    xfer(_reg[addr]);
     ::digitalWrite(_cs, HIGH);
 }
 
 void MCP23S17::readAll() {
     uint8_t cmd = 0b01000001 | ((_addr & 0b111) << 1);
-    _spi->setSpeed(MCP23S17_SPEED);
+    setSpeed();
     ::digitalWrite(_cs, LOW);
-    _spi->transfer(cmd);
-    _spi->transfer(0);
+    xfer(cmd);
+    xfer(0);
     for (uint8_t i = 0; i < 22; i++) {
-        _reg[i] = _spi->transfer(0xFF);
+        _reg[i] = xfer(0xFF);
     }
     ::digitalWrite(_cs, HIGH);
 }
 
 void MCP23S17::writeAll() {
     uint8_t cmd = 0b01000000 | ((_addr & 0b111) << 1);
-    _spi->setSpeed(MCP23S17_SPEED);
+    setSpeed();
     ::digitalWrite(_cs, LOW);
-    _spi->transfer(cmd);
-    _spi->transfer(0);
+    xfer(cmd);
+    xfer(0);
     for (uint8_t i = 0; i < 22; i++) {
-        _spi->transfer(_reg[i]);
+        xfer(_reg[i]);
     }
     ::digitalWrite(_cs, HIGH);
 }

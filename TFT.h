@@ -13,7 +13,11 @@
 //#include <algorithm>
 
 #include <stdint.h>
+
+#ifdef __PIC32MX__
 #include <DSPI.h>
+#endif
+#include <SPI.h>
 
 // Base classes
 #include "TFTCommunicator.h"
@@ -82,6 +86,8 @@ class TFT : public Print
         virtual void drawRGB(int16_t x, int16_t y, const uint16_t *bitmap, int16_t w, int16_t h);
         virtual void drawRGBA(int16_t x, int16_t y, const uint16_t *bitmap, int16_t w, int16_t h, uint16_t trans);
         virtual void setCursor(int16_t x, int16_t y);
+        virtual void setCursorX(int16_t x);
+        virtual void setCursorY(int16_t y);
         virtual int16_t getCursorX();
         virtual int16_t getCursorY();
         virtual int16_t getCursor(boolean x);
@@ -95,6 +101,10 @@ class TFT : public Print
 
         virtual void fillScreen(uint16_t color);
         virtual void fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
+
+
+        void setClipping(int16_t x0, int16_t y0, int16_t x1, int16_t y1);
+        void clearClipping();
 
 
         /*! \name Pure virtual functions
@@ -248,6 +258,11 @@ class TFT : public Print
 
         void setFontScaleX(uint8_t sx);
         void setFontScaleY(uint8_t sy);
+
+        int16_t _clip_x0;
+        int16_t _clip_x1;
+        int16_t _clip_y0;
+        int16_t _clip_y1;
 
     protected:
         /*! A pointer to the currently selected font table */

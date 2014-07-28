@@ -5,8 +5,12 @@
 
 class SPISRAM : public DataStore {
     public:
-        SPISRAM(DSPI *spi, uint8_t cs, uint32_t s) : _spi(spi), _cs(cs), _size(s) {}
-        SPISRAM(DSPI &spi, uint8_t cs, uint32_t s) : _spi(&spi), _cs(cs), _size(s) {}
+#ifdef __PIC32MX__
+        SPISRAM(DSPI *spi, uint8_t cs, uint32_t s) : _dspi(spi), _spi(NULL), _cs(cs), _size(s) {}
+        SPISRAM(DSPI &spi, uint8_t cs, uint32_t s) : _dspi(&spi), _spi(NULL), _cs(cs), _size(s) {}
+#endif
+        SPISRAM(SPIClass *spi, uint8_t cs, uint32_t s) : _spi(spi), _cs(cs), _size(s) {}
+        SPISRAM(SPIClass &spi, uint8_t cs, uint32_t s) : _spi(&spi), _cs(cs), _size(s) {}
         uint8_t read8(uint32_t address);
         uint16_t read16(uint32_t address);
         uint32_t read32(uint32_t address);
@@ -30,9 +34,14 @@ class SPISRAM : public DataStore {
         void initializeDevice();
         uint32_t size() { return _size; }
     private:
+        uint8_t xfer(uint8_t);
+        void setSpeed();
         uint32_t _size;
         uint8_t _cs;
-        DSPI *_spi;
+#ifdef __PIC32MX__
+        DSPI *_dspi;
+#endif
+        SPIClass *_spi;
 };
 
 #endif

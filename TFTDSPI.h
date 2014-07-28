@@ -1,6 +1,8 @@
 #ifndef _TFTDSPI_H
 #define _TFTDSPI_H
 
+#ifdef __PIC32MX__
+
 #include <TFT.h>
 
 /*! The TFTDSPI class creates a new SPI interface using the chipKIT DSPI library. */
@@ -57,6 +59,8 @@ class TFTDSPI : public TFTCommunicator
         uint8_t _dc;
         uint32_t _speed;
 };
+
+#endif
 
 #endif
 

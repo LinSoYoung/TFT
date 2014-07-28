@@ -192,6 +192,39 @@ void TFT::drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t colo
     }
 }
 
+/*! Set clipping boundaries
+ *  =======================
+ *  The clipping boundaries limit where a pixel can be drawn on the screen. It allows
+ *  you to define an area where primitives will be drawn within and any portion outside
+ *  the clipping area will be discarded.
+ *
+ *  Example:
+ *
+ *      setClipping(100, 100, 200, 200);
+ */
+void TFT::setClipping(int16_t x0, int16_t y0, int16_t x1, int16_t y1) {
+    _clip_x0 = x0;
+    _clip_x1 = x1;
+    _clip_y0 = y0;
+    _clip_y1 = y1;
+}
+
+/*! Clear clipping boundaries
+ *  =========================
+ *
+ *  Remove the clipping boundary imposed by setClipping().
+ *
+ *  Example:
+ * 
+ *      clearClipping();
+ */
+void TFT::clearClipping() {
+    _clip_x0 = 0;
+    _clip_y0 = 0;
+    _clip_x1 = getWidth() - 1;
+    _clip_y1 = getHeight() - 1;
+}
+
 /*! Draw a rectangle
  *  ================
  *  This function uses accelerated line drawing routines if available.  It draws a rectangle on the
@@ -639,6 +672,30 @@ uint8_t TFT::drawChar(int16_t x, int16_t y, unsigned char c, uint16_t color, uin
  */
 void TFT::setCursor(int16_t x, int16_t y) {
     cursor_x = x;
+    cursor_y = y;
+}
+
+/*! Set the text X cursor
+ *  =====================
+ *  All future printing will happen from the X pixel (x).
+ *
+ *  Example:
+ *
+ *      tft.setCursorX(100);
+ */
+void TFT::setCursorX(int16_t x) {
+    cursor_x = x;
+}
+
+/*! Set the text Y cursor
+ *  =====================
+ *  All future printing will happen from the Y pixel (y).
+ *
+ *  Example:
+ *
+ *      tft.setCursorY(100);
+ */
+void TFT::setCursorY(int16_t y) {
     cursor_y = y;
 }
 
