@@ -1057,6 +1057,68 @@ uint32_t TFT::rgb2hsv(uint16_t rgb)
     return (h << 16) | (s << 8) | v;
 }
 
+uint16_t TFT::hsv2rgb(uint32_t hsv) {
+    int hue = (hsv >> 16) & 0xFF;
+    int sat = (hsv >> 8) & 0xFF;
+    int val = hsv & 0xFF;
+    unsigned int H_accent = hue/43;
+    unsigned int bottom = ((255 - sat) * val)>>8;
+    unsigned int top = val;
+    unsigned char rising  = ((top-bottom)  *(hue%43   )  )  /  43  +  bottom;
+    unsigned char falling = ((top-bottom)  *(43-hue%43)  )  /  43  +  bottom;
+
+    int r = 0;
+    int g = 0;
+    int b = 0;
+   
+    switch(H_accent) {
+        case 0:
+                r = top;
+                g = rising;
+                b = bottom;
+        break;
+       
+        case 1:
+                r = falling;
+                g = top;
+                b = bottom;
+        break;
+       
+        case 2:
+                r = bottom;
+                g = top;
+                b = rising;
+        break;
+       
+        case 3:
+                r = bottom;
+                g = falling;
+                b = top;
+        break;
+       
+        case 4:
+                r = rising;
+                g = bottom;
+                b = top;
+        break;
+       
+        case 5:
+                r = top;
+                g = bottom;
+                b = falling;
+        break;
+    }
+    if (r > 255) r = 255;
+    if (g > 255) g = 255;
+    if (b > 255) b = 255;
+    if (r < 0) r = 0;
+    if (g < 0) g = 0;
+    if (b < 0) b = 0;
+    return rgb(r, g, b);
+}
+
+
+
 /*! Get the colour at a location
  *  ============================
  *  Returns the colour at (x,y) as seen by the screen.

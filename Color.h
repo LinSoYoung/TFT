@@ -246,5 +246,6 @@ class Color {
         const static uint16_t DarkMagenta           = RGB(139,  0,139);
         const static uint16_t DarkRed               = RGB(139,  0,  0);
         const static uint16_t LightGreen            = RGB(144,238,144);
+        const static uint16_t Sepia                 = RGB(112, 66, 20);
 };
 #endif

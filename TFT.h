@@ -245,7 +245,8 @@ class TFT : public Print
         point3d xyz2lab(point3d c);
         float deltaE(point3d labA, point3d labB);
         uint32_t deltaOrth(uint16_t c1, uint16_t c2);
-        uint32_t rgb2hsv(uint16_t rgb);
+        static uint32_t rgb2hsv(uint16_t rgb);
+        static uint16_t hsv2rgb(uint32_t hsv);
 
         void drawCircleHelper( int16_t x0, int16_t y0, int16_t r, uint8_t cornername, uint16_t color);
         void fillCircleHelper(int16_t x0, int16_t y0, int16_t r, uint8_t cornername, int16_t delta, uint16_t color);
@@ -325,6 +326,9 @@ class TFT : public Print
 #include "Touch.h"
 #include "XPT2046.h"
 #include "AnalogTouch.h"
+
+// Colour filtering system
+#include "Filter.h"
 
 // Image formats
 #include "RLE.h"

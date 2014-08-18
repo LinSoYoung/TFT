@@ -20,7 +20,11 @@ void RLE::draw(TFT *dev, int16_t x, int16_t y) {
     uint32_t i = 0;
     while (i < _size) {
         if (_data[12+i] != _data[13+i]) {
-            dev->setPixel(x + px, y + py, _data[12+i]);
+            uint16_t col = _data[12+i];
+            if (_filter != NULL) {
+                col = _filter->process(col);
+            }
+            dev->setPixel(x + px, y + py, col);
             i++;
             px ++;
             if (px == getWidth()) {
@@ -38,6 +42,9 @@ void RLE::draw(TFT *dev, int16_t x, int16_t y) {
                 i += 4;
             }
             for (uint32_t j = 0; j < len; j++) {
+                if (_filter != NULL) {
+                    col = _filter->process(col);
+                }
                 dev->setPixel(x + px, y + py, col);
                 px ++;
                 if (px == getWidth()) {
@@ -57,7 +64,11 @@ void RLE::draw(TFT *dev, int16_t x, int16_t y, uint16_t t) {
     while (i < _size) {
         if (_data[12+i] != _data[13+i]) {
             if (_data[12+i] != t) {
-                dev->setPixel(x + px, y + py, _data[12+i]);
+                uint16_t col = _data[12+i];
+                if (_filter != NULL) {
+                    col = _filter->process(col);
+                }
+                dev->setPixel(x + px, y + py, col);
             }
             i++;
             px ++;
@@ -77,6 +88,9 @@ void RLE::draw(TFT *dev, int16_t x, int16_t y, uint16_t t) {
             }
             for (uint32_t j = 0; j < len; j++) {
                 if (col != t) {
+                    if (_filter != NULL) {
+                        col = _filter->process(col);
+                    }
                     dev->setPixel(x + px, y + py, col);
                 }
                 px ++;
@@ -158,19 +172,23 @@ void RLE::drawTransformed(TFT *dev, int16_t x, int16_t y, uint8_t transform, uin
     uint32_t i = 0;
     while (i < _size) {
         if (_data[12+i] != _data[13+i]) {
-            switch (transform) {
-                if (_data[12+i] != t) {
+            uint16_t col = _data[12+i];
+            if (_filter != NULL) {
+                col = _filter->process(col);
+            }
+            if (_data[12+i] != t) {
+                switch (transform) {
                     default:
-                        dev->setPixel(x + px, y + py, _data[12+i]);
+                        dev->setPixel(x + px, y + py, col);
                         break;
                     case MirrorH:
-                        dev->setPixel(getWidth() - (x + px) - 1, y + py, _data[12+i]);
+                        dev->setPixel(getWidth() - (x + px) - 1, y + py, col);
                         break;
                     case MirrorV:
-                        dev->setPixel(x + px, getHeight() - (y + py) - 1, _data[12+i]);
+                        dev->setPixel(x + px, getHeight() - (y + py) - 1, col);
                         break;
                     case Rotate180:
-                        dev->setPixel(getWidth() - (x + px) - 1, getHeight() - (y + py) - 1, _data[12+i]);
+                        dev->setPixel(getWidth() - (x + px) - 1, getHeight() - (y + py) - 1, col);
                         break;
                 }
             }
@@ -192,6 +210,9 @@ void RLE::drawTransformed(TFT *dev, int16_t x, int16_t y, uint8_t transform, uin
             }
             for (uint32_t j = 0; j < len; j++) {
                 if (col != t) {
+                    if (_filter != NULL) {
+                        col = _filter->process(col);
+                    }
                     switch (transform) {
                         default:
                             dev->setPixel(x + px, y + py, col);

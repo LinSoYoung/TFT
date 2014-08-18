@@ -343,24 +343,38 @@ void PICadillo35t::windowData(uint16_t d) {
 }
 
 void PICadillo35t::windowData(uint16_t *d, uint32_t l) {
-    while (DCH3CONbits.CHBUSY);
 
-    PMMODEbits.IRQM = 0b01;
+    uint32_t toXfer = l * 2;
 
-    DCH3INTbits.CHSDIE = 1;
-    DCH3SSA = ((unsigned int)d) & 0x1FFFFFFF;
-    DCH3DSA = ((unsigned int)&PMDIN) & 0x1FFFFFFF;
-    DCH3SSIZ = l*2;
-    DCH3DSIZ = 2;
-    DCH3CSIZ = 2;
-    DCH3ECONbits.SIRQEN = 1;
-    DCH3ECONbits.CHSIRQ = _PMP_IRQ;
-    DCH3CONbits.CHAEN = 0;
-    DCH3CONbits.CHEN = 1;
+    uint16_t *data = d;
 
-    DMACONbits.ON=1;
+    while (toXfer > 0) {
+        while (DCH3CONbits.CHBUSY);
+        uint32_t chunk = toXfer;
+        if (chunk > 65534) {
+            chunk = 65534;
+        }
 
-    DCH3ECONbits.CFORCE = 1;
+        toXfer -= chunk;
+
+        PMMODEbits.IRQM = 0b01;
+
+        DCH3INTbits.CHSDIE = 1;
+        DCH3SSA = ((uint32_t)data) & 0x1FFFFFFF;
+        DCH3DSA = ((uint32_t)&PMDIN) & 0x1FFFFFFF;
+        DCH3SSIZ = chunk;
+        DCH3DSIZ = 2;
+        DCH3CSIZ = 2;
+        DCH3ECONbits.SIRQEN = 1;
+        DCH3ECONbits.CHSIRQ = _PMP_IRQ;
+        DCH3CONbits.CHAEN = 0;
+        DCH3CONbits.CHEN = 1;
+
+        DMACONbits.ON=1;
+
+        DCH3ECONbits.CFORCE = 1;
+        data += (chunk >> 1);
+    }
 
 //    for (uint32_t i = 0; i < l; i++) {
 //        PMDIN = d[i];

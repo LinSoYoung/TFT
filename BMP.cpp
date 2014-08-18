@@ -60,6 +60,9 @@ void BMP::drawIdx(TFT *dev, int16_t x, int16_t y, int32_t trans) {
             uint32_t pix = line * getWidth() + ix;
             struct BitmapPixel32 *p = &_palette[_image[pix]];
             uint16_t col = rgb(p->g, p->b, p->a);
+            if (_filter != NULL) {
+                col = _filter->process(col);
+            }
             if (trans < 0) {
                 dev->windowData(col);
             } else {
@@ -84,11 +87,15 @@ void BMP::draw565(TFT *dev, int16_t x, int16_t y, int32_t trans) {
             uint32_t pix = line * getWidth() + ix;
             uint32_t offset = pix * 2;
             uint16_t *p = (uint16_t *)(_image + offset);
+            uint16_t col = *p;
+            if (_filter != NULL) {
+                col = _filter->process(col);
+            }
             if (trans < 0) {
-                dev->windowData(*p);
+                dev->windowData(col);
             } else {
                 if (*p != trans) {
-                    dev->setPixel(x + ix, y + iy, *p);
+                    dev->setPixel(x + ix, y + iy, col);
                 }
             }
         }
@@ -109,6 +116,9 @@ void BMP::drawRGB(TFT *dev, int16_t x, int16_t y, int32_t trans) {
             uint32_t offset = pix * 3;
             struct BitmapPixel24 *p = (struct BitmapPixel24 *)(_image + offset);
             uint16_t col = rgb(p->r, p->g, p->b);
+            if (_filter != NULL) {
+                col = _filter->process(col);
+            }
             if (trans < 0) {
                 dev->windowData(col);
             } else {
@@ -174,6 +184,9 @@ void BMP::drawRGBA(TFT *dev, int16_t x, int16_t y, int32_t trans) {
             blue = ((p->value & bMask) >> bShift);
             alpha = ((p->value & aMask) >> aShift);
             int16_t fg = rgb(red, green, blue);
+            if (_filter != NULL) {
+                fg = _filter->process(fg);
+            }
 
             if (alpha == 255) {
                 dev->setPixel(x + ix, y + iy, fg);
