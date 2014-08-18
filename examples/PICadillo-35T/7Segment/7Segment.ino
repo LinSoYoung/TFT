@@ -96,12 +96,12 @@ typedef struct {
 
 Point locations[] = {
 	{ 14, 0 },
-	{ 113, 7 },
-	{ 113, 129 },
+	{ 113, 9 },
+	{ 113, 127 },
 	{ 13, 223 },
-	{ 0, 128 },
-	{ 0, 8 },
-	{ 14, 110 }
+	{ 0, 126 },
+	{ 0, 10 },
+	{ 15, 110 }
 };
 
 // This is a mapping of which segments are turned on or off for
