@@ -29,19 +29,13 @@
  */
 
 /*
- * This sketch demonstrates how to stutch multiple small images together
- * to form one single image on the screen.  It takes a selection of small
- * images representing each of the segments of a 7 segment display in both
- * the on and off states, and stitches them together to form large digits.
- * 
- * The demonstration takes a reading from ADC channel A0 and maps it to 
- * a value between 0 and 999 to display in large 7-segment digits filling
- * the PICadillo display.
- * 
- * You may want to provide a sensible input to A0, such as the wiper output
- * of a potentiometer connected between +3.3V and GND.
+ * This example demonstrates the use of filter chains for modifying the colour of
+ * image data on the fly.  Filter chains are joined together and the colour of a
+ * pixel in the image is passedalong the chain from one filter to the next, and the 
+ * final filter returns the resultant pixel colour to the drawing routine.  Any number
+ * of filters can be chained together, and the chains can be rearranged to achieve
+ * different effects.
  */
-
 #include <TFT.h>
 
 PICadillo35t tft;
@@ -213,7 +207,8 @@ void waitForTap() {
 }
 
 void message(char *s) {
-	tft.setCursor(0, 0);
+	int sw = tft.stringWidth(s);
+	tft.setCursor(160 - (sw / 2), 0);
 	tft.setTextColor(Color::White, Color::Black);
 	tft.print(s);
 }
