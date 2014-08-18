@@ -60,6 +60,8 @@ Tint tint;
 
 AdjustHSV hsv;
 
+Invert inv;
+
 void setup() {
 	analogWrite(PIN_BACKLIGHT, 255);
 	ts.initializeDevice();
@@ -173,8 +175,22 @@ void loop() {
 	hsv.adjustSaturation(-100);
 	hsv.adjustValue(100);
 	basil.draw(&tft, 0, 0);
-	message("And we're done");
+	message("Next: inversion");
 	waitForTap();
+
+
+
+	basil.removeFilter();
+	basil.draw(&tft, 0, 0);
+	message("Tap to invert");
+	waitForTap();
+
+	basil.setFilter(inv);
+	inv.endChain();
+	basil.draw(&tft, 0, 0);
+	message("How's that then?");
+	waitForTap();
+
 
 }
 

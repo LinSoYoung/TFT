@@ -20,6 +20,7 @@ class Filter {
 #include <AdjustHSV.h>
 #include <Brightness.h>
 #include <Contrast.h>
+#include <Invert.h>
 #include <Monochrome.h>
 #include <Tint.h>
 
