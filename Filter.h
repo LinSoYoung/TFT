@@ -22,6 +22,7 @@ class Filter {
 #include <Contrast.h>
 #include <Invert.h>
 #include <Monochrome.h>
+#include <Noise.h>
 #include <Tint.h>
 
 #endif

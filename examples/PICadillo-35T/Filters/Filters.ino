@@ -57,6 +57,7 @@ Monochrome mono;
 Contrast cst;
 Brightness brt;
 Tint tint;
+Noise noise(10);
 
 AdjustHSV hsv;
 
@@ -141,6 +142,12 @@ void loop() {
 
 	brt.chain(cst);
 	cst.endChain();
+	basil.draw(&tft, 0, 0);
+	message("Now let's add some noise");
+	waitForTap();
+
+	cst.chain(noise);
+	noise.endChain();
 	basil.draw(&tft, 0, 0);
 	message("Next: The HSV Filter");
 	waitForTap();
