@@ -7,22 +7,34 @@ Raw565::Raw565(const uint16_t *data, uint16_t w, uint16_t h) {
 }
 
 void Raw565::draw(TFT *dev, int16_t x, int16_t y) {
-    uint32_t p = 0;
-    for (int py = 0; py < getHeight(); py++) {
-        for (int px = 0; px < getWidth(); px++) {
-            dev->setPixel(x + px, y + py, _data[p++]);
-        }
-    }
+    dev->openWindow(x, y, getWidth(), getHeight());
+    dev->windowData((uint16_t *)_data, getWidth() * getHeight());
+    dev->closeWindow();
 }
 
 void Raw565::draw(TFT *dev, int16_t x, int16_t y, uint16_t t) {
     uint32_t p = 0;
+    uint16_t line[getWidth()];
+
     for (int py = 0; py < getHeight(); py++) {
+        boolean haveTrans = false;
         for (int px = 0; px < getWidth(); px++) {
-            if (_data[p] != t) {
-                dev->setPixel(x + px, y + py, _data[p]);
+            line[px] = _data[p];
+            if (_data[p] == t) {
+                haveTrans = true;
             }
             p++;
+        }
+        if (!haveTrans) {
+            dev->openWindow(x, y + py, getWidth(), 1);
+            dev->windowData(line, getWidth());
+            dev->closeWindow();
+        } else {
+            for (int px = 0; px < getWidth(); px++) {
+                if (line[px] != t) {
+                    dev->setPixel(x + px, y + py, line[px]);
+                }
+            }
         }
     }
 }
