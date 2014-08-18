@@ -49,7 +49,7 @@ PICadillo35t tft;
 // These are references to the images in flash.
 extern uint16_t aOn_565[] asm("_binary_objects_aOn_565_start");
 extern uint16_t bOn_565[] asm("_binary_objects_bOn_565_start");
-extern uint16_t cOn_565[] asm("_binary_objects_cOn_565_start");
+extern uint16_t cOn_565[] asm("_binary_objects_csOn_565_start");
 extern uint16_t dOn_565[] asm("_binary_objects_dOn_565_start");
 extern uint16_t eOn_565[] asm("_binary_objects_eOn_565_start");
 extern uint16_t fOn_565[] asm("_binary_objects_fOn_565_start");
