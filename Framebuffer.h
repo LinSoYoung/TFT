@@ -46,8 +46,6 @@ class Framebuffer : public TFT {
         virtual void fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
         virtual void fillScreen(uint16_t);
 
-        virtual void setAntiAlias(uint8_t aa);
-
         virtual void copyRect(int16_t dx, int16_t dy, int16_t sx, int16_t sy, uint16_t w, uint16_t h);
 
         // Color control
@@ -106,7 +104,6 @@ class Framebuffer : public TFT {
     protected:
         uint16_t _masterWidth;
         uint16_t _masterHeight;
-        uint8_t _antiAlias;
 };
 
 #endif

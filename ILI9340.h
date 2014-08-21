@@ -27,6 +27,10 @@ class ILI9340 : public TFT {
         void invertDisplay(boolean i);
         void displayOn() {} // Not implemented
         void displayOff() {} // Not implemented
+        void openWindow(uint16_t, uint16_t, uint16_t, uint16_t);
+        void windowData(uint16_t);
+        void windowData(uint16_t *, uint32_t);
+        void closeWindow();
 
         void initializeDevice();
 

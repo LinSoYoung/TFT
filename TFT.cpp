@@ -1202,11 +1202,11 @@ void TFT::openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
 void TFT::windowData(uint16_t d) {
     setPixel(winx0 + winpx, winy0 + winpy, d);
     winpx++;
-    if (winpx + winx0 >= winx1) {
+    if (winpx + winx0 > winx1) {
         winpx = 0;
         winpy++;
     }
-    if (winpy + winy0 >= winy1) {
+    if (winpy + winy0 > winy1) {
         winpy = 0;
     }
 }

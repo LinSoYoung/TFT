@@ -1,5 +1,5 @@
 #include <TFT.h>
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
 
 #define S6D0164_SYSTEM                  0x00
 #define S6D0164_OUTPUT                  0x01

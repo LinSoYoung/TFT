@@ -1,4 +1,4 @@
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
 #include <TFT.h>
 
 //--------------------------------------------------------------------------//
@@ -366,7 +366,9 @@ void PICadillo35t::windowData(uint16_t *d, uint32_t l) {
         DCH3DSIZ = 2;
         DCH3CSIZ = 2;
         DCH3ECONbits.SIRQEN = 1;
+#ifdef __PIC32MX__
         DCH3ECONbits.CHSIRQ = _PMP_IRQ;
+#endif
         DCH3CONbits.CHAEN = 0;
         DCH3CONbits.CHEN = 1;
 

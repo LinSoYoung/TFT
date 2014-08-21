@@ -30,7 +30,7 @@
 
 #include <TFT.h>
 
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
 MCP23S17::MCP23S17(DSPI *spi, uint8_t cs, uint8_t addr) {
     _dspi = spi;
     _spi = NULL;
@@ -122,7 +122,7 @@ MCP23S17::MCP23S17(DSPI &spi, uint8_t cs, uint8_t addr) {
 
 MCP23S17::MCP23S17(SPIClass &spi, uint8_t cs, uint8_t addr) {
     _spi = &spi;
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
     _dspi = NULL;
 #endif
     _cs = cs;
@@ -168,7 +168,7 @@ MCP23S17::MCP23S17(SPIClass &spi, uint8_t cs, uint8_t addr) {
 
 MCP23S17::MCP23S17(SPIClass *spi, uint8_t cs, uint8_t addr) {
     _spi = spi;
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
     _dspi = NULL;
 #endif
     _cs = cs;
@@ -213,7 +213,7 @@ MCP23S17::MCP23S17(SPIClass *spi, uint8_t cs, uint8_t addr) {
 }
 
 uint8_t MCP23S17::xfer(uint8_t d) {
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
     if (_dspi != NULL) {
         return _dspi->transfer(d);
     }
@@ -222,7 +222,7 @@ uint8_t MCP23S17::xfer(uint8_t d) {
 }
 
 void MCP23S17::setSpeed() {
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
     if (_dspi != NULL) {
         _dspi->setSpeed(MCP23S17_SPEED);
         return;

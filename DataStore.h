@@ -4,7 +4,7 @@
 #include <TFT.h>
 
 class DataBlock;
-class DataWrite;
+//class DataWrite;
 
 class DataStore {
 	public:

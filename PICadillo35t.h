@@ -1,7 +1,7 @@
 #ifndef _PICADILLO35T_H_
 #define _PICADILLO35T_H_
 
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
 
 #include <TFT.h>
 

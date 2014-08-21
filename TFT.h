@@ -14,7 +14,7 @@
 
 #include <stdint.h>
 
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
 #include <DSPI.h>
 #endif
 #include <SPI.h>

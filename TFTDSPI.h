@@ -1,7 +1,7 @@
 #ifndef _TFTDSPI_H
 #define _TFTDSPI_H
 
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
 
 #include <TFT.h>
 

@@ -23,7 +23,7 @@ void LEDMatrix::initializeDevice() {
     currentRow = 0;
     _width = _col->nativeWidth();
     _height = _row->nativeWidth();
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
     T4CONbits.TCKPS = 0b010; // 1:4
     PR4 = 40000;
     IPC4bits.T4IP = 6;
@@ -51,7 +51,7 @@ void LEDMatrix::UpdateISR() {
     _col->writeData32(~buffer[currentRow]);
 }
 
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
 extern "C" {
     #include <sys/attribs.h>
     void __ISR(_TIMER_4_VECTOR, IPL6) _T4Interrupt(void) {

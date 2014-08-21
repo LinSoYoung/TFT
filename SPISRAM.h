@@ -5,7 +5,7 @@
 
 class SPISRAM : public DataStore {
     public:
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
         SPISRAM(DSPI *spi, uint8_t cs, uint32_t s) : _dspi(spi), _spi(NULL), _cs(cs), _size(s) {}
         SPISRAM(DSPI &spi, uint8_t cs, uint32_t s) : _dspi(&spi), _spi(NULL), _cs(cs), _size(s) {}
 #endif
@@ -38,7 +38,7 @@ class SPISRAM : public DataStore {
         void setSpeed();
         uint32_t _size;
         uint8_t _cs;
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
         DSPI *_dspi;
 #endif
         SPIClass *_spi;

@@ -3,7 +3,7 @@
 #define RAMSPEED 10000000UL
 
 uint8_t SPISRAM::xfer(uint8_t d) {
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
     if (_dspi != NULL) {
         return _dspi->transfer(d);
     }
@@ -12,7 +12,7 @@ uint8_t SPISRAM::xfer(uint8_t d) {
 }
 
 void SPISRAM::setSpeed() {
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
     if (_dspi != NULL) {
         return _dspi->setSpeed(RAMSPEED);
     }
@@ -21,13 +21,13 @@ void SPISRAM::setSpeed() {
 }
 
 void SPISRAM::initializeDevice() {
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
     if (_dspi != NULL) {
         _dspi->begin();
     } else {
 #endif
         _spi->begin();
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
     }
 #endif
     setSpeed();

@@ -72,7 +72,7 @@ void DOGMe::setContrast(uint8_t c) {
     table(0);
 }
 
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
 void DOGMe::write(uint8_t c) {
     data(c);
 }

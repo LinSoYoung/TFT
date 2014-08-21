@@ -1,6 +1,6 @@
 #include <TFT.h>
 
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
 
 #define SPI_MODE DSPI_MODE0
 

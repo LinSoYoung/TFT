@@ -293,4 +293,17 @@ void ILI9340::invertDisplay(boolean i) {
 	_comm->writeCommand8(i ? ILI9340_INVON : ILI9340_INVOFF);
 }
 
+void ILI9340::openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
+	setAddrWindow(x0, y0, x0 + x1 - 1, y0 + y1 - 1);
+}
 
+void ILI9340::windowData(uint16_t c) {
+    _comm->writeData16(c);
+}
+
+void ILI9340::windowData(uint16_t *c, uint32_t len) {
+    _comm->blockData(c, len);
+}
+
+void ILI9340::closeWindow() {
+}

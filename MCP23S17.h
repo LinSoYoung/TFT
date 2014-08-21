@@ -38,7 +38,7 @@
 
 class MCP23S17 : public ParallelIO {
     private:
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
         DSPI *_dspi;
 #endif
         SPIClass *_spi;
@@ -72,7 +72,7 @@ class MCP23S17 : public ParallelIO {
         uint8_t xfer(uint8_t);
     
     public:
-#ifdef __PIC32MX__
+#if defined(__PIC32MX__) || defined(__PIC32MZ__)
         MCP23S17(DSPI *spi, uint8_t cs, uint8_t addr);
         MCP23S17(DSPI &spi, uint8_t cs, uint8_t addr);
 #endif
