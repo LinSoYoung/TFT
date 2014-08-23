@@ -299,6 +299,7 @@ class TFT : public Print
 // Storage devices
 #include "SPISRAM.h"
 #include "SRAM.h"
+#include "Rambo.h"
 
 // Virtual display devices
 #include "Framebuffer.h"
@@ -306,6 +307,7 @@ class TFT : public Print
 #include "Framebuffer332.h"
 #include "Framebuffer332Fast.h"
 #include "Framebuffer565.h"
+#include "Framebuffer565Fast.h"
 #include "Aggregator.h"
 
 // Supported devices

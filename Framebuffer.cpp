@@ -271,6 +271,8 @@ void Framebuffer::getScanLine(uint16_t y, uint16_t x, uint16_t w, uint16_t *data
 }
 
 void Framebuffer::animate(struct sprite *s) {
+    s->xpos += s->dx;
+    s->ypos += s->dy;
     s->currentframe++;
     if (s->currentframe >= s->frames) {
         s->currentframe = 0;
@@ -278,6 +280,8 @@ void Framebuffer::animate(struct sprite *s) {
 }
 
 void Framebuffer::animatePingPong(struct sprite *s) {
+    s->xpos += s->dx;
+    s->ypos += s->dy;
     s->currentframe += s->animdir;
     if (s->currentframe >= s->frames) {
         s->animdir = -1;
@@ -446,4 +450,10 @@ void Framebuffer::update(TFT *tft, int16_t x0, int16_t y0) {
     }
     tft->closeWindow();
 }
+
+void Framebuffer::setDirection(struct sprite *spr, int16_t dx, int16_t dy) {
+    spr->dx = dx;
+    spr->dy = dy;
+}
+    
 

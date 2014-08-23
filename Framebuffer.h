@@ -9,6 +9,10 @@ struct sprite {
     int16_t xpos;
     /*! Y Position of the sprite */
     int16_t ypos;
+    /*! Auto-move X speed */
+    int16_t dx;
+    /*! Auto-move y speed */
+    int16_t dy;
     /*! Width of the sprite */
     uint16_t width;
     /*! Height of the sprite */
@@ -64,6 +68,7 @@ class Framebuffer : public TFT {
         virtual void removeSprite(struct sprite *s);
         virtual void moveTo(struct sprite *s, int16_t x, int16_t y);
         virtual void moveBy(struct sprite *s, int16_t dx, int16_t dy);
+        virtual void setDirection(struct sprite *s, int16_t dx, int16_t dy);
         virtual struct sprite *spriteAt(int16_t x, int16_t y);
         virtual void animate(struct sprite *s);
         virtual void animatePingPong(struct sprite *s);
