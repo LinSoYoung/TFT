@@ -9,6 +9,8 @@ my $points = shift;
 my $start = shift;
 my $end = shift;
 
+my $name = shift;
+
 if(!$points) 
 {
     $points = 8;
@@ -30,104 +32,149 @@ if(!-f $file)
 }
 
 my $out = $file . ".cpp";
-my $name = $file;
 
-if($file =~ /^(.*)\.ttf/i)
-{
-	$name = $1;
-}
-
-if($name =~ /([^\/]+)$/)
-{
-    $name = $1;
-}
-
-if ($name =~ /^(.*)-/)
-{
-    $name = $1;
-}
-$name .= $points;
-$out = $name . ".cpp";
-
-my $chardata;   # Array to store character data
-
-my $char = 0;  # Start with the space character
-
-my $size = findFontSize($file,$points);
-
-print "Font size:\n";
-print "Top: " . $size->{top} . "\n";
-print "Bottom: " . $size->{bottom} . "\n";
-print "Left: " . $size->{left} . "\n";
-print "Right: " . $size->{right} . "\n";
-
-print "Width: " . $size->{width} . "\n";
-print "Height: " . $size->{height} . "\n";
-print "Origin: " . $size->{origin}->{x} . "," . $size->{origin}->{y} . "\n";
-
-$size->{bpl} = int($size->{width} / 8) + 1;
-
-print "Bytes per line: " . $size->{bpl} . "\n";
-
-if ($size->{bpl} > 8) {
-    print "ERROR: Font is too wide!\n";
-    exit(10);
-}
-
-my $img = GD::Image->new($size->{width},$size->{height});
-my $bg = $img->colorAllocate(0,0,0);
-my $fg = $img->colorAllocate(255,255,255);
-
-my $fontdata;
-my $offset = 0;
-
-open(OUT,">$out");
-print OUT "#include <TFT.h>\n\n";
-print OUT "const uint8_t Fonts::" . $name . "[] = {\n";
-
-printf(OUT "    %d, %d, 0x%02X, 0x%02X, 1,\n",
-    $size->{height}, $size->{bpl}, $start, $end);
-
-my $char = $start;
-
-while($char < $end)
-{
-    $img->filledRectangle(0,0,$size->{width},$size->{height},$bg);
-    my @bb = $img->stringFT(-$fg,$file,$points,0,$size->{origin}->{x},$size->{origin}->{y},chr($char));
-
-    my $width = $bb[2] - $bb[0];
-
-    printf(OUT "    %2d,", $width);
-    my $line = 0;
-    my $byte = 0;
-    while($line < $size->{height})
+if ($name eq "") {
+    if($file =~ /^(.*)\.ttf/i)
     {
-        my $data = 0;
-        my $bit = 0;
-        while($bit < $width)
-        {
-            my $pixel = $img->getPixel($width-$bit,$line);
-            $data = $data << 1;
-            if($pixel == $fg)
-            {
-                $data |= 1;
-            }
-            $bit++;
-        }
-        $bit = $size->{bpl};
-        while($bit > 0)
-        {
-            $bit--;
-            printf(OUT " 0x%02X,", ($data >> ($bit * 8)) & 0xFF)
-        }
-        $line++;
+        $name = $1;
     }
-    print OUT "\n";
 
-    $char++;
+    if($name =~ /([^\/]+)$/)
+    {
+        $name = $1;
+    }
+
+    if ($name =~ /^(.*)-/)
+    {
+        $name = $1;
+    }
 }
 
+my $pstart = 0;
+my $pend = 0;
+
+if ($points =~ /(\d+)-(\d+)/) {
+    $pstart = $1;
+    $pend = $2;
+} else {
+    $pstart = $points;
+    $pend = $points;
+}
+
+$points = $pstart;
+
+$out = $name . ".h";
+open(OUT, ">$out");
+
+print OUT "#ifndef _FONTS_" . uc($name) . "_H\n";
+print OUT "#define _FONTS_" . uc($name) . "_H\n";
+print OUT "\n";
+print OUT "#include <TFT.h>\n";
+print OUT "\n";
+print OUT "namespace Fonts {\n";
+while ($points < $pend) {
+    print OUT "        extern const uint8_t " . $name . $points . "[];\n";
+    $points++;
+}
 print OUT "};\n";
+print OUT "\n";
+print OUT "#endif\n";
+close(OUT);
+
+$points = $pstart;
+while ($points < $pend) {
+
+    my $fontname = $name . $points;
+    $out = $fontname . ".cpp";
+
+    my $chardata;   # Array to store character data
+
+    my $char = 0;  # Start with the space character
+
+    my $size = findFontSize($file,$points);
+
+    print "Font size:\n";
+    print "Top: " . $size->{top} . "\n";
+    print "Bottom: " . $size->{bottom} . "\n";
+    print "Left: " . $size->{left} . "\n";
+    print "Right: " . $size->{right} . "\n";
+
+    print "Width: " . $size->{width} . "\n";
+    print "Height: " . $size->{height} . "\n";
+    print "Origin: " . $size->{origin}->{x} . "," . $size->{origin}->{y} . "\n";
+
+    $size->{bpl} = int($size->{width} / 8) + 1;
+
+    print "Bytes per line: " . $size->{bpl} . "\n";
+
+    #if ($size->{bpl} > 8) {
+    #    print "ERROR: Font is too wide!\n";
+    #    exit(10);
+    #}
+
+    my $img = GD::Image->new($size->{width},$size->{height});
+    my $bg = $img->colorAllocate(0,0,0);
+    my $fg = $img->colorAllocate(255,255,255);
+
+    my $fontdata;
+    my $offset = 0;
+
+    open(OUT,">$out");
+    print OUT "#include <$name.h>\n\n";
+
+    print OUT "namespace Fonts {\n";
+    print OUT "    const uint8_t " . $name . $points . "[] = {\n";
+
+    printf(OUT "        %d, %d, 0x%02X, 0x%02X, 1,\n",
+        $size->{height}, $size->{bpl}, $start, $end);
+
+    my $char = $start;
+
+    while($char < $end)
+    {
+        $img->filledRectangle(0,0,$size->{width},$size->{height},$bg);
+        my @bb = $img->stringFT(-$fg,$file,$points,0,$size->{origin}->{x},$size->{origin}->{y},chr($char));
+
+        my $width = $bb[2] - $bb[0];
+
+        printf(OUT "        %2d,", $width);
+        my $line = 0;
+        my $byte = 0;
+        while($line < $size->{height})
+        {
+            my $data = 0;
+            my $bit = 0;
+            while($bit < $width)
+            {
+                my $pixel = $img->getPixel($width-$bit,$line);
+                $data = $data << 1;
+                if($pixel == $fg)
+                {
+                    $data |= 1;
+                }
+                $bit++;
+            }
+            $bit = $size->{bpl};
+            while($bit > 0)
+            {
+                $bit--;
+                printf(OUT "     0x%02X,", ($data >> ($bit * 8)) & 0xFF)
+            }
+            $line++;
+        }
+        print OUT "\n";
+
+        $char++;
+    }
+
+    print OUT "    };\n";
+    print OUT "};\n";
+
+    close (OUT);
+
+    $points++;
+}
+
 
 sub findFontSize()
 {

@@ -1185,8 +1185,8 @@ uint16_t TFT::mix(uint16_t a, uint16_t b, uint8_t pct) {
 void TFT::openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
     winx0 = x0;
     winy0 = y0;
-    winx1 = x1;
-    winy1 = y1;
+    winx1 = x1-1;
+    winy1 = y1-1;
     winpx = 0;
     winpy = 0;
 }
