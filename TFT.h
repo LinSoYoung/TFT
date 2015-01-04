@@ -293,7 +293,6 @@ class TFT : public Print
 #include "TFTPar16.h"
 #include "RawPar.h"
 #include "TFTPMP.h"
-#include "MCP23S17.h"
 #include "CoreIO.h"
 
 // Storage devices
