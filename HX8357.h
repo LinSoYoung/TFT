@@ -1,5 +1,5 @@
 #ifndef _HX8357_H_
-#define _HX8357+H_
+#define _HX8357_H_
 
 #include <TFT.h>
 

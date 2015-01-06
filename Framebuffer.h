@@ -88,7 +88,7 @@ class Framebuffer : public TFT {
         struct sprite *sprites;
         struct sprite *selectedSprite;
         virtual uint8_t bufferRead(uint32_t addr);
-        virtual void inline bufferWrite(uint32_t addr, uint8_t value);
+        virtual void inline bufferWrite(uint32_t addr, uint8_t value) = 0;
         virtual void setRotation(uint8_t rot);
 
         virtual uint16_t getWidth();

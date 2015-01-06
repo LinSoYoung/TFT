@@ -50,13 +50,13 @@ void S6D0164::LCD_Write_COM(uint8_t c) {
 
 void S6D0164::LCD_Write_COM_DATA(uint8_t c, uint16_t d) {
     _comm->writeCommand16(c << 8);
-    _comm->writeData8(d & 0xFF00);
-    _comm->writeData8(d << 8);
+    _comm->writeData8((d >> 8) & 0xFF);
+    _comm->writeData8((d) & 0xFF);
 }
 
 void S6D0164::LCD_Write_DATA(uint16_t d) {
-    _comm->writeData8(d & 0xFF00);
-    _comm->writeData8(d << 8);
+    _comm->writeData8((d >> 8) & 0xFF);
+    _comm->writeData8((d) & 0xFF);
 
 }
 

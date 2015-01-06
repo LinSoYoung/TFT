@@ -178,7 +178,6 @@ void HX8357::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t 
         return;
     }
 	setAddrWindow(x, y, x+w-1, y+h-1);
-	uint8_t hi = color >> 8, lo = color;
 
     _comm->streamStart();
 	for(y=h; y>0; y--) {
@@ -196,7 +195,6 @@ void HX8357::drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t color)
         return;
     }
 	setAddrWindow(x, y, x+w-1, y);
-	uint8_t hi = color >> 8, lo = color;
 
     _comm->streamStart();
 	while (w--) {
@@ -212,7 +210,6 @@ void HX8357::drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t color)
         return;
     }
 	setAddrWindow(x, y, x, y+h-1);
-	uint8_t hi = color >> 8, lo = color;
 
     _comm->streamStart();
 	while (h--) {

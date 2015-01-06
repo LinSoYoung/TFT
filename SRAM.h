@@ -29,8 +29,8 @@ class SRAM : public DataStore {
         void initializeDevice();
         uint32_t size() { return _size; }
     private:
-        uint32_t _size;
         uint8_t *_buffer;
+        uint32_t _size;
 };
 
 #endif

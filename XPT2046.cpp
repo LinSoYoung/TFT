@@ -56,7 +56,6 @@ void XPT2046::sample() {
 
     uint32_t temp;
 
-    struct coord tpos;
     temp = 0;
     for (uint8_t i = 0; i < XPT2046_SMPSIZE; i++) {
         _comm->streamStart();

@@ -509,14 +509,14 @@ void TFT::drawRGBA(int16_t x, int16_t y, const uint16_t *bitmap, int16_t w, int1
  *
  *      int width = tft.stringWidth("The quick brown fox jumped over the lazy dog");
  */
-uint16_t TFT::stringWidth(char *text) {
+uint16_t TFT::stringWidth(const char *text) {
     uint16_t w = 0;
     if (font == NULL) {
         return 0;
     }
     FontHeader *header = (FontHeader *)font;
 
-    for (char *t = text; *t; t++) {
+    for (const char *t = text; *t; t++) {
         char c = *t;
         if (c >= header->startGlyph && c <= header->endGlyph) {
             uint8_t co = c - header->startGlyph;
@@ -537,7 +537,7 @@ uint16_t TFT::stringWidth(char *text) {
  *
  *      int height = stringHeight("The quick brown fox jumped over the lazy dog");
  */
-uint16_t TFT::stringHeight(char *text) {
+uint16_t TFT::stringHeight(const char *text) {
     uint16_t w = 0;
     if (font == NULL) {
         return 0;

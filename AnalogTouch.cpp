@@ -55,7 +55,6 @@ boolean AnalogTouch::isPressed() {
 
 int AnalogTouch::getSample(uint8_t pin) {
     int samples[ANALOGTOUCH_SMPSIZE];
-    int thisSample = 0;
     for (int i = 0; i < ANALOGTOUCH_SMPSIZE; i++) {
         samples[i] = analogRead(pin);
     }

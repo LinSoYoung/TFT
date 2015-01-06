@@ -17,7 +17,6 @@ void Framebuffer1::setPixel(int16_t x, int16_t y, uint16_t color) {
     if (x < 0 || x >= _width || y < 0 || y >= _height) {
         return;
     }
-    uint8_t pcol = color & 0xFF;
     uint32_t pos = Math::FastUIntMpy(y, _width) + x;
     uint32_t bytepos = pos >> 3;
     uint32_t bitpos = pos % 8;

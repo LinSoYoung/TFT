@@ -30,14 +30,14 @@
 #define HX8357_DISPLAYOFF					0x28
 #define HX8357_DISPLAYON					0x29
 
-void inline __attribute__((alwaysinline)) PICadillo35t::writeCommand(uint16_t c) {
+void inline PICadillo35t::writeCommand(uint16_t c) {
     while (PMMODEbits.BUSY == 1);
     PMADDR = 0x0000;
     PMDIN = c;
     _lastOp = opWrite;
 }
 
-void inline __attribute__((alwaysinline)) PICadillo35t::writeData(uint16_t c) {
+void inline PICadillo35t::writeData(uint16_t c) {
     while (PMMODEbits.BUSY == 1);
     PMADDR = 0x0001;
     PMDIN = c;
@@ -236,7 +236,6 @@ void PICadillo35t::fillRectangle(int16_t x, int16_t y, int16_t w, int16_t h, uin
         return;
     }
 	setAddrWindow(x, y, x+w-1, y+h-1);
-	uint8_t hi = color >> 8, lo = color;
 
     PMADDR = 0x0001;
 	for(y=h; y>0; y--) {
@@ -255,7 +254,6 @@ void PICadillo35t::drawHorizontalLine(int16_t x, int16_t y, int16_t w, uint16_t 
         return;
     }
 	setAddrWindow(x, y, x+w-1, y);
-	uint8_t hi = color >> 8, lo = color;
 
     PMADDR = 0x0001;
 	while (w--) {
@@ -272,7 +270,6 @@ void PICadillo35t::drawVerticalLine(int16_t x, int16_t y, int16_t h, uint16_t co
         return;
     }
 	setAddrWindow(x, y, x, y+h-1);
-	uint8_t hi = color >> 8, lo = color;
 
     PMADDR = 0x0001;
 	while (h--) {
@@ -431,17 +428,16 @@ void PICadillo35t::loadCacheBlock(int16_t x, int16_t y) {
 	setAddrWindowRead(x0,y0,x1,y1);
     _lastOp = opRead;
     PMADDR = 0x0001;
-    uint16_t start = PMDIN;
+    (void) PMDIN;
 
     for (int i = 0; i < 5; i++) {
         while (PMMODEbits.BUSY == 1);
-        volatile uint16_t value = PMDIN;
+        (void) PMDIN;
     }
 
     uint16_t values[96];
     uint32_t vc = 0;
 
-    char temp[100];
     for (uint32_t cpos = 0; cpos < ((1 << cacheDimension) * (1 << cacheDimension)); cpos+=2) {
         while (PMMODEbits.BUSY == 1);
         uint16_t val1 = PMDIN;

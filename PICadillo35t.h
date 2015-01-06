@@ -52,8 +52,8 @@ class PICadillo35t : public TFT
         void windowData(uint16_t *d, uint32_t l);
         void closeWindow();
 
-        void inline __attribute__((alwaysinline)) writeCommand(uint16_t);
-        void inline __attribute__((alwaysinline)) writeData(uint16_t);
+        void inline writeCommand(uint16_t);
+        void inline writeData(uint16_t);
 		
 	protected:
 		uint8_t colstart, rowstart;

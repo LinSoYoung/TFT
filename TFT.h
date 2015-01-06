@@ -186,8 +186,8 @@ class TFT : public Print
          */
         virtual void invertDisplay(boolean i) = 0;
          /**@}*/
-        virtual uint16_t stringWidth(char *text);
-        virtual uint16_t stringHeight(char *text);
+        virtual uint16_t stringWidth(const char *text);
+        virtual uint16_t stringHeight(const char *text);
 
         virtual void openWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
         virtual void windowData(uint16_t d);

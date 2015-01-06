@@ -32,9 +32,9 @@ class SPISRAM : public DataStore {
     private:
         uint8_t xfer(uint8_t);
         void setSpeed();
-        uint32_t _size;
-        uint8_t _cs;
         DSPI *_dspi;
+        uint8_t _cs;
+        uint32_t _size;
 };
 
 #endif

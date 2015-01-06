@@ -28,10 +28,10 @@ class AnalogTouch : public Touch {
     private:
         struct coord _pos;
         boolean _pressed;
-        uint8_t _yu;
-        uint8_t _yd;
         uint8_t _xl;
         uint8_t _xr;
+        uint8_t _yu;
+        uint8_t _yd;
         float _scale_x;
         float _scale_y;
         int16_t _offset_x;

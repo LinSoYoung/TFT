@@ -38,12 +38,12 @@ class TFTSoftSPI : public TFTCommunicator
         void streamData8(uint8_t);
         void streamData16(uint16_t);
         void streamData32(uint32_t);
-        uint8_t streamCommand8() {};
-        uint16_t streamCommand16() {};
-        uint32_t streamCommand32() {};
-        uint8_t streamData8() {};
-        uint16_t streamData16() {};
-        uint32_t streamData32() {};
+        uint8_t streamCommand8() { return 0; };
+        uint16_t streamCommand16() { return 0; };
+        uint32_t streamCommand32() { return 0; };
+        uint8_t streamData8() { return 0; };
+        uint16_t streamData16() { return 0; };
+        uint32_t streamData32() { return 0; };
 
         void blockData(uint8_t *d, uint32_t c) { };
         void blockData(uint16_t *d, uint32_t c) { };
