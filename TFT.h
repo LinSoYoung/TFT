@@ -314,7 +314,6 @@ class TFT : public Print
 #include "KS0108.h"
 #include "LEDMatrix.h"
 #include "HD44780.h"
-#include "DOGMe.h"
 #include "ILI9340.h"
 #include "BD663474.h"
 #include "SSD1289.h"
