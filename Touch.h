@@ -60,7 +60,7 @@ class Touch {
          *  This sets the screen orientation of the touch screen.  It should be set to the same as the
          *  rotation used for the screen.
          */
-        virtual void setRotation(uint8_t r);
+        virtual void setRotation(uint8_t r) = 0;
 
         /*! Sample the touch screen
          *  =======================
